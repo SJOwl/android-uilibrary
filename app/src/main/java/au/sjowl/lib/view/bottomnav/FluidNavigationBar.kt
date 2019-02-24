@@ -101,14 +101,22 @@ class FluidNavigationBar : LinearLayout {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_UP) {
-            val selectedIndex = indexOfItemClicked(event.x)
-            if (currentItemIndex != selectedIndex) {
-                onItemSelected?.invoke(selectedIndex)
-                currentItemIndex = selectedIndex
-                selectItem(currentItemIndex)
-            } else {
-                onItemReselected?.invoke(currentItemIndex)
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN,
+            MotionEvent.ACTION_MOVE -> {
+                val selectedIndex = indexOfItemClicked(event.x)
+                selectItem(selectedIndex)
+            }
+            MotionEvent.ACTION_UP -> {
+                val selectedIndex = indexOfItemClicked(event.x)
+                if (currentItemIndex != selectedIndex) {
+                    onItemSelected?.invoke(selectedIndex)
+                    currentItemIndex = selectedIndex
+                    selectItem(currentItemIndex)
+                } else {
+                    onItemReselected?.invoke(currentItemIndex)
+                }
             }
         }
         return true
