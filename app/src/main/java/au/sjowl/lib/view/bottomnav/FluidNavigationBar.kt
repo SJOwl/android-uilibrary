@@ -1,18 +1,11 @@
 package au.sjowl.lib.view.bottomnav
 
-import android.animation.AnimatorSet
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.RectF
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import org.jetbrains.anko.dip
 
@@ -21,16 +14,15 @@ class FluidNavigationBar : LinearLayout {
     var items = listOf<FluidNavigationItem>()
         set(value) {
             field = value
-            value.forEach {
-                val f = FluidNavigationDrawable(
-                    it.title.capitalize(),
-                    ContextCompat.getDrawable(context, it.drawableId)
-                        ?: throw IllegalArgumentException("no such drawable: ${it.drawableId}")
-                )
-                drawableItems.add(f)
+            value.forEach { fluidNavigationItem ->
                 addView(FluidTabView(context).apply {
-                    drawable = f.drawable
-                    title = f.title
+                    drawableId = fluidNavigationItem.drawableId
+                    title = fluidNavigationItem.title
+                    animationDuration = this@FluidNavigationBar.animationDuration
+                    colorTintSelected = this@FluidNavigationBar.colorTintSelected
+                    colorTintUnselected = this@FluidNavigationBar.colorTintUnselected
+                    colorBubble = this@FluidNavigationBar.colorBubble
+                    colorBg = this@FluidNavigationBar.colorBackground
                 })
             }
             currentItemIndex = 0
@@ -40,48 +32,47 @@ class FluidNavigationBar : LinearLayout {
         set(value) {
             field = value
             (children.toList()[value] as FluidTabView).checked = true
-            postInvalidate()
         }
 
-    var animationDuration: Long = 3000L
+    var colorBubble = Color.parseColor("#0011B6")
+        set(value) {
+            field = value
+            children.forEach { (it as FluidTabView).colorBubble = value }
+        }
 
-    var tintSelected = Color.parseColor("#fafafa")
+    var colorBackground = Color.parseColor("#fafafa")
+        set(value) {
+            field = value
+            children.forEach { (it as FluidTabView).colorBg = value }
+        }
 
-    var tintUnselected = Color.parseColor("#000000")
+    var colorTintSelected = Color.parseColor("#fafafa")
+        set(value) {
+            field = value
+            children.forEach { (it as FluidTabView).colorTintSelected = value }
+        }
 
-    private val paintOvalBg = Paint().apply {
-        color = Color.parseColor("#0011B6")
-        style = Paint.Style.FILL
-        isAntiAlias = true
-    }
+    var colorTintUnselected = colorBubble
+        set(value) {
+            field = value
+            children.forEach { (it as FluidTabView).colorTintUnselected = value }
+        }
 
-    private val paintBg = Paint().apply {
-        color = Color.parseColor("#fafafa")
-        style = Paint.Style.FILL
-        isAntiAlias = true
-    }
+    var colorTitle = Color.BLACK
+        set(value) {
+            field = value
+            children.forEach { (it as FluidTabView).colorTitle = value }
+        }
 
-    private val colorBackground = Color.parseColor("#FDFDFD")
-
-    private var drawableItems = arrayListOf<FluidNavigationDrawable>()
+    var animationDuration: Long = 180L
+        set(value) {
+            field = value
+            children.forEach { (it as FluidTabView).animationDuration = value }
+        }
 
     private val iconSize = context.dip(24)
 
-    private val radiusPadding = context.dip(12)
-
-    private val iconHalf = iconSize / 2
-
     private val selectedIconSize = context.dip(40)
-
-    private val selectedIconHalf = selectedIconSize / 2
-
-    private var selectedIconHalfCurrent = selectedIconSize / 2
-        set(value) {
-            field = value
-            postInvalidateOnAnimation()
-        }
-
-    private var prevSelectedHalf = 0
 
     private var spaceBetweenIcons = 0
 
@@ -89,17 +80,9 @@ class FluidNavigationBar : LinearLayout {
 
     private var onItemReselected: ((index: Int) -> Unit)? = null
 
-    private var animatorSet: AnimatorSet? = AnimatorSet()
-
     private val ovalPadding = context.dip(30)
 
     private val heightDefault = context.dip(56)
-
-    private val sb = Boundaries()
-
-    private val psb = Boundaries()
-
-    private val ub = Boundaries()
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = defaultSize(widthMeasureSpec)
@@ -162,55 +145,4 @@ class FluidNavigationBar : LinearLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-}
-
-class Boundaries(
-    var centerX: Float = 0f,
-    var centerY: Float = 0f,
-    var radius: Float = 0f
-) {
-
-    val rect: Rect
-        get() {
-            r.left = (centerX - radius).toInt()
-            r.right = (centerX + radius).toInt()
-            r.top = (centerY - radius).toInt()
-            r.bottom = (centerY + radius).toInt()
-            return r
-        }
-
-    val rectf: RectF
-        get() {
-            rf.left = (centerX - radius).toFloat()
-            rf.right = (centerX + radius).toFloat()
-            rf.top = (centerY - radius).toFloat()
-            rf.bottom = (centerY + radius).toFloat()
-            return rf
-        }
-
-    val left get() = (centerX - radius).toInt()
-
-    val right get() = (centerX + radius).toInt()
-
-    val top get() = (centerY - radius).toInt()
-
-    val bottom get() = (centerY + radius).toInt()
-
-    private val r = Rect()
-
-    private val rf = RectF()
-}
-
-class FluidNavigationItem(
-    val title: String,
-    val drawableId: Int
-)
-
-private class FluidNavigationDrawable(
-    val title: String,
-    val drawable: Drawable
-)
-
-inline fun Canvas.drawOval(left: Int, top: Int, right: Int, bottom: Int, paint: Paint) {
-    drawOval(left * 1f, top * 1f, right * 1f, bottom * 1f, paint)
 }

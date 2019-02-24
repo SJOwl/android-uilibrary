@@ -16,12 +16,11 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import au.sjowl.lib.twolinestextview.R
 import org.jetbrains.anko.dip
 
 class FluidTabView : View {
 
-    var drawable: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_wallet_svg_xml) // todo remove from here
+    var drawable: Drawable? = null
 
     var checked: Boolean = false
         set(value) {
@@ -43,20 +42,42 @@ class FluidTabView : View {
             drawable = ContextCompat.getDrawable(context, value)
         }
 
-    var title = "Wallet"
+    var title = ""
         set(value) {
             field = value.capitalize()
         }
 
-    var tintSelected = Color.parseColor("#fafafa")
+    var colorTintSelected = Color.parseColor("#fafafa")
+        set(value) {
+            field = value
+            setAnims()
+        }
 
-    var tintUnselected = Color.parseColor("#0011B6")
-
-    var animationDuration: Long = 250L
+    var colorTintUnselected = Color.parseColor("#0011B6")
+        set(value) {
+            field = value
+            setAnims()
+        }
 
     var colorBubble = Color.parseColor("#0011B6")
+        set(value) {
+            field = value
+            paintOvalBg.color = value
+        }
 
     var colorBg = Color.parseColor("#fafafa")
+        set(value) {
+            field = value
+            paintBg.color = value
+        }
+
+    var colorTitle = Color.BLACK
+        set(value) {
+            field = value
+            textPaint.color = value
+        }
+
+    var animationDuration: Long = 180L
 
     val iconSize = context.dip(32) * 1f
 
@@ -70,7 +91,7 @@ class FluidTabView : View {
 
     private val animProperties = arrayListOf<AnimProperty>()
 
-    private var animTint: AnimatedPropertyInt = AnimatedPropertyInt(tintUnselected, tintUnselected, tintSelected)
+    private var animTint: AnimatedPropertyInt = AnimatedPropertyInt(colorTintUnselected, colorTintUnselected, colorTintSelected)
 
     private val sb = Boundaries()
 
@@ -95,7 +116,7 @@ class FluidTabView : View {
     }
 
     private val textPaint = Paint().apply {
-        color = Color.BLACK
+        color = colorTitle
         isAntiAlias = true
         textSize = context.dip(14).toFloat()
     }
@@ -104,9 +125,7 @@ class FluidTabView : View {
 
     private val placeholderRect = Rect()
 
-    private val colorX = Color.parseColor("#D5C400")
-
-    private val baseHeight = context.dip(56) * 1f
+    private val baseHeight = context.dip(56) * 1f + 1f
 
     private val radiusMax = iconSize * 0.7f
 
@@ -124,15 +143,23 @@ class FluidTabView : View {
         centerX = measuredWidth / 2
         centerY = (topMargin + baseHeight / 2).toInt()
 
+        textPaint.getTextBounds(title, 0, title.length, placeholderRect)
         setAnims()
     }
 
     override fun onDraw(canvas: Canvas) {
+        drawBackground(canvas)
+        drawBezierPath(canvas)
+        drawBgCircle(canvas)
+        drawIcon(canvas)
+        drawTitle(canvas)
+    }
 
-        canvas.drawColor(colorX)
-
+    private inline fun drawBackground(canvas: Canvas) {
         canvas.drawRect(0f, measuredHeight - baseHeight, measuredWidth * 1f, measuredHeight * 1f, paintBg)
+    }
 
+    private inline fun drawBezierPath(canvas: Canvas) {
         path.reset()
         val r = animRadius.value + coverWidth
         val origY = animTranslation.value - r
@@ -153,21 +180,29 @@ class FluidTabView : View {
             )
             canvas.drawPath(path, paintBg)
         }
+    }
 
+    private inline fun drawBgCircle(canvas: Canvas) {
         sb.centerX = centerX * 1f
         sb.centerY = animTranslation.value
         sb.radius = animRadius.value
 
         canvas.drawCircle(sb.centerX, sb.centerY, sb.radius, paintOvalBg)
+    }
 
+    private inline fun drawIcon(canvas: Canvas) {
         sb.radius = iconHalf
         drawable?.setBounds(sb.left, sb.top, sb.right, sb.bottom)
         drawable?.setTint(animTint.value)
         drawable?.draw(canvas)
+    }
 
-        textPaint.getTextBounds(title, 0, title.length, placeholderRect)
-        textPaint.alpha = (animAlpha.value * 255).toInt()
-        canvas.drawTextCentered(title, centerX * 1f, 0.5f * (measuredHeight + animTranslation.value + iconHalf), textPaint, placeholderRect)
+    private inline fun drawTitle(canvas: Canvas) {
+        val y = 0.5f * (measuredHeight + animTranslation.value + iconHalf)
+        if (y < measuredHeight) {
+            textPaint.alpha = (animAlpha.value * 255).toInt()
+            canvas.drawTextCentered(title, centerX * 1f, y, textPaint, placeholderRect)
+        }
     }
 
     private fun setAnims() {
@@ -177,18 +212,17 @@ class FluidTabView : View {
         animRadius.from = 0f
         animRadius.to = radiusMax
 
-        animTint.from = tintUnselected
-        animTint.to = tintSelected
+        animTint.from = colorTintUnselected
+        animTint.to = colorTintSelected
 
         animAlpha.from = 0f
         animAlpha.to = 1f
 
-        animProperties.forEach { it.setup() }
-
         if (checked) animProperties.forEach {
             it.reverse()
-            it.setup()
         }
+
+        animProperties.forEach { it.setup() }
     }
 
     private fun anim() {

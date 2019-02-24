@@ -1,5 +1,6 @@
 package au.sjowl.lib.view
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import au.sjowl.lib.twolinestextview.R
@@ -12,6 +13,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupFluidBottombar()
+    }
+
+    private fun setupFluidBottombar() {
         fluidNavigationBar.items = listOf(
             FluidNavigationItem("chat", R.drawable.ic_chat_svg_xml),
             FluidNavigationItem("calendar", R.drawable.ic_calendar_svg_xml),
@@ -26,5 +31,9 @@ class MainActivity : AppCompatActivity() {
         fluidNavigationBar.onItemReselected { index ->
             println("reselected $index")
         }
+        fluidNavigationBar.colorBubble = Color.parseColor("#0011B6")
+        fluidNavigationBar.colorTintSelected = Color.parseColor("#fafafa")
+        fluidNavigationBar.colorTintUnselected = Color.parseColor("#0011B6")
+        fluidNavigationBar.colorTitle = Color.BLACK
     }
 }
