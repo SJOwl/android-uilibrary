@@ -165,17 +165,17 @@ class FluidNavigationBar : LinearLayout {
 }
 
 class Boundaries(
-    var centerX: Int = 0,
-    var centerY: Int = 0,
-    var radius: Int = 0
+    var centerX: Float = 0f,
+    var centerY: Float = 0f,
+    var radius: Float = 0f
 ) {
 
     val rect: Rect
         get() {
-            r.left = centerX - radius
-            r.right = centerX + radius
-            r.top = centerY - radius
-            r.bottom = centerY + radius
+            r.left = (centerX - radius).toInt()
+            r.right = (centerX + radius).toInt()
+            r.top = (centerY - radius).toInt()
+            r.bottom = (centerY + radius).toInt()
             return r
         }
 
@@ -188,13 +188,13 @@ class Boundaries(
             return rf
         }
 
-    val left get() = centerX - radius
+    val left get() = (centerX - radius).toInt()
 
-    val right get() = centerX + radius
+    val right get() = (centerX + radius).toInt()
 
-    val top get() = centerY - radius
+    val top get() = (centerY - radius).toInt()
 
-    val bottom get() = centerY + radius
+    val bottom get() = (centerY + radius).toInt()
 
     private val r = Rect()
 

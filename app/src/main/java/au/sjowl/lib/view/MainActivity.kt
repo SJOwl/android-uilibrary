@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
             FluidNavigationItem("calendar", R.drawable.ic_calendar_svg_xml),
             FluidNavigationItem("profile", R.drawable.ic_profile_svg_xml),
             FluidNavigationItem("wallet", R.drawable.ic_wallet_svg_xml),
-            FluidNavigationItem("search", R.drawable.ic_search)
+            FluidNavigationItem("", R.drawable.ic_search) // empty title if do not want to draw it
         )
 
         fluidNavigationBar.onItemSelected { index ->

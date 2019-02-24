@@ -52,15 +52,15 @@ class FluidTabView : View {
 
     var tintUnselected = Color.parseColor("#0011B6")
 
-    var topMargin = context.dip(32)
-
     var animationDuration: Long = 250L
 
     var colorBubble = Color.parseColor("#0011B6")
 
     var colorBg = Color.parseColor("#fafafa")
 
-    val defaultWidth = topMargin * 2.8f
+    val iconSize = context.dip(32) * 1f
+
+    val defaultWidth = iconSize * 2.8f
 
     private var animTranslation: AnimatedPropertyF = AnimatedPropertyF()
 
@@ -78,8 +78,6 @@ class FluidTabView : View {
 
     private var centerY = 0
 
-    private val iconSize = context.dip(32)
-
     private val iconHalf = iconSize / 2
 
     private var animatorSet: AnimatorSet? = AnimatorSet()
@@ -90,7 +88,7 @@ class FluidTabView : View {
         isAntiAlias = true
     }
 
-    private val paintOvalBgCover = Paint().apply {
+    private val paintBg = Paint().apply {
         color = colorBg
         style = Paint.Style.FILL
         isAntiAlias = true
@@ -106,75 +104,78 @@ class FluidTabView : View {
 
     private val placeholderRect = Rect()
 
+    private val colorX = Color.parseColor("#D5C400")
+
+    private val baseHeight = context.dip(56) * 1f
+
+    private val radiusMax = iconSize * 0.7f
+
+    private val coverWidth = radiusMax * 0.2f
+
+    private val topMargin = radiusMax - coverWidth
+
+    private val translationMax = radiusMax + coverWidth
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val w = defaultSize(widthMeasureSpec, defaultWidth.toInt())
-        val h = defaultSize(heightMeasureSpec, context.dip(56) + topMargin)
+        val w = defaultSize(widthMeasureSpec, defaultWidth)
+        val h = defaultSize(heightMeasureSpec, baseHeight + topMargin)
         setMeasuredDimension(w, h)
 
         centerX = measuredWidth / 2
-        centerY = (0.5f * (measuredHeight + topMargin)).toInt()
+        centerY = (topMargin + baseHeight / 2).toInt()
 
         setAnims()
     }
 
     override fun onDraw(canvas: Canvas) {
 
-        canvas.drawRect(0f, topMargin * 1f, measuredWidth * 1f, measuredHeight * 1f, paintOvalBgCover)
+        canvas.drawColor(colorX)
+
+        canvas.drawRect(0f, measuredHeight - baseHeight, measuredWidth * 1f, measuredHeight * 1f, paintBg)
 
         path.reset()
+        val r = animRadius.value + coverWidth
+        val origY = animTranslation.value - r
+        if (origY < topMargin) {
+            val xb = r * 0.2f
+            val x = 0.75f * r
+            val rb = animRadius.value + coverWidth * 3
+            path.moveTo(centerX - rb, topMargin)
+            path.cubicTo(
+                centerX - r + xb, topMargin,
+                centerX - x, origY,
+                centerX * 1f, origY
+            )
+            path.cubicTo(
+                centerX + x, origY,
+                centerX + r - xb, topMargin,
+                centerX + rb, topMargin
+            )
+            canvas.drawPath(path, paintBg)
+        }
 
-        val r = animRadius.value
-        val xb = r * 0.2f
-        val x = 0.75f * r
-        val origY = animTranslation.value - r * 0.85f
-        path.moveTo(centerX - r, topMargin * 1f)
-        path.cubicTo(
-            centerX - r + xb, topMargin * 1f,
-            centerX - x, origY,
-            centerX * 1f, origY
-        )
-        path.cubicTo(
-            centerX + x, origY,
-            centerX + r - xb, topMargin * 1f,
-            centerX + r, topMargin * 1f
-        )
-        canvas.drawPath(path, paintOvalBgCover)
+        sb.centerX = centerX * 1f
+        sb.centerY = animTranslation.value
+        sb.radius = animRadius.value
 
-        sb.centerX = centerX
-        sb.centerY = animTranslation.value.toInt()
+        canvas.drawCircle(sb.centerX, sb.centerY, sb.radius, paintOvalBg)
+
         sb.radius = iconHalf
-
-        canvas.drawCircle(sb.centerX * 1f, sb.centerY * 1f, animRadius.value * 0.7f, paintOvalBg)
         drawable?.setBounds(sb.left, sb.top, sb.right, sb.bottom)
         drawable?.setTint(animTint.value)
         drawable?.draw(canvas)
 
         textPaint.getTextBounds(title, 0, title.length, placeholderRect)
         textPaint.alpha = (animAlpha.value * 255).toInt()
-        canvas.drawTextCentered(title, centerX * 1f, animTranslation.value + 0.5f * (measuredHeight - topMargin) + placeholderRect.height(), textPaint, placeholderRect)
-    }
-
-    fun anim() {
-        animatorSet?.cancel()
-        animatorSet = AnimatorSet().apply {
-            playTogether(
-                valueAnim(animTranslation),
-                valueAnim(animRadius),
-                colorAnim(animTint),
-                valueAnim(animAlpha)
-            )
-            start()
-        }
-        animatorSet?.doOnEnd {
-        }
+        canvas.drawTextCentered(title, centerX * 1f, 0.5f * (measuredHeight + animTranslation.value + iconHalf), textPaint, placeholderRect)
     }
 
     private fun setAnims() {
         animTranslation.from = centerY * 1f
-        animTranslation.to = topMargin.toFloat()
+        animTranslation.to = if (title.isNotEmpty()) translationMax else animTranslation.from
 
         animRadius.from = 0f
-        animRadius.to = topMargin.toFloat()
+        animRadius.to = radiusMax
 
         animTint.from = tintUnselected
         animTint.to = tintSelected
@@ -187,6 +188,21 @@ class FluidTabView : View {
         if (checked) animProperties.forEach {
             it.reverse()
             it.setup()
+        }
+    }
+
+    private fun anim() {
+        animatorSet?.cancel()
+        animatorSet = AnimatorSet().apply {
+            playTogether(
+                valueAnim(animTranslation),
+                valueAnim(animRadius),
+                colorAnim(animTint),
+                valueAnim(animAlpha)
+            )
+            start()
+        }
+        animatorSet?.doOnEnd {
         }
     }
 
@@ -210,16 +226,16 @@ class FluidTabView : View {
         duration = animationDuration
     }
 
-    private fun defaultSize(measureSpec: Int, size: Int): Int {
+    private fun defaultSize(measureSpec: Int, size: Float): Int {
         var result = size
         val specMode = View.MeasureSpec.getMode(measureSpec)
-        val specSize = View.MeasureSpec.getSize(measureSpec)
+        val specSize = View.MeasureSpec.getSize(measureSpec) * 1f
 
         when (specMode) {
             View.MeasureSpec.AT_MOST -> result = size
             View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.EXACTLY -> result = specSize
         }
-        return result
+        return result.toInt()
     }
 
     init {
