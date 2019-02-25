@@ -3,29 +3,30 @@ package au.sjowl.lib.view.app
 import android.os.Bundle
 import android.view.View
 import au.sjowl.lib.twolinestextview.R
-import kotlinx.android.synthetic.main.fr_bottomnav_rotation.*
+import au.sjowl.lib.view.bottomnav.NavigationItem
+import kotlinx.android.synthetic.main.fr_bottomnav_spread.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import kotlin.random.Random
 
-class NavRotationFragment : BaseFragment() {
-    override val layoutId: Int get() = R.layout.fr_bottomnav_rotation
+class NavSpreadFragment : BaseFragment() {
+    override val layoutId: Int get() = R.layout.fr_bottomnav_spread
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRotationBottombar()
+        setupBottombar()
     }
 
-    private fun setupRotationBottombar() {
-        with(rotNavigationBar) {
+    private fun setupBottombar() {
+        with(spreadNavigationBar) {
             items = listOf(
-                au.sjowl.lib.view.bottomnav.NavigationItem("chat", R.drawable.ic_chat_svg_xml),
-                au.sjowl.lib.view.bottomnav.NavigationItem("calendar", R.drawable.ic_calendar_svg_xml),
-                au.sjowl.lib.view.bottomnav.NavigationItem("profile", R.drawable.ic_profile_svg_xml),
-                au.sjowl.lib.view.bottomnav.NavigationItem("wallet", R.drawable.ic_wallet_svg_xml),
-                au.sjowl.lib.view.bottomnav.NavigationItem("", R.drawable.ic_search)
+                NavigationItem("chat", R.drawable.ic_chat_svg_xml),
+                NavigationItem("calendar", R.drawable.ic_calendar_svg_xml),
+                NavigationItem("profile", R.drawable.ic_profile_svg_xml)
+//                NavigationItem("wallet", R.drawable.ic_wallet_svg_xml),
+//                NavigationItem("", R.drawable.ic_search)
             )
-            currentItemIndex = 3
+//            currentItemIndex = 3
 
             onItemSelected { index ->
                 println("selected   $index")
@@ -37,8 +38,8 @@ class NavRotationFragment : BaseFragment() {
             setBadgeCount(0, 25)
             setBadgeCount(1, 0)
             setBadgeCount(2, 3)
-            setBadgeCount(3, 150)
-            setBadgeCount(4, 12040)
+//            setBadgeCount(3, 150)
+//            setBadgeCount(4, 12040)
 
             animationDuration
 
@@ -52,8 +53,8 @@ class NavRotationFragment : BaseFragment() {
             iconSize = context.dip(24)
         }
 
-        container.onClick {
-            rotNavigationBar.setBadgeCount(2, Random.nextInt(0, 100))
+        root.onClick {
+            spreadNavigationBar.setBadgeCount(2, Random.nextInt(0, 100))
         }
     }
 }

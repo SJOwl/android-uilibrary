@@ -1,4 +1,4 @@
-package au.sjowl.lib.view.bottomnav.interpolators
+package au.sjowl.lib.view.animations.interpolators
 
 class SinusDissipationInterpolator(
     private var amplitude: Double = 0.9,

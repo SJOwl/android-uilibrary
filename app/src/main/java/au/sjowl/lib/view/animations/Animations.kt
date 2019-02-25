@@ -5,7 +5,7 @@ import android.view.View
 import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import au.sjowl.lib.twolinestextview.R
-import au.sjowl.lib.view.bottomnav.interpolators.SinusDissipationInterpolator
+import au.sjowl.lib.view.animations.interpolators.SinusDissipationInterpolator
 
 fun View.runScaleAnimation(scaleFrom: Float = 0.5f, scaleTo: Float = 1.0f, duration: Long = 250L) {
     startAnimation(ScaleAnimation(scaleFrom, scaleTo, scaleFrom, scaleTo, width / 2f, height / 2f).apply {

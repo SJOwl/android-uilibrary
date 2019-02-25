@@ -1,4 +1,4 @@
-package au.sjowl.lib.view.bottomnav.rotation
+package au.sjowl.lib.view.bottomnav.spread
 
 import android.animation.Animator
 import android.animation.AnimatorSet
@@ -21,7 +21,7 @@ import au.sjowl.lib.view.bottomnav.Badge
 import au.sjowl.lib.view.bottomnav.Boundaries
 import org.jetbrains.anko.dip
 
-class RotationTabView : View {
+class SpreadTabView : View {
 
     lateinit var drawable: Drawable
 
@@ -86,7 +86,7 @@ class RotationTabView : View {
             iconHalf = value / 2
         }
 
-    private var defaultWidth = iconSize * 2.8f
+    var defaultWidth = iconSize * 2.8f
 
     private val animFloat = AnimatedPropertyF()
 
@@ -130,6 +130,7 @@ class RotationTabView : View {
     private var badgeAnim: Animator? = null
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+
         val w = defaultSize(widthMeasureSpec, defaultWidth)
         val h = defaultSize(heightMeasureSpec, baseHeight)
         setMeasuredDimension(w, h)
@@ -225,7 +226,7 @@ class RotationTabView : View {
             interpolator = DecelerateInterpolator()
             addUpdateListener {
                 animatedProperty.value = it.animatedValue as Float
-                this@RotationTabView.postInvalidate()
+                this@SpreadTabView.postInvalidate()
             }
         }
     }

@@ -7,7 +7,7 @@ import au.sjowl.lib.twolinestextview.R
 
 class MainActivity : AppCompatActivity() {
 
-    private val currentFragmentIndex = 1
+    private val currentFragmentIndex = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
             0 -> ProgressFragment()
             1 -> NavFluidFragment()
             2 -> NavRotationFragment()
+            3 -> NavSpreadFragment()
 
             else -> HomeFragment()
         }
