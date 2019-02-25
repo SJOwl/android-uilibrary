@@ -1,4 +1,4 @@
-package au.sjowl.lib.view
+package au.sjowl.lib.view.animations
 
 import android.graphics.drawable.Animatable
 import android.view.View

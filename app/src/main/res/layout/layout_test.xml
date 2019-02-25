@@ -1,70 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/ic_bookmark_filled"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/searchOne"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/search_anim"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/icon" />
-
-    <ImageView
-        android:id="@+id/searchReverse"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/search_reverse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchOne" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/root2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchReverse">
-
-        <ImageView
-            android:id="@+id/icon2"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/ic_bookmark_filled"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/icon3"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/search_anim"
-            app:layout_constraintEnd_toStartOf="@id/icon4"
-            app:layout_constraintStart_toEndOf="@id/icon2"
-            app:layout_constraintTop_toBottomOf="@id/icon2" />
-
-        <ImageView
-            android:id="@+id/icon4"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/ic_bookmark_filled"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/icon3" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,9 +31,8 @@ class RotationNavigationBar : LinearLayout {
 
     var currentItemIndex = 0
         set(value) {
-            (children.toList()[field] as RotationTabView).checked = false
-            (children.toList()[value] as RotationTabView).checked = true
             field = value
+            selectItem(value)
         }
 
     var animationDuration: Long = 180L

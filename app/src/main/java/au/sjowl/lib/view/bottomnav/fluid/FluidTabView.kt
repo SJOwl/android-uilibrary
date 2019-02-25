@@ -13,7 +13,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import au.sjowl.lib.view.bottomnav.AnimProperty
@@ -31,12 +30,12 @@ class FluidTabView : View {
         set(value) {
             if (field != value) {
                 if (isVisible) {
-                    setAnims()
+                    setSelectedStateAnimations()
                     field = value
-                    anim()
+                    animateSelectedState()
                 } else {
                     field = value
-                    setAnims()
+                    setSelectedStateAnimations()
                 }
             }
         }
@@ -56,13 +55,13 @@ class FluidTabView : View {
     var colorTintSelected = Color.parseColor("#fafafa")
         set(value) {
             field = value
-            setAnims()
+            setSelectedStateAnimations()
         }
 
     var colorTintUnselected = Color.parseColor("#0011B6")
         set(value) {
             field = value
-            setAnims()
+            setSelectedStateAnimations()
         }
 
     var colorBubble = Color.parseColor("#0011B6")
@@ -101,10 +100,6 @@ class FluidTabView : View {
 
     private val sb = Boundaries()
 
-    private var centerX = 0
-
-    private var centerY = 0
-
     private val iconHalf = iconSize / 2
 
     private var animatorSet: AnimatorSet? = AnimatorSet()
@@ -141,6 +136,10 @@ class FluidTabView : View {
 
     private val translationMax = radiusMax + coverWidth
 
+    private var centerX = 0
+
+    private var centerY = (topMargin + baseHeight / 2).toInt()
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = defaultSize(widthMeasureSpec, defaultWidth)
         val h = defaultSize(heightMeasureSpec, baseHeight + topMargin)
@@ -150,7 +149,7 @@ class FluidTabView : View {
         centerY = (topMargin + baseHeight / 2).toInt()
 
         textPaint.getTextBounds(title, 0, title.length, placeholderRect)
-        setAnims()
+        setSelectedStateAnimations()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -211,7 +210,8 @@ class FluidTabView : View {
         }
     }
 
-    private fun setAnims() {
+    private fun setSelectedStateAnimations() {
+        println("centerY = $centerY $this")
         animTranslation.from = centerY * 1f
         animTranslation.to = if (title.isNotEmpty()) translationMax else animTranslation.from
 
@@ -231,7 +231,7 @@ class FluidTabView : View {
         animProperties.forEach { it.setup() }
     }
 
-    private fun anim() {
+    private fun animateSelectedState() {
         animatorSet?.cancel()
         animatorSet = AnimatorSet().apply {
             playTogether(
@@ -241,8 +241,6 @@ class FluidTabView : View {
                 valueAnim(animAlpha)
             )
             start()
-        }
-        animatorSet?.doOnEnd {
         }
     }
 

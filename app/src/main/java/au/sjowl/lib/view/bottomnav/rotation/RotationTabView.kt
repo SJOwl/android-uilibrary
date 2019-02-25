@@ -99,9 +99,6 @@ class RotationTabView : View {
 
     private val sb = Boundaries()
 
-    private var centerX = 0
-
-    private var centerY = 0
 
     private var iconHalf = iconSize / 2
 
@@ -124,6 +121,10 @@ class RotationTabView : View {
     private val radiusMax = baseHeight * 0.45f
 
     private val scaleAmplitude = 0.5
+
+    private var centerX = 0
+
+    private var centerY = (baseHeight / 2).toInt()
 
     private val animBadgeFloat = AnimatedPropertyF()
 

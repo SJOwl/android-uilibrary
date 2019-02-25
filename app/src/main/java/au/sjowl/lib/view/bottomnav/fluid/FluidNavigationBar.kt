@@ -10,6 +10,9 @@ import androidx.core.view.children
 import au.sjowl.lib.view.bottomnav.NavigationItem
 import org.jetbrains.anko.dip
 
+/**
+ * todo badges, test seting params from code
+ */
 class FluidNavigationBar : LinearLayout {
 
     var items = listOf<NavigationItem>()
@@ -32,7 +35,7 @@ class FluidNavigationBar : LinearLayout {
     var currentItemIndex = 0
         set(value) {
             field = value
-            (children.toList()[value] as FluidTabView).checked = true
+            selectItem(value)
         }
 
     var colorBubble = Color.parseColor("#0011B6")

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg">
+
+    <au.sjowl.lib.view.progress.EllipticProgress
+        android:id="@+id/ellipticProgress"
+        style="@style/MainTheme.Progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <au.sjowl.lib.view.progress.ArcProgress
+        android:id="@+id/arcProgress"
+        style="@style/MainTheme.Progress"
+        app:layout_constraintStart_toEndOf="@id/ellipticProgress"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <au.sjowl.lib.view.progress.ArcProgressSwing
+        android:id="@+id/arcProgressSwing"
+        style="@style/MainTheme.Progress"
+        app:layout_constraintStart_toEndOf="@id/arcProgress"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <au.sjowl.lib.view.progress.ArcProgressStriped
+        style="@style/MainTheme.Progress"
+        app:layout_constraintStart_toEndOf="@id/arcProgressSwing"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
