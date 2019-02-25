@@ -1,4 +1,4 @@
-package au.sjowl.lib.view.bottomnav
+package au.sjowl.lib.view.bottomnav.fluid
 
 import android.content.Context
 import android.graphics.Color
@@ -7,11 +7,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.children
+import au.sjowl.lib.view.bottomnav.NavigationItem
 import org.jetbrains.anko.dip
 
 class FluidNavigationBar : LinearLayout {
 
-    var items = listOf<FluidNavigationItem>()
+    var items = listOf<NavigationItem>()
         set(value) {
             field = value
             value.forEach { fluidNavigationItem ->
@@ -70,9 +71,11 @@ class FluidNavigationBar : LinearLayout {
             children.forEach { (it as FluidTabView).animationDuration = value }
         }
 
-    private val iconSize = context.dip(24)
-
-    private val selectedIconSize = context.dip(40)
+    var iconSize = context.dip(24)
+        set(value) {
+            field = value
+            children.forEach { (it as FluidTabView).iconSize = value * 1f }
+        }
 
     private var spaceBetweenIcons = 0
 

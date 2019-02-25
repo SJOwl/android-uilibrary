@@ -1,6 +1,6 @@
 package au.sjowl.lib.view.bottomnav
 
-class FluidNavigationItem(
+class NavigationItem(
     val title: String,
     val drawableId: Int
 )

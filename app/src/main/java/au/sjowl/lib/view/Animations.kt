@@ -5,21 +5,13 @@ import android.view.View
 import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.view.bottomnav.interpolators.SinusDissipationInterpolator
 
 fun View.runScaleAnimation(scaleFrom: Float = 0.5f, scaleTo: Float = 1.0f, duration: Long = 250L) {
     startAnimation(ScaleAnimation(scaleFrom, scaleTo, scaleFrom, scaleTo, width / 2f, height / 2f).apply {
         interpolator = SinusDissipationInterpolator()
         this.duration = duration
     })
-}
-
-class SinusDissipationInterpolator(
-    private var amplitude: Double = 0.9,
-    private var frequency: Double = 3.0
-) : android.view.animation.Interpolator {
-    override fun getInterpolation(x: Float): Float {
-        return (amplitude * Math.sin(Math.PI * frequency * x) * (1 - x) + 1).toFloat()
-    }
 }
 
 fun AnimateImageView(v: ImageView) {

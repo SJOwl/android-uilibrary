@@ -1,4 +1,4 @@
-package au.sjowl.lib.view.bottomnav
+package au.sjowl.lib.view.bottomnav.fluid
 
 import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
@@ -16,11 +16,16 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import au.sjowl.lib.view.bottomnav.AnimProperty
+import au.sjowl.lib.view.bottomnav.AnimatedPropertyF
+import au.sjowl.lib.view.bottomnav.AnimatedPropertyInt
+import au.sjowl.lib.view.bottomnav.Boundaries
+import au.sjowl.lib.view.bottomnav.drawTextCentered
 import org.jetbrains.anko.dip
 
 class FluidTabView : View {
 
-    var drawable: Drawable? = null
+    lateinit var drawable: Drawable
 
     var checked: Boolean = false
         set(value) {
@@ -40,6 +45,7 @@ class FluidTabView : View {
         set(value) {
             field = value
             drawable = ContextCompat.getDrawable(context, value)
+                ?: throw IllegalArgumentException("No such drawable resource")
         }
 
     var title = ""
@@ -79,7 +85,7 @@ class FluidTabView : View {
 
     var animationDuration: Long = 180L
 
-    val iconSize = context.dip(32) * 1f
+    var iconSize = context.dip(32) * 1f
 
     val defaultWidth = iconSize * 2.8f
 
@@ -192,9 +198,9 @@ class FluidTabView : View {
 
     private inline fun drawIcon(canvas: Canvas) {
         sb.radius = iconHalf
-        drawable?.setBounds(sb.left, sb.top, sb.right, sb.bottom)
-        drawable?.setTint(animTint.value)
-        drawable?.draw(canvas)
+        drawable.setBounds(sb.left, sb.top, sb.right, sb.bottom)
+        drawable.setTint(animTint.value)
+        drawable.draw(canvas)
     }
 
     private inline fun drawTitle(canvas: Canvas) {
@@ -284,51 +290,4 @@ class FluidTabView : View {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-}
-
-interface AnimProperty {
-    fun setup()
-    fun reverse()
-}
-
-class AnimatedPropertyF(
-    var value: Float = 0f,
-    var from: Float = 0f,
-    var to: Float = 0f
-) : AnimProperty {
-    override fun setup() {
-        value = from
-    }
-
-    override fun reverse() {
-        val t = from
-        from = to
-        to = t
-    }
-}
-
-class AnimatedPropertyInt(
-    var value: Int = 0,
-    var from: Int = 0,
-    var to: Int = 0
-) : AnimProperty {
-    override fun setup() {
-        value = from
-    }
-
-    override fun reverse() {
-        val t = from
-        from = to
-        to = t
-    }
-}
-
-fun Canvas.drawTextCenteredVertically(text: String, x: Float, y: Float, paint: Paint, r: Rect) {
-    paint.getTextBounds(text, 0, text.length, r)
-    drawText(text, x, y + r.height() / 2, paint)
-}
-
-fun Canvas.drawTextCentered(text: String, x: Float, y: Float, paint: Paint, r: Rect) {
-    paint.getTextBounds(text, 0, text.length, r)
-    drawText(text, x - r.width() / 2, y + r.height() / 2, paint)
 }
