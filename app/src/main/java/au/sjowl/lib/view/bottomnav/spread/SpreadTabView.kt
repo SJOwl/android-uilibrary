@@ -5,20 +5,22 @@ import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import au.sjowl.lib.view.bottomnav.AnimProperty
-import au.sjowl.lib.view.bottomnav.AnimatedPropertyF
-import au.sjowl.lib.view.bottomnav.AnimatedPropertyInt
 import au.sjowl.lib.view.bottomnav.Badge
 import au.sjowl.lib.view.bottomnav.Boundaries
+import au.sjowl.lib.view.utils.AnimProperty
+import au.sjowl.lib.view.utils.AnimatedPropertyF
+import au.sjowl.lib.view.utils.AnimatedPropertyInt
 import org.jetbrains.anko.dip
 
 class SpreadTabView : View {
@@ -57,24 +59,20 @@ class SpreadTabView : View {
         set(value) {
             field = value
             setSelectedStateAnimations()
+            paintText.color = value
         }
 
     var colorTintUnselected = Color.parseColor("#0011B6")
         set(value) {
             field = value
             setSelectedStateAnimations()
+            animTint.value = if (checked) colorTintSelected else colorTintUnselected
         }
 
     var colorBubble = Color.parseColor("#0011B6")
         set(value) {
             field = value
             paintOvalBg.color = value
-        }
-
-    var colorBg = Color.parseColor("#fafafa")
-        set(value) {
-            field = value
-            paintBg.color = value
         }
 
     var animationDuration: Long = 180L
@@ -105,21 +103,23 @@ class SpreadTabView : View {
 
     private val paintOvalBg = defaultPaint().apply {
         color = colorBubble
-        style = Paint.Style.STROKE
-        strokeWidth = 10f
-        textSize = context.dip(14).toFloat()
+        style = Paint.Style.FILL
     }
 
-    private val paintBg = defaultPaint().apply {
-        color = colorBg
+    private val paintTextBitmap = defaultPaint().apply {
         style = Paint.Style.FILL
+        alpha = 255
+    }
+
+    private val paintText = Paint().apply {
+        color = colorTintSelected
+        isAntiAlias = true
+        textSize = context.dip(14).toFloat()
     }
 
     private val baseHeight = context.dip(56) * 1f + 1f
 
-    private val radiusMax = baseHeight * 0.45f
-
-    private val scaleAmplitude = 0.5
+    private val scaleAmplitude = 0.3
 
     private var centerX = 0
 
@@ -129,22 +129,33 @@ class SpreadTabView : View {
 
     private var badgeAnim: Animator? = null
 
+    private val titleRect = Rect()
+
+    private var titleBitmap: Bitmap? = null
+
+    private var titleCanvas: Canvas? = null
+
+    private val titleSrc = Rect()
+
+    private val titleDst = Rect()
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
         val w = defaultSize(widthMeasureSpec, defaultWidth)
         val h = defaultSize(heightMeasureSpec, baseHeight)
         setMeasuredDimension(w, h)
 
-        centerX = measuredWidth / 2
         centerY = (baseHeight / 2).toInt()
 
         setSelectedStateAnimations()
     }
 
     override fun onDraw(canvas: Canvas) {
-        drawBackground(canvas)
+        centerX = width / 2
+
         drawBgCircle(canvas)
         drawIcon(canvas)
+        drawTitle(canvas)
         drawBadge(canvas)
     }
 
@@ -165,34 +176,55 @@ class SpreadTabView : View {
         isAntiAlias = true
     }
 
-    private inline fun drawBackground(canvas: Canvas) {
-        canvas.drawRect(0f, measuredHeight - baseHeight, measuredWidth * 1f, measuredHeight * 1f, paintBg)
-    }
-
     private inline fun drawBgCircle(canvas: Canvas) {
-        sb.centerX = centerX * 1f
         sb.centerY = centerY * 1f
-        sb.radius = animFloat.value * radiusMax
-
-        if (animFloat.from < animFloat.to) {
-            paintOvalBg.alpha = ((1 - animFloat.value) * 255).toInt()
-            paintOvalBg.strokeWidth = 10f * (1 - animFloat.value)
-            canvas.drawCircle(sb.centerX, sb.centerY, sb.radius, paintOvalBg)
-        }
+        sb.radius = iconHalf * 1.6f
+        paintOvalBg.alpha = (animFloat.value * 255).toInt()
+        canvas.drawRoundRect(iconHalf, sb.topF, width - iconHalf, sb.bottomF, sb.radius, sb.radius, paintOvalBg)
     }
 
     private inline fun drawIcon(canvas: Canvas) {
-        sb.centerX = centerX * 1f
+        sb.centerX = iconSize * 1.5f
         sb.centerY = centerY * 1f
         sb.radius = (iconHalf * (1 + scaleAmplitude * Math.sin(animFloat.value * Math.PI))).toFloat()
-        val r = (sb.radius * Math.abs(Math.cos(animFloat.value * Math.PI))).toInt()
-        drawable.setBounds(centerX - r, sb.top, centerX + r, sb.bottom)
+
+        drawable.setBounds(sb.rect)
         drawable.setTint(animTint.value)
         drawable.draw(canvas)
     }
 
+    private inline fun drawTitle(canvas: Canvas) {
+
+        if (checked) {
+
+            paintText.getTextBounds(title, 0, title.length, titleRect)
+            if (titleBitmap == null) {
+                titleBitmap = Bitmap.createBitmap(titleRect.width(), titleRect.height(), Bitmap.Config.ARGB_4444)
+
+                if (titleCanvas == null) {
+                    titleCanvas = Canvas(titleBitmap!!)
+                }
+                titleCanvas!!.setBitmap(titleBitmap!!)
+                titleCanvas!!.drawText(title, 0f, titleRect.height() * 1f, paintText)
+            }
+
+            titleSrc.right = Math.min((width - 3f * iconSize).toInt(), titleRect.width())
+            titleSrc.bottom = titleRect.height()
+            titleSrc.top = 0
+            titleSrc.left = 0
+
+            titleDst.left = (iconSize * 2.5f).toInt()
+            titleDst.top = centerY - titleRect.height() / 2
+            titleDst.bottom = centerY + titleRect.height() / 2
+            titleDst.right = Math.min(2.5f * iconSize + titleSrc.width(), width - iconHalf).toInt()
+
+            paintTextBitmap.alpha = (animFloat.value * 255).toInt()
+            canvas.drawBitmap(titleBitmap!!, titleSrc, titleDst, paintTextBitmap)
+        }
+    }
+
     private inline fun drawBadge(canvas: Canvas) {
-        badge.draw(canvas, centerX + iconHalf, centerY - iconHalf, animFloat.value, animBadgeFloat.value)
+        badge.draw(canvas, width - iconSize, centerY - iconHalf, animFloat.value, animBadgeFloat.value)
     }
 
     private fun setSelectedStateAnimations() {
@@ -206,7 +238,9 @@ class SpreadTabView : View {
             it.reverse()
         }
 
-        animProperties.forEach { it.setup() }
+        if (animatorSet?.isRunning != true) {
+            animProperties.forEach { it.setup() }
+        }
     }
 
     private fun animateSelectedState() {

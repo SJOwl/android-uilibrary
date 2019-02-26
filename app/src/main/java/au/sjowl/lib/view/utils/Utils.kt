@@ -1,8 +1,10 @@
-package au.sjowl.lib.view.bottomnav
+package au.sjowl.lib.view.utils
 
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import androidx.core.content.ContextCompat
 
 inline fun absCos(value: Float) = Math.abs(Math.cos(value * 1.0)).toFloat()
 inline fun absCos(value: Double) = Math.abs(Math.cos(value)).toFloat()
@@ -55,4 +57,12 @@ class AnimatedPropertyInt(
         from = to
         to = t
     }
+
+    fun set(from: Int, to: Int, value: Int) {
+        this.from = from
+        this.to = to
+        this.value = value
+    }
 }
+
+fun Context.colorCompat(id: Int) = ContextCompat.getColor(this, id)

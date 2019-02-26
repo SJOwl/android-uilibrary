@@ -5,4 +5,18 @@
     <color name="colorAccent">#6ED37C</color>
     <color name="colorAccentxzxxx">#6ED37C</color>
     <color name="colorBg">#6C9592</color>
+
+    <color name="color1">#FFF5BB</color>
+    <color name="color2">#D2FAB7</color>
+    <color name="color3">#BEFFFA</color>
+    <color name="color4">#CFD3FF</color>
+    <color name="color5">#FFD4CE</color>
+
+    <color name="color1_darker">#8A6900</color>
+    <color name="color2_darker">#5D8800</color>
+    <color name="color3_darker">#018B78</color>
+    <color name="color4_darker">#000FE2</color>
+    <color name="color5_darker">#DB1A00</color>
+
+    <color name="colorTextSelected">#AFAFAF</color>
 </resources>

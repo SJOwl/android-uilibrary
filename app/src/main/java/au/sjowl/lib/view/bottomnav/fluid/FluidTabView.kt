@@ -15,11 +15,11 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import au.sjowl.lib.view.bottomnav.AnimProperty
-import au.sjowl.lib.view.bottomnav.AnimatedPropertyF
-import au.sjowl.lib.view.bottomnav.AnimatedPropertyInt
 import au.sjowl.lib.view.bottomnav.Boundaries
-import au.sjowl.lib.view.bottomnav.drawTextCentered
+import au.sjowl.lib.view.utils.AnimProperty
+import au.sjowl.lib.view.utils.AnimatedPropertyF
+import au.sjowl.lib.view.utils.AnimatedPropertyInt
+import au.sjowl.lib.view.utils.drawTextCentered
 import org.jetbrains.anko.dip
 
 class FluidTabView : View {

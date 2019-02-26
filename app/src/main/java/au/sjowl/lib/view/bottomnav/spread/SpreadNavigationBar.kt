@@ -2,29 +2,28 @@ package au.sjowl.lib.view.bottomnav.spread
 
 import android.content.Context
 import android.graphics.Color
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.children
-import au.sjowl.lib.view.bottomnav.NavigationItem
 import org.jetbrains.anko.dip
-import org.jetbrains.anko.wrapContent
 
 class SpreadNavigationBar : LinearLayout {
 
-    var items = listOf<NavigationItem>()
+    var items = listOf<SpreadNavigationItem>()
         set(value) {
             field = value
             value.forEach { fluidNavigationItem ->
                 addView(SpreadTabView(context).apply {
                     drawableId = fluidNavigationItem.drawableId
                     title = fluidNavigationItem.title
+                    colorTintSelected = fluidNavigationItem.colorTextSelected
+                    colorBubble = fluidNavigationItem.colorBackground
                     animationDuration = this@SpreadNavigationBar.animationDuration
-                    colorTintSelected = this@SpreadNavigationBar.colorTintSelected
                     colorTintUnselected = this@SpreadNavigationBar.colorTintUnselected
-                    colorBubble = this@SpreadNavigationBar.colorBubble
-                    colorBg = this@SpreadNavigationBar.colorBackground
                 })
             }
             currentItemIndex = 0
@@ -40,39 +39,22 @@ class SpreadNavigationBar : LinearLayout {
         set(value) {
             field = value
             children.forEach { (it as SpreadTabView).animationDuration = value }
+            transition.duration = value
         }
 
-    var colorBubble = Color.parseColor("#0011B6")
-        set(value) {
-            field = value
-            children.forEach { (it as SpreadTabView).colorBubble = value }
-        }
-
-    var colorBackground = Color.WHITE
-        set(value) {
-            field = value
-            children.forEach { (it as SpreadTabView).colorBg = value }
-        }
-
-    var colorTintSelected = colorBubble
-        set(value) {
-            field = value
-            children.forEach { (it as SpreadTabView).colorTintSelected = value }
-        }
-
-    var colorTintUnselected = Color.parseColor("#aaaaaa")
+    var colorTintUnselected = Color.MAGENTA
         set(value) {
             field = value
             children.forEach { (it as SpreadTabView).colorTintUnselected = value }
         }
 
-    var colorBadgeBackground: Int = colorBubble
+    var colorBadgeBackground: Int = Color.MAGENTA
         set(value) {
             field = value
             children.forEach { (it as SpreadTabView).badge.paintBadge.color = value }
         }
 
-    var colorBadgeText: Int = colorBackground
+    var colorBadgeText: Int = Color.WHITE
         set(value) {
             field = value
             children.forEach { (it as SpreadTabView).badge.paintBadgeText.color = value }
@@ -92,26 +74,16 @@ class SpreadNavigationBar : LinearLayout {
 
     private val heightDefault = context.dip(56)
 
+    private val transition = AutoTransition().apply {
+        duration = animationDuration
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = defaultSize(widthMeasureSpec)
         val h = defaultSize(heightMeasureSpec)
         setMeasuredDimension(w, h)
 
-        if (items.size !in (3..5)) throw IllegalStateException("Bottombar must contain 3-5 items")
-
-        val childW = measuredWidth / items.size
-        children.forEach {
-            //            it.layoutParams.width = childW
-
-//            it.layoutParams = LinearLayout.LayoutParams(
-//                0,
-//                wrapContent,
-//                1f
-//            )
-            it.layoutParams.width = 0
-            it.layoutParams.height = wrapContent
-            (it.layoutParams as LinearLayout.LayoutParams).weight = 1f
-        }
+        measureChildren()
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
@@ -152,19 +124,38 @@ class SpreadNavigationBar : LinearLayout {
         onItemReselected = callback
     }
 
-    private fun selectItem(index: Int) {
-        children.forEachIndexed { i, view ->
-            (view as SpreadTabView).checked = index == i
-            (view.layoutParams as LinearLayout.LayoutParams).weight = if (index == i) 2f else 1f
+    private fun measureChildren() {
+        if (items.size !in (3..5)) throw IllegalStateException("Bottombar must contain 3-5 items")
+        val childW = measuredWidth / (items.size + 1)
+        children.forEachIndexed { index, view ->
+            view.layoutParams.width = if (index == currentItemIndex) childW * 2 else childW
         }
     }
 
-    private inline fun indexOfItemClicked(x: Float): Int = x.toInt() / (measuredWidth / items.size)
+    private fun selectItem(index: Int) {
+        children.forEachIndexed { i, view ->
+            (view as SpreadTabView).checked = index == i
+        }
+        requestLayout()
+        TransitionManager.beginDelayedTransition(this, transition)
+    }
+
+    private inline fun indexOfItemClicked(x: Float): Int {
+        val list = children.toList()
+        var child: View
+        for (index in 0 until childCount) {
+            child = list[index]
+            if (child.x < x && child.width + child.x > x)
+                return index
+        }
+
+        throw IllegalStateException("No tab clicked")
+    }
 
     private fun defaultSize(measureSpec: Int, size: Int = heightDefault + ovalPadding): Int {
         var result = size
         val specMode = View.MeasureSpec.getMode(measureSpec)
-        val specSize = MeasureSpec.getSize(measureSpec)
+        val specSize = View.MeasureSpec.getSize(measureSpec)
 
         when (specMode) {
             MeasureSpec.AT_MOST -> result = size

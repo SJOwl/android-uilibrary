@@ -35,6 +35,11 @@ class Boundaries(
 
     val bottom get() = (centerY + radius).toInt()
 
+    val leftF get() = centerX - radius
+    val rightF get() = centerX + radius
+    val topF get() = centerY - radius
+    val bottomF get() = centerY + radius
+
     private val r = Rect()
 
     private val rf = RectF()

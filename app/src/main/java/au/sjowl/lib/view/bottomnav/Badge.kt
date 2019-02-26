@@ -7,6 +7,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
+import au.sjowl.lib.view.utils.absCos
+import au.sjowl.lib.view.utils.absSin
+import au.sjowl.lib.view.utils.drawTextCentered
 import org.jetbrains.anko.dip
 
 class Badge(
@@ -38,6 +41,12 @@ class Badge(
     private var bitmap: Bitmap? = null
 
     private val amplitude = 0.4f
+
+    private val rectSrc = Rect()
+
+    private val rectDst = Rect()
+
+    private val paddingRight = context.dip(4)
 
     override fun toString(): String {
         return when (count) {
@@ -76,9 +85,23 @@ class Badge(
             val scaleMultiplier = amplitude * absSin(scale * Math.PI) + 1f
             w *= absCos(animFloat * Math.PI) * scaleMultiplier
             h *= scaleMultiplier
-            val src = Rect(0, 0, bmp.width, bmp.height)
-            val dst = Rect((cx - w).toInt(), (cy - h).toInt(), (cx + w).toInt(), (cy + h).toInt())
-            canvas.drawBitmap(bmp, src, dst, null)
+            with(rectSrc) {
+                right = bmp.width
+                bottom = bmp.height
+            }
+            with(rectDst) {
+                left = (cx - w).toInt()
+                top = (cy - h).toInt()
+                right = (cx + w).toInt()
+                bottom = (cy + h).toInt()
+
+                if (right > canvas.width) {
+                    val delta = right - canvas.width + paddingRight
+                    left -= delta
+                    right -= delta
+                }
+            }
+            canvas.drawBitmap(bmp, rectSrc, rectDst, null)
         }
     }
 
