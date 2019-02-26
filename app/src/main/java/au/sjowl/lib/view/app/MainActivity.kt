@@ -7,10 +7,11 @@ import au.sjowl.lib.twolinestextview.R
 import au.sjowl.lib.view.app.bottomnav.NavFluidFragment
 import au.sjowl.lib.view.app.bottomnav.NavRotationFragment
 import au.sjowl.lib.view.app.bottomnav.NavSpreadFragment
+import au.sjowl.lib.view.app.buttons.ButtonWithLoaderFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private val currentFragmentIndex = 2
+    private val currentFragmentIndex = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             1 -> NavFluidFragment()
             2 -> NavRotationFragment()
             3 -> NavSpreadFragment()
+            4 -> ButtonWithLoaderFragment()
 
             else -> HomeFragment()
         }
