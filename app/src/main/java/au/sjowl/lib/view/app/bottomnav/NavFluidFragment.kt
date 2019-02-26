@@ -8,6 +8,7 @@ import au.sjowl.lib.view.app.BaseFragment
 import au.sjowl.lib.view.bottomnav.fluid.NavigationItem
 import kotlinx.android.synthetic.main.fr_bottomnav_fluid.*
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.support.v4.toast
 
 class NavFluidFragment : BaseFragment() {
     override val layoutId: Int get() = R.layout.fr_bottomnav_fluid
@@ -28,10 +29,10 @@ class NavFluidFragment : BaseFragment() {
             )
 
             onItemSelected { index ->
-                println("selected   $index")
+                toast("selected   $index")
             }
             onItemReselected { index ->
-                println("reselected $index")
+                toast("reselected $index")
             }
             colorBubble = Color.parseColor("#0011B6")
             colorBackground = Color.parseColor("#fafafa")

@@ -19,4 +19,7 @@
     <color name="color5_darker">#DB1A00</color>
 
     <color name="colorTextSelected">#AFAFAF</color>
+
+    <color name="buttonBg">#90FF9F</color>
+    <color name="buttonText">#00640F</color>
 </resources>

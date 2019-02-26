@@ -10,6 +10,7 @@ import au.sjowl.lib.view.utils.colorCompat
 import kotlinx.android.synthetic.main.fr_bottomnav_rotation.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk27.coroutines.onClick
+import org.jetbrains.anko.support.v4.toast
 import kotlin.random.Random
 
 class NavRotationFragment : BaseFragment() {
@@ -31,10 +32,10 @@ class NavRotationFragment : BaseFragment() {
             )
 
             onItemSelected { index ->
-                println("selected   $index")
+                toast("selected   $index")
             }
             onItemReselected { index ->
-                println("reselected $index")
+                toast("reselected $index")
             }
 
             setBadgeCount(0, 25)
