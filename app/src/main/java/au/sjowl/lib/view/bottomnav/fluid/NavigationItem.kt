@@ -1,4 +1,4 @@
-package au.sjowl.lib.view.bottomnav
+package au.sjowl.lib.view.bottomnav.fluid
 
 class NavigationItem(
     val title: String,

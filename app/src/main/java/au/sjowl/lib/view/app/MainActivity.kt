@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.view.app.bottomnav.NavFluidFragment
+import au.sjowl.lib.view.app.bottomnav.NavRotationFragment
+import au.sjowl.lib.view.app.bottomnav.NavSpreadFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private val currentFragmentIndex = 3
+    private val currentFragmentIndex = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

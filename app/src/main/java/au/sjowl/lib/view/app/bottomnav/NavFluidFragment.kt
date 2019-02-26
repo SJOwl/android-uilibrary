@@ -1,10 +1,11 @@
-package au.sjowl.lib.view.app
+package au.sjowl.lib.view.app.bottomnav
 
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import au.sjowl.lib.twolinestextview.R
-import au.sjowl.lib.view.bottomnav.NavigationItem
+import au.sjowl.lib.view.app.BaseFragment
+import au.sjowl.lib.view.bottomnav.fluid.NavigationItem
 import kotlinx.android.synthetic.main.fr_bottomnav_fluid.*
 import org.jetbrains.anko.dip
 
@@ -33,20 +34,14 @@ class NavFluidFragment : BaseFragment() {
                 println("reselected $index")
             }
             colorBubble = Color.parseColor("#0011B6")
-            colorTintSelected = Color.parseColor("#fafafa")
-            colorTintUnselected = Color.parseColor("#0011B6")
-            colorTitle = Color.BLACK
-            currentItemIndex = 1
-            currentItemIndex = 2
-            currentItemIndex = 3
-            currentItemIndex = 4
-            colorBubble = Color.parseColor("#0011B6")
             colorBackground = Color.parseColor("#fafafa")
             colorTintSelected = Color.parseColor("#fafafa")
             colorTintUnselected = Color.parseColor("#0011B6")
             colorTitle = Color.parseColor("#0011B6")
             animationDuration = 200L
             iconSize = context.dip(24)
+
+            currentItemIndex = 1
         }
     }
 }

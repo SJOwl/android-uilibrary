@@ -71,12 +71,6 @@ class RotationTabView : View {
             paintOvalBg.color = value
         }
 
-    var colorBg = Color.parseColor("#fafafa")
-        set(value) {
-            field = value
-            paintBg.color = value
-        }
-
     var animationDuration: Long = 180L
 
     var iconSize = context.dip(24) * 1f
@@ -110,11 +104,6 @@ class RotationTabView : View {
         textSize = context.dip(14).toFloat()
     }
 
-    private val paintBg = defaultPaint().apply {
-        color = colorBg
-        style = Paint.Style.FILL
-    }
-
     private val baseHeight = context.dip(56) * 1f + 1f
 
     private val radiusMax = baseHeight * 0.45f
@@ -141,7 +130,6 @@ class RotationTabView : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        drawBackground(canvas)
         drawBgCircle(canvas)
         drawIcon(canvas)
         drawBadge(canvas)
@@ -164,10 +152,6 @@ class RotationTabView : View {
         isAntiAlias = true
     }
 
-    private inline fun drawBackground(canvas: Canvas) {
-        canvas.drawRect(0f, measuredHeight - baseHeight, measuredWidth * 1f, measuredHeight * 1f, paintBg)
-    }
-
     private inline fun drawBgCircle(canvas: Canvas) {
         sb.centerX = centerX * 1f
         sb.centerY = centerY * 1f
@@ -187,7 +171,10 @@ class RotationTabView : View {
         val r = (sb.radius * Math.abs(Math.cos(animFloat.value * Math.PI))).toInt()
         drawable.setBounds(centerX - r, sb.top, centerX + r, sb.bottom)
         drawable.setTint(animTint.value)
+        val angle = Math.sin(animFloat.value * Math.PI).toFloat() * 30
+        canvas.rotate(angle, sb.centerX, sb.centerY)
         drawable.draw(canvas)
+        canvas.rotate(-angle, sb.centerX, sb.centerY)
     }
 
     private inline fun drawBadge(canvas: Canvas) {

@@ -7,11 +7,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.children
-import au.sjowl.lib.view.bottomnav.NavigationItem
 import org.jetbrains.anko.dip
 
 /**
- * todo badges, test seting params from code
+ * todo badges, test set params from code
  */
 class FluidNavigationBar : LinearLayout {
 

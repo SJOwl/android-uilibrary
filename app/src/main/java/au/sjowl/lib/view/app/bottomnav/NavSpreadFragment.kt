@@ -1,9 +1,10 @@
-package au.sjowl.lib.view.app
+package au.sjowl.lib.view.app.bottomnav
 
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.view.app.BaseFragment
 import au.sjowl.lib.view.bottomnav.spread.SpreadNavigationItem
 import au.sjowl.lib.view.utils.colorCompat
 import kotlinx.android.synthetic.main.fr_bottomnav_spread.*

@@ -7,23 +7,21 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.children
-import au.sjowl.lib.view.bottomnav.NavigationItem
 import org.jetbrains.anko.dip
 
 class RotationNavigationBar : LinearLayout {
 
-    var items = listOf<NavigationItem>()
+    var items = listOf<RotationNavItem>()
         set(value) {
             field = value
-            value.forEach { fluidNavigationItem ->
+            value.forEach { navItem ->
                 addView(RotationTabView(context).apply {
-                    drawableId = fluidNavigationItem.drawableId
-                    title = fluidNavigationItem.title
+                    drawableId = navItem.drawableId
+                    title = navItem.title
+                    colorTintSelected = navItem.colorSelected
                     animationDuration = this@RotationNavigationBar.animationDuration
-                    colorTintSelected = this@RotationNavigationBar.colorTintSelected
                     colorTintUnselected = this@RotationNavigationBar.colorTintUnselected
                     colorBubble = this@RotationNavigationBar.colorBubble
-                    colorBg = this@RotationNavigationBar.colorBackground
                 })
             }
             currentItemIndex = 0
@@ -47,18 +45,6 @@ class RotationNavigationBar : LinearLayout {
             children.forEach { (it as RotationTabView).colorBubble = value }
         }
 
-    var colorBackground = Color.WHITE
-        set(value) {
-            field = value
-            children.forEach { (it as RotationTabView).colorBg = value }
-        }
-
-    var colorTintSelected = colorBubble
-        set(value) {
-            field = value
-            children.forEach { (it as RotationTabView).colorTintSelected = value }
-        }
-
     var colorTintUnselected = Color.parseColor("#aaaaaa")
         set(value) {
             field = value
@@ -71,7 +57,7 @@ class RotationNavigationBar : LinearLayout {
             children.forEach { (it as RotationTabView).badge.paintBadge.color = value }
         }
 
-    var colorBadgeText: Int = colorBackground
+    var colorBadgeText: Int = Color.WHITE
         set(value) {
             field = value
             children.forEach { (it as RotationTabView).badge.paintBadgeText.color = value }
