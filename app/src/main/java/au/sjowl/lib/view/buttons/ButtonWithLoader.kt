@@ -19,14 +19,6 @@ import au.sjowl.lib.view.utils.contains
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.textColor
 
-/**
- * todo
- * enabled state: different from pressed and default, can not be changed
- * animate transitions between states
- * click speed can not be more 300ms?
- * learn about button possible states
- */
-
 class ButtonWithLoader : TextView {
 
     private val COLOR_BACKGROUND = 1
@@ -98,8 +90,8 @@ class ButtonWithLoader : TextView {
     }
 
     override fun onDraw(canvas: Canvas) {
-        paintBackground.color = animator.getInt(COLOR_BACKGROUND)
-        textColor = animator.getInt(COLOR_TEXT)
+        paintBackground.color = animator.getColor(COLOR_BACKGROUND)
+        textColor = animator.getColor(COLOR_TEXT)
         canvas.drawRoundRect(0f, 0f, width * 1f, height * 1f, r, r, paintBackground)
         super.onDraw(canvas)
     }

@@ -18,4 +18,13 @@ class ButtonWithLoaderFragment : BaseFragment() {
             println("button clicked!")
         }
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        button.isEnabled = false
+//        GlobalScope.launch(Dispatchers.Main) {
+//            delay(2000)
+//            button.isEnabled = true
+//        }
+//    }
 }

@@ -7,13 +7,13 @@ class StateAnimator(
     var animationDuration: Long = 200L
 ) {
 
-    val properties = mutableMapOf<Int, AnimatedProperty<Any>>()
+    private val properties = mutableMapOf<Int, AnimatedProperty<Any>>()
 
     private var animatorSet: AnimatorSet? = AnimatorSet()
 
-    inline fun getInt(key: Int): Int = properties.getValue(key).value as Int
+    fun getColor(key: Int): Int = properties.getValue(key).value as Int
 
-    inline fun getFloat(key: Int): Float = properties.getValue(key).value as Float
+    fun getFloat(key: Int): Float = properties.getValue(key).value as Float
 
     fun setStates(stateFrom: Map<Int, Any>, stateTo: Map<Int, Any>) {
 
