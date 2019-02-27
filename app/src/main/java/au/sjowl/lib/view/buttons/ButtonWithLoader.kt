@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.TextView
 import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.view.animations.StateAnimator
 import au.sjowl.lib.view.utils.colorCompat
 import au.sjowl.lib.view.utils.contains
 import org.jetbrains.anko.dip
@@ -25,22 +26,41 @@ import org.jetbrains.anko.textColor
  * click speed can not be more 300ms?
  * learn about button possible states
  */
+
 class ButtonWithLoader : TextView {
+
+    private val COLOR_BACKGROUND = 1
+
+    private val COLOR_TEXT = 2
+
+    private val ELEVATION = 3
 
     private var baseElevation = context.dip(4) * 1f
 
     private val r = context.dip(20) * 1f
 
-    private val stateDefault = InteractionState(context.colorCompat(R.color.button_background_default), context.colorCompat(R.color.button_text_default), baseElevation)
+    private val stateDefault = mapOf(
+        COLOR_BACKGROUND to context.colorCompat(R.color.button_background_default),
+        COLOR_TEXT to context.colorCompat(R.color.button_text_default),
+        ELEVATION to baseElevation
+    )
 
-    private val statePressed = InteractionState(context.colorCompat(R.color.button_background_pressed), context.colorCompat(R.color.button_text_pressed), 0f)
+    private val statePressed = mapOf(
+        COLOR_BACKGROUND to context.colorCompat(R.color.button_background_pressed),
+        COLOR_TEXT to context.colorCompat(R.color.button_text_pressed),
+        ELEVATION to 0f
+    )
 
-    private val stateDisabled = InteractionState(context.colorCompat(R.color.button_background_disabled), context.colorCompat(R.color.button_text_disabled), baseElevation)
+    private val stateDisabled = mapOf(
+        COLOR_BACKGROUND to context.colorCompat(R.color.button_background_disabled),
+        COLOR_TEXT to context.colorCompat(R.color.button_text_disabled),
+        ELEVATION to baseElevation
+    )
 
     private var stateCurrent = stateDefault
 
     private val paintBackground = Paint().apply {
-        color = stateDefault.colorBackground
+        color = stateDefault[COLOR_BACKGROUND] as Int
         style = Paint.Style.FILL
         strokeWidth = 10f
         isAntiAlias = true
@@ -48,7 +68,7 @@ class ButtonWithLoader : TextView {
 
     private val rect = Rect(0, 0, width, height)
 
-    private val animator = StateAnimator()
+    private val animator = StateAnimator(1000L)
 
     private var colorBackground: Int = Color.WHITE
         set(value) {
@@ -78,8 +98,8 @@ class ButtonWithLoader : TextView {
     }
 
     override fun onDraw(canvas: Canvas) {
-        paintBackground.color = animator.colorBackground.value
-        textColor = animator.colorText.value
+        paintBackground.color = animator.getInt(COLOR_BACKGROUND)
+        textColor = animator.getInt(COLOR_TEXT)
         canvas.drawRoundRect(0f, 0f, width * 1f, height * 1f, r, r, paintBackground)
         super.onDraw(canvas)
     }
@@ -102,16 +122,21 @@ class ButtonWithLoader : TextView {
         setState(if (enabled) stateDefault else stateDisabled)
     }
 
-    private fun setState(state: InteractionState) {
+    private fun setState(state: Map<Int, Any>) {
         if (stateCurrent != state) {
-            textColor = state.colorText
-            elevation = state.elevation
-            colorBackground = state.colorBackground
+            textColor = state[COLOR_TEXT] as Int
+            elevation = state[ELEVATION] as Float
+            colorBackground = state[COLOR_BACKGROUND] as Int
 
-            animator.setAnimations(stateCurrent, state)
+            animator.setStates(stateCurrent, state)
             stateCurrent = state
-            animator.animateSelectedState(this)
+            animator.animate(this)
         }
+    }
+
+    private fun init() {
+        stateDefault
+        animator.setStates(stateDefault, stateDefault)
     }
 
     constructor(context: Context) : super(context) {
@@ -124,10 +149,5 @@ class ButtonWithLoader : TextView {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         init()
-    }
-
-    private fun init() {
-        stateDefault
-        animator.setAnimations(stateDefault, stateDefault)
     }
 }
