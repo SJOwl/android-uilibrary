@@ -3,14 +3,20 @@ package au.sjowl.lib.view.buttons
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RoundRectShape
+import android.graphics.Outline
+import android.graphics.Paint
+import android.graphics.Rect
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewOutlineProvider
 import android.widget.TextView
-import org.jetbrains.anko.backgroundDrawable
+import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.view.utils.colorCompat
+import au.sjowl.lib.view.utils.contains
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.textColor
 
 /**
  * todo
@@ -21,67 +27,107 @@ import org.jetbrains.anko.dip
  */
 class ButtonWithLoader : TextView {
 
-    private var baseElevation = context.dip(8) * 1f
+    private var baseElevation = context.dip(4) * 1f
 
-    private val r = context.dip(8) * 1f
+    private val r = context.dip(20) * 1f
+
+    private val stateDefault = InteractionState(context.colorCompat(R.color.button_background_default), context.colorCompat(R.color.button_text_default), baseElevation)
+
+    private val statePressed = InteractionState(context.colorCompat(R.color.button_background_pressed), context.colorCompat(R.color.button_text_pressed), 0f)
+
+    private val stateDisabled = InteractionState(context.colorCompat(R.color.button_background_disabled), context.colorCompat(R.color.button_text_disabled), baseElevation)
+
+    private var stateCurrent = stateDefault
+
+    private val paintBackground = Paint().apply {
+        color = stateDefault.colorBackground
+        style = Paint.Style.FILL
+        strokeWidth = 10f
+        isAntiAlias = true
+    }
+
+    private val rect = Rect(0, 0, width, height)
+
+    private val animator = StateAnimator()
+
+    private var colorBackground: Int = Color.WHITE
+        set(value) {
+            if (field != value) {
+                paintBackground.color = value
+                field = value
+                postInvalidate()
+            }
+        }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> setPressed()
-            MotionEvent.ACTION_MOVE -> if (contains(event)) setPressed() else setDefault()
-            MotionEvent.ACTION_UP -> {
-                if (contains(event)) {
-                    callOnClick()
+        if (isEnabled) {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> setState(statePressed)
+                MotionEvent.ACTION_MOVE -> if (contains(event)) setState(statePressed) else setState(stateDefault)
+                MotionEvent.ACTION_UP -> {
+                    if (contains(event)) {
+                        callOnClick()
+                    }
+                    setState(stateDefault)
                 }
-                setDefault()
+                MotionEvent.ACTION_CANCEL -> setState(stateDefault)
             }
-            MotionEvent.ACTION_CANCEL -> setDefault()
+            return true
         }
-        return true
+        return false
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawColor(Color.MAGENTA)
+        paintBackground.color = animator.colorBackground.value
+        textColor = animator.colorText.value
+        canvas.drawRoundRect(0f, 0f, width * 1f, height * 1f, r, r, paintBackground)
         super.onDraw(canvas)
     }
 
-    private fun setPressed() {
-//        backgroundDrawable = context.getDrawable(R.drawable.button_bg_pressed)
-        elevation = 0f
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        rect.right = width
+        rect.bottom = height
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setRoundRect(rect, r)
+                }
+            }
+        }
     }
 
-    private fun setDefault() {
-//        backgroundDrawable = context.getDrawable(R.drawable.button_bg_default)
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        setState(if (enabled) stateDefault else stateDisabled)
+    }
 
-        val roundRectShape = RoundRectShape(floatArrayOf(10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f), null, null)
-        val shapeDrawable = ShapeDrawable(roundRectShape)
-        shapeDrawable.paint.color = Color.WHITE
-        backgroundDrawable = shapeDrawable
+    private fun setState(state: InteractionState) {
+        if (stateCurrent != state) {
+            textColor = state.colorText
+            elevation = state.elevation
+            colorBackground = state.colorBackground
 
-        elevation = baseElevation
+            animator.setAnimations(stateCurrent, state)
+            stateCurrent = state
+            animator.animateSelectedState(this)
+        }
     }
 
     constructor(context: Context) : super(context) {
-        setDefault()
+        init()
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        setDefault()
+        init()
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        setDefault()
+        init()
     }
-}
 
-inline fun View.contains(px: Int, py: Int): Boolean {
-    return px > x && px < x + measuredWidth && py > y && py < y + measuredHeight
-}
-
-inline fun View.contains(px: Float, py: Float): Boolean {
-    return px > x && px < x + width && py > y && py < y + height
-}
-
-inline fun View.contains(event: MotionEvent): Boolean {
-    return contains(event.x + x, event.y + y)
+    private fun init() {
+        stateDefault
+        animator.setAnimations(stateDefault, stateDefault)
+    }
 }

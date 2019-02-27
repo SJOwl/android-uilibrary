@@ -20,6 +20,10 @@
 
     <color name="colorTextSelected">#AFAFAF</color>
 
-    <color name="buttonBg">#90FF9F</color>
-    <color name="buttonText">#00640F</color>
+    <color name="button_background_default">#70ff75</color>
+    <color name="button_background_pressed">#D6D6D6</color>
+    <color name="button_background_disabled">#FFFFFF</color>
+    <color name="button_text_default">#006802</color>
+    <color name="button_text_pressed">#017A7E</color>
+    <color name="button_text_disabled">#A7A7A7</color>
 </resources>

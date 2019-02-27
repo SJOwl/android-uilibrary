@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.view.MotionEvent
+import android.view.View
 import androidx.core.content.ContextCompat
 
 inline fun absCos(value: Float) = Math.abs(Math.cos(value * 1.0)).toFloat()
@@ -11,6 +13,18 @@ inline fun absCos(value: Double) = Math.abs(Math.cos(value)).toFloat()
 
 inline fun absSin(value: Float) = Math.abs(Math.sin(value * 1.0)).toFloat()
 inline fun absSin(value: Double) = Math.abs(Math.sin(value)).toFloat()
+
+inline fun View.contains(px: Int, py: Int): Boolean {
+    return px > x && px < x + measuredWidth && py > y && py < y + measuredHeight
+}
+
+inline fun View.contains(px: Float, py: Float): Boolean {
+    return px > x && px < x + width && py > y && py < y + height
+}
+
+inline fun View.contains(event: MotionEvent): Boolean {
+    return contains(event.x + x, event.y + y)
+}
 
 fun Canvas.drawTextCenteredVertically(text: String, x: Float, y: Float, paint: Paint, r: Rect) {
     paint.getTextBounds(text, 0, text.length, r)

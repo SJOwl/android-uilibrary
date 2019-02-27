@@ -6,16 +6,15 @@ import au.sjowl.lib.twolinestextview.R
 import au.sjowl.lib.view.app.BaseFragment
 import kotlinx.android.synthetic.main.fr_button_with_loader.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.toast
 
 class ButtonWithLoaderFragment : BaseFragment() {
     override val layoutId: Int get() = R.layout.fr_button_with_loader
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button.isEnabled = false
+//        button.isEnabled = false
         button.onClick {
-            context?.toast("button clicked!")
+            //            context?.toast("button clicked!")
             println("button clicked!")
         }
     }
