@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <au.sjowl.lib.view.buttons.ButtonWithLoader
+    <au.sjowl.lib.view.buttons.SimpleButton
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +14,6 @@
         android:paddingEnd="@dimen/button_padding_h"
         android:paddingBottom="@dimen/button_padding_v"
         android:text="Home"
-        android:background="#01FFFFFF"
         android:textAllCaps="true"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

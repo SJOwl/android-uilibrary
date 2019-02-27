@@ -26,4 +26,6 @@
     <color name="button_text_default">#006802</color>
     <color name="button_text_pressed">#017A7E</color>
     <color name="button_text_disabled">#A7A7A7</color>
+
+    <color name="anotherColor">#54000000</color>
 </resources>

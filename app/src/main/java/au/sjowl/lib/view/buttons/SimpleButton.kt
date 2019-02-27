@@ -19,7 +19,7 @@ import au.sjowl.lib.view.utils.contains
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.textColor
 
-class ButtonWithLoader : TextView {
+class SimpleButton : TextView {
 
     private val COLOR_BACKGROUND = 1
 
@@ -60,7 +60,7 @@ class ButtonWithLoader : TextView {
 
     private val rect = Rect(0, 0, width, height)
 
-    private val animator = StateAnimator(1000L)
+    private val animator = StateAnimator(180L)
 
     private var colorBackground: Int = Color.WHITE
         set(value) {
