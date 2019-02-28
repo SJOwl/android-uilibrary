@@ -9,7 +9,7 @@ class AnimatedProperty<T>(
     val key: Int = 0,
     var from: T,
     var to: T,
-    val animationDuration: Long = 180L
+    var animationDuration: Long = 180L
 ) {
     var value = from
 

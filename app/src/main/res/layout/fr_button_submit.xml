@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg">
+
+    <au.sjowl.lib.view.buttons.SubmitButton
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="72dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button">
+
+        <Button
+            android:id="@+id/stateDisabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="disabled" />
+
+        <Button
+            android:id="@+id/stateReady"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ready" />
+
+        <Button
+            android:id="@+id/stateProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="progress" />
+
+        <Button
+            android:id="@+id/stateError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="error" />
+
+        <SeekBar
+            android:id="@+id/durationSeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
