@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBg">
+    android:layout_height="match_parent">
 
-    <au.sjowl.lib.view.buttons.SubmitButton
+    <au.sjowl.lib.view.buttons.submit.SubmitButton
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:padding="20dp"
+        android:paddingStart="@dimen/button_padding_h"
+        android:paddingTop="@dimen/button_padding_v"
+        android:paddingEnd="@dimen/button_padding_h"
+        android:paddingBottom="@dimen/button_padding_v"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,11 +54,18 @@
             android:layout_height="wrap_content"
             android:text="error" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="32dp"
+            android:text="Animation duration: " />
+
         <SeekBar
             android:id="@+id/durationSeek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp" />
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

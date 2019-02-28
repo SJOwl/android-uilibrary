@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.SeekBar
 import au.sjowl.lib.twolinestextview.R
 import au.sjowl.lib.view.app.BaseFragment
-import au.sjowl.lib.view.buttons.SubmitButton
 import kotlinx.android.synthetic.main.fr_button_submit.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,9 +27,24 @@ class SubmitButtonFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button.onClick {
-            println("button clicked!")
+
+        button.onSubmitClick {
+            println("click submit")
+            processJob?.cancel()
+            processJob = progress()
         }
+        button.onCancelClick { println("click cancel") }
+        button.onDoneClick {
+            println("click done")
+            button.showSubmit()
+        }
+        button.onRetryClick {
+            println("click retry")
+            processJob?.cancel()
+            processJob = progress()
+        }
+
+        button.isEnabled = true
 
         stateDisabled.onClick {
             button.isEnabled = false
@@ -47,14 +61,14 @@ class SubmitButtonFragment : BaseFragment() {
             processJob = progressWithError()
         }
 
-        button.animDuration = 1200L
+        button.animationDuration = 1200L
         val animDMax = 2000L
         val unit = animDMax / 100
-        durationSeek.progress = (button.animDuration / unit).toInt()
+        durationSeek.progress = (button.animationDuration / unit).toInt()
         durationSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 animDuration = seekBar.progress * unit
-                button.animDuration = seekBar.progress * unit
+                button.animationDuration = seekBar.progress * unit
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -66,7 +80,6 @@ class SubmitButtonFragment : BaseFragment() {
     }
 
     private fun progress() = GlobalScope.launch(Dispatchers.Main) {
-        button.setState(SubmitButton.STATE_PROGRESS)
         var progress = 0f
         button.progress = 0f
         while (progress < 1) {
@@ -77,7 +90,6 @@ class SubmitButtonFragment : BaseFragment() {
     }
 
     private fun progressWithError() = GlobalScope.launch(Dispatchers.Main) {
-        button.setState(SubmitButton.STATE_PROGRESS)
         var progress = 0f
         button.progress = 0f
         while (progress < 0.9f) {
@@ -85,6 +97,6 @@ class SubmitButtonFragment : BaseFragment() {
             progress += progressStep
             button.progress = progress
         }
-        button.setState(SubmitButton.STATE_ERROR)
+        button.showError()
     }
 }

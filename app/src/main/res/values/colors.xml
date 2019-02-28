@@ -13,7 +13,7 @@
     <color name="color5">#FFD4CE</color>
 
     <color name="color1_darker">#8A6900</color>
-    <color name="color2_darker">#5D8800</color>
+    <color name="color2_darker">#00eea7</color>
     <color name="color3_darker">#018B78</color>
     <color name="color4_darker">#000FE2</color>
     <color name="color5_darker">#DB1A00</color>
@@ -27,5 +27,6 @@
     <color name="button_text_pressed">#017A7E</color>
     <color name="button_text_disabled">#A7A7A7</color>
 
-    <color name="anotherColor">#54000000</color>
+    <color name="submit_main">#00DA9D</color>
+    <color name="submit_error">#F84949</color>
 </resources>

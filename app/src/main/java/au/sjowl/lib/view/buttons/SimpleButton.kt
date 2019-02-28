@@ -71,6 +71,31 @@ class SimpleButton : TextView {
             }
         }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        rect.right = width
+        rect.bottom = height
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setRoundRect(rect, r)
+                }
+            }
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        paintBackground.color = animator.getColor(COLOR_BACKGROUND)
+        textColor = animator.getColor(COLOR_TEXT)
+        canvas.drawRoundRect(0f, 0f, width * 1f, height * 1f, r, r, paintBackground)
+        super.onDraw(canvas)
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        setState(if (enabled) stateDefault else stateDisabled)
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (isEnabled) {
             when (event.action) {
@@ -87,31 +112,6 @@ class SimpleButton : TextView {
             return true
         }
         return false
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        paintBackground.color = animator.getColor(COLOR_BACKGROUND)
-        textColor = animator.getColor(COLOR_TEXT)
-        canvas.drawRoundRect(0f, 0f, width * 1f, height * 1f, r, r, paintBackground)
-        super.onDraw(canvas)
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        rect.right = width
-        rect.bottom = height
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            outlineProvider = object : ViewOutlineProvider() {
-                override fun getOutline(view: View, outline: Outline) {
-                    outline.setRoundRect(rect, r)
-                }
-            }
-        }
-    }
-
-    override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enabled)
-        setState(if (enabled) stateDefault else stateDisabled)
     }
 
     private fun setState(state: Map<Int, Any>) {

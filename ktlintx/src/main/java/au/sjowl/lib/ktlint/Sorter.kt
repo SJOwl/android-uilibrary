@@ -23,7 +23,13 @@ class Sorter() {
         "onStop",
         "onDetach",
         "onDestroyView",
-        "onDestroy"
+        "onDestroy",
+        /* View */
+        "onSizeChanged",
+        "onMeasure",
+        "onDraw",
+        "callOnClick",
+        "setEnabled"
     )
 
     val sortList = listOf(
