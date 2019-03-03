@@ -27,7 +27,7 @@ class DrawHelper(
 
     val paintFrame = Paint().apply {
         style = Paint.Style.STROKE
-        strokeWidth = 10f
+        strokeWidth = 5f
         isAntiAlias = true
     }
 

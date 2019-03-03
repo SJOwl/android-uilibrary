@@ -10,6 +10,8 @@ abstract class ButtonState(
 
     abstract val properties: Map<Int, Any>
 
+    var onClickListener: (() -> Unit)? = null
+
     val context: Context = dh.context
 
     abstract fun draw(canvas: Canvas)

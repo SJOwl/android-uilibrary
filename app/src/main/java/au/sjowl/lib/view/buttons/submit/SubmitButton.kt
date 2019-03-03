@@ -40,14 +40,6 @@ class SubmitButton : View {
             dh.animator.animationDuration = value
         }
 
-    private var onSubmitClickListener: (() -> Unit)? = null
-
-    private var onDoneClickListener: (() -> Unit)? = null
-
-    private var onRetryClickListener: (() -> Unit)? = null
-
-    private var onCancelClickListener: (() -> Unit)? = null
-
     private val dh = DrawHelper(this)
 
     private val stateDisabled = StateDisabled(dh)
@@ -101,19 +93,19 @@ class SubmitButton : View {
     }
 
     fun onSubmitClick(listener: (() -> Unit)?) {
-        onSubmitClickListener = listener
+        stateReady.onClickListener = listener
     }
 
     fun onDoneClick(listener: (() -> Unit)?) {
-        onDoneClickListener = listener
+        stateDone.onClickListener = listener
     }
 
     fun onRetryClick(listener: (() -> Unit)?) {
-        onRetryClickListener = listener
+        stateError.onClickListener = listener
     }
 
     fun onCancelClick(listener: (() -> Unit)?) {
-        onCancelClickListener = listener
+        stateProgress.onClickListener = listener
     }
 
     fun showError() {
@@ -147,12 +139,7 @@ class SubmitButton : View {
     private fun init() {
         dh.animator.setStates(stateCurrent.properties, stateCurrent.properties)
         onClick {
-            when (stateCurrent) {
-                stateDone -> onDoneClickListener?.invoke()
-                stateReady -> onSubmitClickListener?.invoke()
-                stateProgress -> onCancelClickListener?.invoke()
-                stateError -> onRetryClickListener?.invoke()
-            }
+            stateCurrent.onClickListener?.invoke()
         }
     }
 
