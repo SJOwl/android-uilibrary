@@ -1,7 +1,7 @@
-package au.sjowl.lib.view.buttons.fab.vertical
+package au.sjowl.lib.view.buttons.fab.commons
 
 import android.content.Context
-import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.utils.colorCompat
 
 class FmStateExpanded(context: Context) : FmState() {

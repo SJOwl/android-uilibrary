@@ -3,7 +3,7 @@ package au.sjowl.lib.view.app.buttons
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
-import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.app.BaseFragment
 import kotlinx.android.synthetic.main.fr_button_submit.*
 import kotlinx.coroutines.Dispatchers

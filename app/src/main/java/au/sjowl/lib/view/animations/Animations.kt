@@ -4,7 +4,7 @@ import android.graphics.drawable.Animatable
 import android.view.View
 import android.view.animation.ScaleAnimation
 import android.widget.ImageView
-import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.animations.interpolators.SinusDissipationInterpolator
 
 fun View.runScaleAnimation(scaleFrom: Float = 0.5f, scaleTo: Float = 1.0f, duration: Long = 250L) {
@@ -16,8 +16,8 @@ fun View.runScaleAnimation(scaleFrom: Float = 0.5f, scaleTo: Float = 1.0f, durat
 
 fun AnimateImageView(v: ImageView) {
     var b = true
-    val cursor = v.context.resources.getDrawable(R.drawable.search_reverse)
-    val searchIcon = v.context.resources.getDrawable(R.drawable.search_anim)
+    val cursor = v.context.getDrawable(R.drawable.search_reverse)
+    val searchIcon = v.context.getDrawable(R.drawable.search_anim)
 
     if (b)
         v.setImageDrawable(cursor)

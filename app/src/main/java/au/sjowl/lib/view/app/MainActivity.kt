@@ -3,17 +3,18 @@ package au.sjowl.lib.view.app
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.app.bottomnav.NavFluidFragment
 import au.sjowl.lib.view.app.bottomnav.NavRotationFragment
 import au.sjowl.lib.view.app.bottomnav.NavSpreadFragment
+import au.sjowl.lib.view.app.buttons.FabMenuCircularFragment
 import au.sjowl.lib.view.app.buttons.FabMenuVerticalFragment
 import au.sjowl.lib.view.app.buttons.SimpleButtonFragment
 import au.sjowl.lib.view.app.buttons.SubmitButtonFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private val currentFragmentIndex = 6
+    private val currentFragmentIndex = 7
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             4 -> SimpleButtonFragment()
             5 -> SubmitButtonFragment()
             6 -> FabMenuVerticalFragment()
+            7 -> FabMenuCircularFragment()
 
             else -> HomeFragment()
         }

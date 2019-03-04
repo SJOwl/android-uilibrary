@@ -1,4 +1,4 @@
-package au.sjowl.lib.view.buttons.fab.vertical
+package au.sjowl.lib.view.buttons.fab.commons
 
 abstract class FmState {
     abstract val properties: Map<Int, Any>

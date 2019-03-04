@@ -2,7 +2,7 @@ package au.sjowl.lib.view.app.buttons
 
 import android.os.Bundle
 import android.view.View
-import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.app.BaseFragment
 import kotlinx.android.synthetic.main.fr_button_simple.*
 import kotlinx.coroutines.Dispatchers

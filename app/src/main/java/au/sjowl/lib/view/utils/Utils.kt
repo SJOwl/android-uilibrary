@@ -100,3 +100,8 @@ fun View.gone() {
 fun View.hide() {
     visibility = View.INVISIBLE
 }
+
+fun View.scale(scale: Float) {
+    scaleX = scale
+    scaleY = scale
+}

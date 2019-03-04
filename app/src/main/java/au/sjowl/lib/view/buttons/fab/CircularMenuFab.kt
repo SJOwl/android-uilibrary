@@ -1,19 +1,25 @@
-package au.sjowl.lib.view.buttons.fab.vertical
+package au.sjowl.lib.view.buttons.fab
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.animations.ViewStateAnimator
-import au.sjowl.lib.view.animations.interpolators.providers.BounceInterpolatorProvider
+import au.sjowl.lib.view.animations.interpolators.providers.DefaultInterpolatorProvider
+import au.sjowl.lib.view.buttons.fab.commons.FabMenuView
+import au.sjowl.lib.view.buttons.fab.commons.FabView
+import au.sjowl.lib.view.buttons.fab.commons.FmState
+import au.sjowl.lib.view.buttons.fab.commons.FmStateCollapsed
+import au.sjowl.lib.view.buttons.fab.commons.FmStateExpanded
 import au.sjowl.lib.view.utils.gone
+import au.sjowl.lib.view.utils.scale
 import au.sjowl.lib.view.utils.show
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
-class VerticalMenuFab : ViewGroup {
+class CircularMenuFab : ViewGroup {
 
     val items = arrayListOf<FabMenuView>()
 
@@ -23,9 +29,7 @@ class VerticalMenuFab : ViewGroup {
             fab.icon = ContextCompat.getDrawable(context, value) as Drawable
         }
 
-    val animator = ViewStateAnimator(180L, BounceInterpolatorProvider())
-
-    private val marginItems = context.dimen(R.dimen.fab_menu_vertical_margins)
+    val animator = ViewStateAnimator(180L, DefaultInterpolatorProvider())
 
     private val fab = FabView(context)
 
@@ -41,6 +45,8 @@ class VerticalMenuFab : ViewGroup {
 
     private var onItemClickListener: ((Int) -> Unit)? = null
 
+    private val radiusMax = (2 * Math.sqrt(2.0)).toFloat() * baseWidth
+
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         val r = baseWidth / 2
         val cx = right - r - paddingRight
@@ -48,17 +54,18 @@ class VerticalMenuFab : ViewGroup {
         fab.layout(cx - r, cy - r, cx + r, cy + r)
         fab.postInvalidate()
         fab.rotation = 315 * multiplier
-        fab.scaleX = -0.3f * multiplier + 1
-        fab.scaleY = fab.scaleX
+        fab.scale(-0.3f * multiplier + 1)
 
+        val discreteAngle = 90f / (items.size - 1) * Math.PI / 180
         for ((index, it) in items.withIndex()) {
             if (multiplier > 0f) {
                 it.show()
-                cy = bottom - paddingBottom - r - ((2 * (index + 1) * r + marginItems * (index + 1)) * multiplier).toInt()
-                it.layout(cx - r, cy - r, cx + r, cy + r)
-                it.rotation = (1f - multiplier) * 180
-                it.scaleX = (multiplier + 1f) / 2
-                it.scaleY = it.scaleX
+                val fi = index * discreteAngle * multiplier
+                val centerR = radiusMax * multiplier / 2
+                val icx = (cx - centerR * Math.sin(fi)).toInt()
+                val icy = (cy - centerR * Math.cos(fi)).toInt()
+                it.layout(icx - r, icy - r, icx + r, icy + r)
+                it.scale((multiplier + 1f) / 2)
             } else {
                 it.gone()
             }
@@ -72,7 +79,7 @@ class VerticalMenuFab : ViewGroup {
         items.forEachIndexed { index, drawableId ->
             val menuItem = FabMenuView(context).apply {
                 icon = context.getDrawable(drawableId) as Drawable
-                animator = this@VerticalMenuFab.animator
+                animator = this@CircularMenuFab.animator
             }
             this.items.add(menuItem)
             addView(menuItem)

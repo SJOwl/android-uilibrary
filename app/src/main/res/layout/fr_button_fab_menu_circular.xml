@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-    <au.sjowl.lib.view.buttons.fab.VerticalMenuFab
+    <au.sjowl.lib.view.buttons.fab.CircularMenuFab
         android:id="@+id/fab"
         android:layout_width="0dp"
         android:layout_height="0dp"

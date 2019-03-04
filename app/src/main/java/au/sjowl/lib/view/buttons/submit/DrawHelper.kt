@@ -3,7 +3,7 @@ package au.sjowl.lib.view.buttons.submit
 import android.graphics.Paint
 import android.graphics.Rect
 import androidx.core.content.ContextCompat
-import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.animations.ViewStateAnimator
 import au.sjowl.lib.view.utils.colorCompat
 import org.jetbrains.anko.dip

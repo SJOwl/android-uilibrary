@@ -7,11 +7,11 @@ import au.sjowl.lib.view.app.BaseFragment
 import au.sjowl.lib.view.app.buttons.commands.CommandChat
 import au.sjowl.lib.view.app.buttons.commands.CommandSearch
 import au.sjowl.lib.view.app.buttons.commands.CommandWallet
-import kotlinx.android.synthetic.main.fr_button_fab_menu_vertical.*
+import kotlinx.android.synthetic.main.fr_button_fab_menu_circular.*
 
-class FabMenuVerticalFragment : BaseFragment() {
+class FabMenuCircularFragment : BaseFragment() {
 
-    override val layoutId: Int get() = R.layout.fr_button_fab_menu_vertical
+    override val layoutId: Int get() = R.layout.fr_button_fab_menu_circular
 
     private val menuCommands = listOf(
         CommandSearch(),
