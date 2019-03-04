@@ -21,37 +21,39 @@ class VerticalMenuFab : ViewGroup {
             fab.icon = ContextCompat.getDrawable(context, value) as Drawable
         }
 
-    val animator = ViewStateAnimator(1800L)
+    val animator = ViewStateAnimator(180L)
+
+    private val marginItems = context.dip(8)
 
     private val fab = FabView(context)
 
     private val baseWidth = context.dip(56)
 
-    private val marginItems = context.dip(16)
-
     private val multiplier get() = animator.getFloat(FmState.MULT) // [0f;1f]
 
-    private val stateCollapsed = FmStateCollapsed()
+    private val stateCollapsed = FmStateCollapsed(context)
 
-    private val stateExpanded = FmStateExpanded()
+    private val stateExpanded = FmStateExpanded(context)
 
     private var stateCurrent: FmState = stateCollapsed
 
+    private var onItemClickListener: ((Int) -> Unit)? = null
+
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        var l = right - baseWidth - paddingRight
-        var t = bottom - baseWidth - paddingBottom
-        val r = l + baseWidth
-        fab.layout(l, t, r, t + baseWidth)
+        val r = baseWidth / 2
+        val cx = right - r - paddingRight
+        var cy = bottom - r - paddingBottom
+        fab.layout(cx - r, cy - r, cx + r, cy + r)
         fab.postInvalidate()
+        fab.rotation = 315 * multiplier
+        fab.scaleX = -0.3f * multiplier + 1
+        fab.scaleY = fab.scaleX
 
         for ((index, it) in items.withIndex()) {
             if (multiplier > 0f) {
                 it.show()
-                val cx = right - baseWidth / 2 - paddingRight
-                val cy = bottom - baseWidth / 2 - paddingBottom
-                l = right - baseWidth - paddingRight
-                t = (bottom - (paddingBottom + (baseWidth * (index + 2) + marginItems * (index + 1)) * multiplier)).toInt()
-                it.layout(l, t, r, t + baseWidth)
+                cy = bottom - paddingBottom - r - ((2 * (index + 1) * r + marginItems * (index + 1)) * multiplier).toInt()
+                it.layout(cx - r, cy - r, cx + r, cy + r)
                 it.rotation = (1f - multiplier) * 180
                 it.scaleX = (multiplier + 1f) / 2
                 it.scaleY = it.scaleX
@@ -61,23 +63,28 @@ class VerticalMenuFab : ViewGroup {
         }
     }
 
-    fun setMenuItems(items: Collection<FabMenuItem>) {
+    fun setMenuItems(items: Collection<Int>) {
         this.items.clear()
         removeAllViews()
 
-        items.forEach {
+        items.forEachIndexed { index, drawableId ->
             val menuItem = FabMenuView(context).apply {
-                data = it
+                icon = context.getDrawable(drawableId) as Drawable
                 animator = this@VerticalMenuFab.animator
             }
             this.items.add(menuItem)
             addView(menuItem)
+            menuItem.onClick {
+                onItemClickListener?.invoke(index)
+                setState(stateCollapsed)
+            }
         }
         addView(fab)
         invalidate()
     }
 
     fun onItemSelected(function: (Int) -> Unit) {
+        onItemClickListener = function
     }
 
     private fun setState(state: FmState) {
@@ -87,16 +94,16 @@ class VerticalMenuFab : ViewGroup {
         stateCurrent = state
     }
 
+    private fun toggleState() {
+        setState(if (stateCurrent == stateCollapsed) stateExpanded else stateCollapsed)
+    }
+
     init {
         animator.setStates(stateCurrent.properties, stateCurrent.properties)
         fab.animator = animator
         fab.onClick {
             toggleState()
         }
-    }
-
-    private fun toggleState() {
-        setState(if (stateCurrent == stateCollapsed) stateExpanded else stateCollapsed)
     }
 
     constructor(context: Context) : super(context)

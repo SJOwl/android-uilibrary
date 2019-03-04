@@ -1,11 +1,13 @@
 package au.sjowl.lib.view.buttons.fab.vertical
 
-import android.graphics.Color
+import android.content.Context
+import au.sjowl.lib.twolinestextview.R
+import au.sjowl.lib.view.utils.colorCompat
 
-class FmStateCollapsed : FmState() {
+class FmStateCollapsed(context: Context) : FmState() {
     override val properties: Map<Int, Any> = mapOf(
         MULT to 0f,
-        COLOR_FAB to Color.WHITE,
-        COLOR_FAB_ICON to Color.BLACK
+        COLOR_FAB to context.colorCompat(R.color.fab_bg_collapsed),
+        COLOR_FAB_ICON to context.colorCompat(R.color.fab_tint_collapsed)
     )
 }

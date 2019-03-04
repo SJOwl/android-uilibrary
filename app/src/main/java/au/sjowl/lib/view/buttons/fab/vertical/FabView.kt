@@ -30,14 +30,12 @@ class FabView : View {
             val cy = height / 2f
             val r = cx - circlePaint.strokeWidth
             circlePaint.color = colorBackground
-//            canvas.drawCircle(cx, cy, r, circlePaint)
+            canvas.drawCircle(cx, cy, r, circlePaint)
             icon.setBounds((cx - r / 2).toInt(), (cy - r / 2).toInt(), (cx + r / 2).toInt(), (cy + r / 2).toInt())
             icon.setTint(colorTint)
             icon.draw(canvas)
         }
     }
-
-    // todo animate elevation on click
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

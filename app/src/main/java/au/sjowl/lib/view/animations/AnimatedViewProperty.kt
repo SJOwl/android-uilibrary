@@ -24,6 +24,8 @@ open class AnimatedViewProperty<T>(
         to = temp
     }
 
+    open val floatInterpolator get() = DecelerateInterpolator()
+
     open fun animate(view: View): ValueAnimator {
         return when (from) {
             is Float -> fromFloat(view)
@@ -34,7 +36,7 @@ open class AnimatedViewProperty<T>(
 
     private fun fromFloat(view: View) = ValueAnimator.ofFloat(from as Float, to as Float).apply {
         duration = animationDuration
-        interpolator = DecelerateInterpolator()
+        interpolator = floatInterpolator
         addUpdateListener {
             value = it.animatedValue as T
             invalidateView(view)
