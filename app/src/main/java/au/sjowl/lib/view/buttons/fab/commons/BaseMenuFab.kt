@@ -20,7 +20,7 @@ abstract class BaseMenuFab : ViewGroup {
             fab.icon = ContextCompat.getDrawable(context, value) as Drawable
         }
 
-    val animator = ViewStateAnimator(180L, DefaultInterpolatorProvider())
+    open val animator = ViewStateAnimator(180L, DefaultInterpolatorProvider())
 
     protected val fab = FabView(context)
 

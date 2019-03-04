@@ -2,6 +2,8 @@ package au.sjowl.lib.view.buttons.fab
 
 import android.content.Context
 import android.util.AttributeSet
+import au.sjowl.lib.view.animations.ViewStateAnimator
+import au.sjowl.lib.view.animations.interpolators.providers.DefaultInterpolatorProvider
 import au.sjowl.lib.view.buttons.fab.commons.BaseMenuFab
 import au.sjowl.lib.view.buttons.fab.commons.FmState
 import au.sjowl.lib.view.utils.gone
@@ -9,6 +11,8 @@ import au.sjowl.lib.view.utils.scale
 import au.sjowl.lib.view.utils.show
 
 class CircularMenuFab : BaseMenuFab {
+
+    override val animator = ViewStateAnimator(180L, DefaultInterpolatorProvider())
 
     private val multiplier get() = animator.getFloat(FmState.MULT) // [0f;1f]
 
@@ -27,8 +31,8 @@ class CircularMenuFab : BaseMenuFab {
         for ((index, it) in items.withIndex()) {
             if (multiplier > 0f) {
                 it.show()
-                val fi = index * discreteAngle * multiplier
                 val centerR = radiusMax * multiplier / 2
+                val fi = index * discreteAngle * (if (multiplier < 0.5f) 0f else 2 * multiplier - 1)
                 val icx = (cx - centerR * Math.sin(fi)).toInt()
                 val icy = (cy - centerR * Math.cos(fi)).toInt()
                 it.layout(icx - r, icy - r, icx + r, icy + r)

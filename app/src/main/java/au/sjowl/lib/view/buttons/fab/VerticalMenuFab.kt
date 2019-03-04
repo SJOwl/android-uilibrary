@@ -3,6 +3,8 @@ package au.sjowl.lib.view.buttons.fab
 import android.content.Context
 import android.util.AttributeSet
 import au.sjowl.lib.uxlibrary.R
+import au.sjowl.lib.view.animations.ViewStateAnimator
+import au.sjowl.lib.view.animations.interpolators.providers.DefaultInterpolatorProvider
 import au.sjowl.lib.view.buttons.fab.commons.BaseMenuFab
 import au.sjowl.lib.view.buttons.fab.commons.FmState
 import au.sjowl.lib.view.utils.gone
@@ -11,6 +13,8 @@ import au.sjowl.lib.view.utils.show
 import org.jetbrains.anko.dimen
 
 class VerticalMenuFab : BaseMenuFab {
+
+    override val animator = ViewStateAnimator(180L, DefaultInterpolatorProvider())
 
     private val marginItems = context.dimen(R.dimen.fab_menu_vertical_margins)
 
