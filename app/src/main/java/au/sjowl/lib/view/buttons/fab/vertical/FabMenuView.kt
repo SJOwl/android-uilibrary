@@ -16,7 +16,7 @@ class FabMenuView : View {
 
     lateinit var icon: Drawable
 
-    private var colorTint: Int = context.colorCompat(R.color.fab_menu_tint)
+    private var colorTint: Int = context.colorCompat(R.color.fab_tint)
 
     private val circlePaint = Paint().apply {
         isAntiAlias = true

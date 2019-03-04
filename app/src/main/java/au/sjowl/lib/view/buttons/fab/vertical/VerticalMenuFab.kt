@@ -5,11 +5,12 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import au.sjowl.lib.twolinestextview.R
 import au.sjowl.lib.view.animations.ViewStateAnimator
 import au.sjowl.lib.view.animations.interpolators.providers.BounceInterpolatorProvider
 import au.sjowl.lib.view.utils.gone
 import au.sjowl.lib.view.utils.show
-import org.jetbrains.anko.dip
+import org.jetbrains.anko.dimen
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 class VerticalMenuFab : ViewGroup {
@@ -24,11 +25,11 @@ class VerticalMenuFab : ViewGroup {
 
     val animator = ViewStateAnimator(180L, BounceInterpolatorProvider())
 
-    private val marginItems = context.dip(8)
+    private val marginItems = context.dimen(R.dimen.fab_menu_vertical_margins)
 
     private val fab = FabView(context)
 
-    private val baseWidth = context.dip(56)
+    private val baseWidth = context.dimen(R.dimen.fab_menu_vertical_size)
 
     private val multiplier get() = animator.getFloat(FmState.MULT) // [0f;1f]
 
