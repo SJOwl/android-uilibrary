@@ -16,10 +16,10 @@ class CircularMenuFab : BaseMenuFab {
 
     private val multiplier get() = animator.getFloat(FmState.MULT) // [0f;1f]
 
-    private val radiusMax = (2 * Math.sqrt(2.0)).toFloat() * baseWidth
+    private val radiusMax = (2 * Math.sqrt(2.0)).toFloat() * (baseWidth - paddingRight / 2)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        val r = baseWidth / 2
+        var r = baseWidth / 2
         val cx = right - r - paddingRight
         var cy = bottom - r - paddingBottom
         fab.layout(cx - r, cy - r, cx + r, cy + r)
@@ -27,6 +27,7 @@ class CircularMenuFab : BaseMenuFab {
         fab.rotation = 315 * multiplier
         fab.scale(-0.3f * multiplier + 1)
 
+        r = baseWidth / 2 - paddingRight / 4
         val discreteAngle = 90f / (items.size - 1) * Math.PI / 180
         for ((index, it) in items.withIndex()) {
             if (multiplier > 0f) {
@@ -41,6 +42,10 @@ class CircularMenuFab : BaseMenuFab {
                 it.gone()
             }
         }
+    }
+
+    init {
+        init()
     }
 
     constructor(context: Context) : super(context)

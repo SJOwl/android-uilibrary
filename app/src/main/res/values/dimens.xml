@@ -3,6 +3,6 @@
     <dimen name="button_padding_h">32dp</dimen>
     <dimen name="button_padding_v">16dp</dimen>
 
-    <dimen name="fab_menu_vertical_size">56dp</dimen>
+    <dimen name="fab_menu_vertical_size">64dp</dimen>
     <dimen name="fab_menu_vertical_margins">8dp</dimen>
 </resources>

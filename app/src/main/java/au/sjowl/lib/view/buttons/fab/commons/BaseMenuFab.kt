@@ -9,9 +9,12 @@ import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.animations.ViewStateAnimator
 import au.sjowl.lib.view.animations.interpolators.providers.DefaultInterpolatorProvider
 import org.jetbrains.anko.dimen
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.padding
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 abstract class BaseMenuFab : ViewGroup {
+
     val items = arrayListOf<FabMenuView>()
 
     var fabIconId = 0
@@ -58,6 +61,16 @@ abstract class BaseMenuFab : ViewGroup {
         onItemClickListener = function
     }
 
+    fun init() {
+        animator.setStates(stateCurrent.properties, stateCurrent.properties)
+        fab.animator = animator
+        fab.onClick {
+            toggleState()
+        }
+        fab.padding = context.dip(8)
+        fab.elevation = context.dip(4).toFloat()
+    }
+
     private fun setState(state: FmState) {
         if (state == stateCurrent) return
         animator.setStates(stateCurrent.properties, state.properties)
@@ -67,14 +80,6 @@ abstract class BaseMenuFab : ViewGroup {
 
     private fun toggleState() {
         setState(if (stateCurrent == stateCollapsed) stateExpanded else stateCollapsed)
-    }
-
-    init {
-        animator.setStates(stateCurrent.properties, stateCurrent.properties)
-        fab.animator = animator
-        fab.onClick {
-            toggleState()
-        }
     }
 
     constructor(context: Context) : super(context)

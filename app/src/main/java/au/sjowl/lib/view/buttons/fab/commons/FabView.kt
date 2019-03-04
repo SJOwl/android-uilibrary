@@ -2,10 +2,13 @@ package au.sjowl.lib.view.buttons.fab.commons
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Outline
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewOutlineProvider
 import au.sjowl.lib.view.animations.ViewStateAnimator
 
 class FabView : View {
@@ -23,10 +26,22 @@ class FabView : View {
         style = Paint.Style.FILL
     }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val p = paddingRight
+            outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setOval(p, p, w - p, h - p)
+                }
+            }
+        }
+    }
+
     override fun onDraw(canvas: Canvas) {
         val cx = width / 2f
         val cy = height / 2f
-        val r = cx - circlePaint.strokeWidth
+        val r = cx - circlePaint.strokeWidth - paddingRight / 2
         circlePaint.color = colorBackground
         canvas.drawCircle(cx, cy, r, circlePaint)
         icon.setBounds((cx - r / 2).toInt(), (cy - r / 2).toInt(), (cx + r / 2).toInt(), (cy + r / 2).toInt())
