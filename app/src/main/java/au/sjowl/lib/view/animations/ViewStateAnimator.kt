@@ -3,28 +3,29 @@ package au.sjowl.lib.view.animations
 import android.animation.AnimatorSet
 import android.view.View
 
-class StateAnimator(
+open class ViewStateAnimator(
     var animationDuration: Long = 200L
 ) {
 
-    private val properties = mutableMapOf<Int, AnimatedProperty<Any>>()
+    protected open val properties = mutableMapOf<Int, AnimatedViewProperty<Any>>()
 
-    private var animatorSet: AnimatorSet? = AnimatorSet()
+    protected var animatorSet: AnimatorSet? = AnimatorSet()
 
     fun getColor(key: Int): Int = properties.getValue(key).value as Int
 
     fun getFloat(key: Int): Float = properties.getValue(key).value as Float
 
+    // todo create base State(){ val properties:Map<Int, Any>}
     fun setStates(stateFrom: Map<Int, Any>, stateTo: Map<Int, Any>) {
 
         properties.clear()
         stateFrom.keys.forEach { key ->
-            properties.put(key, AnimatedProperty(
+            properties[key] = AnimatedViewProperty(
                 key = key,
                 from = stateFrom.getValue(key),
                 to = stateTo.getValue(key),
                 animationDuration = animationDuration
-            ))
+            )
         }
 
         properties.values.forEach { w ->
@@ -45,7 +46,7 @@ class StateAnimator(
         }
     }
 
-    fun animate(view: View) {
+    open fun animate(view: View) {
         animatorSet?.cancel()
         animatorSet = AnimatorSet().apply {
             playTogether(properties.values.map { it.animate(view) })

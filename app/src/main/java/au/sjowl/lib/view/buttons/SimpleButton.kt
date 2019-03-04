@@ -13,7 +13,7 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.TextView
 import au.sjowl.lib.twolinestextview.R
-import au.sjowl.lib.view.animations.StateAnimator
+import au.sjowl.lib.view.animations.ViewStateAnimator
 import au.sjowl.lib.view.utils.colorCompat
 import au.sjowl.lib.view.utils.contains
 import org.jetbrains.anko.dip
@@ -60,7 +60,7 @@ class SimpleButton : TextView {
 
     private val rect = Rect(0, 0, width, height)
 
-    private val animator = StateAnimator(180L)
+    private val animator = ViewStateAnimator(180L)
 
     private var colorBackground: Int = Color.WHITE
         set(value) {
@@ -127,7 +127,6 @@ class SimpleButton : TextView {
     }
 
     private fun init() {
-        stateDefault
         animator.setStates(stateDefault, stateDefault)
     }
 

@@ -29,4 +29,6 @@
 
     <color name="submit_main">#00DA9D</color>
     <color name="submit_error">#F84949</color>
+
+    <color name="fab_menu_tint">#00E092</color>
 </resources>

@@ -3,9 +3,10 @@ package au.sjowl.lib.view.animations
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 
-class AnimatedProperty<T>(
+open class AnimatedViewProperty<T>(
     val key: Int = 0,
     var from: T,
     var to: T,
@@ -23,7 +24,7 @@ class AnimatedProperty<T>(
         to = temp
     }
 
-    fun animate(view: View): ValueAnimator {
+    open fun animate(view: View): ValueAnimator {
         return when (from) {
             is Float -> fromFloat(view)
             is Int -> fromColor(view)
@@ -36,7 +37,7 @@ class AnimatedProperty<T>(
         interpolator = DecelerateInterpolator()
         addUpdateListener {
             value = it.animatedValue as T
-            view.postInvalidate()
+            invalidateView(view)
         }
     }
 
@@ -46,6 +47,14 @@ class AnimatedProperty<T>(
         setEvaluator(ArgbEvaluator())
         addUpdateListener {
             value = it.animatedValue as T
+            invalidateView(view)
+        }
+    }
+
+    private inline fun invalidateView(view: View) {
+        if (view is ViewGroup) {
+            view.requestLayout()
+        } else {
             view.postInvalidate()
         }
     }

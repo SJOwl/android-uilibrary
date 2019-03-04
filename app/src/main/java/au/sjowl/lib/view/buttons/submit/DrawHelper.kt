@@ -4,7 +4,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import androidx.core.content.ContextCompat
 import au.sjowl.lib.twolinestextview.R
-import au.sjowl.lib.view.animations.StateAnimator
+import au.sjowl.lib.view.animations.ViewStateAnimator
 import au.sjowl.lib.view.utils.colorCompat
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sp
@@ -43,5 +43,5 @@ class DrawHelper(
     val doneSvg = ContextCompat.getDrawable(context, R.drawable.ic_ok)
         ?: throw IllegalStateException("")
 
-    val animator = StateAnimator(1800L)
+    val animator = ViewStateAnimator(1800L)
 }

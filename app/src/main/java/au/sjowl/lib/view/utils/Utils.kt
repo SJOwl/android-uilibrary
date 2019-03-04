@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import kotlin.system.measureNanoTime
 
 inline fun absCos(value: Float) = Math.abs(Math.cos(value * 1.0)).toFloat()
 inline fun absCos(value: Double) = Math.abs(Math.cos(value)).toFloat()
@@ -80,3 +81,22 @@ class AnimatedPropertyInt(
 }
 
 fun Context.colorCompat(id: Int) = ContextCompat.getColor(this, id)
+
+fun measureDrawingMs(msg: String, block: (() -> Unit)) {
+    val t = measureNanoTime {
+        block.invoke()
+    }
+    println("$msg draw %.3f".format(t / 1000000f))
+}
+
+fun View.show() {
+    visibility = View.VISIBLE
+}
+
+fun View.gone() {
+    visibility = View.GONE
+}
+
+fun View.hide() {
+    visibility = View.INVISIBLE
+}
