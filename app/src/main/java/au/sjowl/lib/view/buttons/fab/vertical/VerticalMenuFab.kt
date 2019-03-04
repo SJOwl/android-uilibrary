@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import au.sjowl.lib.view.animations.ViewStateAnimator
+import au.sjowl.lib.view.animations.interpolators.providers.BounceInterpolatorProvider
 import au.sjowl.lib.view.utils.gone
 import au.sjowl.lib.view.utils.show
 import org.jetbrains.anko.dip
@@ -21,7 +22,7 @@ class VerticalMenuFab : ViewGroup {
             fab.icon = ContextCompat.getDrawable(context, value) as Drawable
         }
 
-    val animator = ViewStateAnimator(180L)
+    val animator = ViewStateAnimator(180L, BounceInterpolatorProvider())
 
     private val marginItems = context.dip(8)
 

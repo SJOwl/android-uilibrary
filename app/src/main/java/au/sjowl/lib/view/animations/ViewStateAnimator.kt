@@ -2,9 +2,12 @@ package au.sjowl.lib.view.animations
 
 import android.animation.AnimatorSet
 import android.view.View
+import au.sjowl.lib.view.animations.interpolators.providers.DefaultInterpolatorProvider
+import au.sjowl.lib.view.animations.interpolators.providers.InterpolatorProvider
 
 open class ViewStateAnimator(
-    var animationDuration: Long = 200L
+    var animationDuration: Long = 200L,
+    val interpolatorProvider: InterpolatorProvider = DefaultInterpolatorProvider()
 ) {
 
     protected open val properties = mutableMapOf<Int, AnimatedViewProperty<Any>>()
@@ -24,7 +27,8 @@ open class ViewStateAnimator(
                 key = key,
                 from = stateFrom.getValue(key),
                 to = stateTo.getValue(key),
-                animationDuration = animationDuration
+                animationDuration = animationDuration,
+                interpolatorProvider = interpolatorProvider
             )
         }
 

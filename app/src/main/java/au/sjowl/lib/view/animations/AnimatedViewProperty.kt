@@ -4,13 +4,14 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
+import au.sjowl.lib.view.animations.interpolators.providers.InterpolatorProvider
 
 open class AnimatedViewProperty<T>(
     val key: Int = 0,
     var from: T,
     var to: T,
-    var animationDuration: Long = 180L
+    var animationDuration: Long = 180L,
+    val interpolatorProvider: InterpolatorProvider
 ) {
     var value = from
 
@@ -24,8 +25,6 @@ open class AnimatedViewProperty<T>(
         to = temp
     }
 
-    open val floatInterpolator get() = DecelerateInterpolator()
-
     open fun animate(view: View): ValueAnimator {
         return when (from) {
             is Float -> fromFloat(view)
@@ -36,7 +35,7 @@ open class AnimatedViewProperty<T>(
 
     private fun fromFloat(view: View) = ValueAnimator.ofFloat(from as Float, to as Float).apply {
         duration = animationDuration
-        interpolator = floatInterpolator
+        interpolator = interpolatorProvider.floatInterpolator()
         addUpdateListener {
             value = it.animatedValue as T
             invalidateView(view)

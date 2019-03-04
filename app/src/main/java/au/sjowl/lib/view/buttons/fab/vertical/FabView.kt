@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import au.sjowl.lib.view.animations.ViewStateAnimator
-import au.sjowl.lib.view.utils.measureDrawingMs
 
 class FabView : View {
 
@@ -25,16 +24,14 @@ class FabView : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        measureDrawingMs("fab") {
-            val cx = width / 2f
-            val cy = height / 2f
-            val r = cx - circlePaint.strokeWidth
-            circlePaint.color = colorBackground
-            canvas.drawCircle(cx, cy, r, circlePaint)
-            icon.setBounds((cx - r / 2).toInt(), (cy - r / 2).toInt(), (cx + r / 2).toInt(), (cy + r / 2).toInt())
-            icon.setTint(colorTint)
-            icon.draw(canvas)
-        }
+        val cx = width / 2f
+        val cy = height / 2f
+        val r = cx - circlePaint.strokeWidth
+        circlePaint.color = colorBackground
+        canvas.drawCircle(cx, cy, r, circlePaint)
+        icon.setBounds((cx - r / 2).toInt(), (cy - r / 2).toInt(), (cx + r / 2).toInt(), (cy + r / 2).toInt())
+        icon.setTint(colorTint)
+        icon.draw(canvas)
     }
 
     constructor(context: Context) : super(context)
