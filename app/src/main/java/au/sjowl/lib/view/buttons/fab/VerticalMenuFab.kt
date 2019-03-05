@@ -10,6 +10,8 @@ import au.sjowl.lib.view.buttons.fab.commons.FmState
 import au.sjowl.lib.view.utils.gone
 import au.sjowl.lib.view.utils.scale
 import au.sjowl.lib.view.utils.show
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.dimen
 
 class VerticalMenuFab : BaseMenuFab {
@@ -21,6 +23,12 @@ class VerticalMenuFab : BaseMenuFab {
     private val multiplier get() = animator.getFloat(FmState.MULT) // [0f;1f]
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        if (multiplier > 0f) {
+            backgroundColor = animator.getColor(FmState.COLOR_BG)
+        } else {
+            backgroundDrawable = null
+        }
+
         var r = baseWidth / 2
         val cx = right - r - paddingRight
         var cy = bottom - r - paddingBottom

@@ -36,7 +36,7 @@ class FabMenuView : View {
         val cx = width / 2f
         val cy = height / 2f
         val r = cx - circlePaint.strokeWidth
-        canvas.drawCircle(cx, cy, r, circleBgPaint)
+//        canvas.drawCircle(cx, cy, r, circleBgPaint)
         canvas.drawCircle(cx, cy, r, circlePaint)
         icon.setBounds((cx - r / 2).toInt(), (cy - r / 2).toInt(), (cx + r / 2).toInt(), (cy + r / 2).toInt())
         icon.setTint(colorTint)

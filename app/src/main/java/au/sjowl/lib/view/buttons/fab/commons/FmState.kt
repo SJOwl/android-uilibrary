@@ -7,5 +7,6 @@ abstract class FmState {
         const val MULT = 0
         const val COLOR_FAB = 1
         const val COLOR_FAB_ICON = 2
+        const val COLOR_BG = 3
     }
 }

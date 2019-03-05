@@ -30,6 +30,7 @@
     <color name="submit_main">#00DA9D</color>
     <color name="submit_error">#F84949</color>
 
+    <color name="fab_bg">#80000000</color>
     <color name="fab_tint">#00E092</color>
     <color name="fab_bg_collapsed">#01EB99</color>
     <color name="fab_tint_collapsed">#FFFFFF</color>

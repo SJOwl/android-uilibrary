@@ -9,6 +9,8 @@ import au.sjowl.lib.view.buttons.fab.commons.FmState
 import au.sjowl.lib.view.utils.gone
 import au.sjowl.lib.view.utils.scale
 import au.sjowl.lib.view.utils.show
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.backgroundDrawable
 
 class CircularMenuFab : BaseMenuFab {
 
@@ -19,6 +21,12 @@ class CircularMenuFab : BaseMenuFab {
     private val radiusMax = (2 * Math.sqrt(2.0)).toFloat() * (baseWidth - paddingRight / 2)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        if (multiplier > 0f) {
+            backgroundColor = animator.getColor(FmState.COLOR_BG)
+        } else {
+            backgroundDrawable = null
+        }
+
         var r = baseWidth / 2
         val cx = right - r - paddingRight
         var cy = bottom - r - paddingBottom

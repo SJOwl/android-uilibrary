@@ -11,7 +11,10 @@ import au.sjowl.lib.view.app.buttons.FabMenuCircularFragment
 import au.sjowl.lib.view.app.buttons.FabMenuVerticalFragment
 import au.sjowl.lib.view.app.buttons.SimpleButtonFragment
 import au.sjowl.lib.view.app.buttons.SubmitButtonFragment
+import au.sjowl.lib.view.app.transitions.TransitionsFragment
 
+// todo 1 to fabs: https://github.com/Nightonke/BoomMenu
+// todo 2 https://github.com/yavski/fab-speed-dial
 class MainActivity : AppCompatActivity() {
 
     private val currentFragmentIndex = 7
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             5 -> SubmitButtonFragment()
             6 -> FabMenuVerticalFragment()
             7 -> FabMenuCircularFragment()
+            8 -> TransitionsFragment()
 
             else -> HomeFragment()
         }
