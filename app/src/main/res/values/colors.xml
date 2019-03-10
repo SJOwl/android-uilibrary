@@ -37,4 +37,6 @@
     <color name="fab_bg_expanded">#004D31</color>
     <color name="fab_tint_expanded">#00E092</color>
     <color name="fab_menu_bg">#FFFFFF</color>
+
+    <color name="mockLines">#4EFFD7</color>
 </resources>

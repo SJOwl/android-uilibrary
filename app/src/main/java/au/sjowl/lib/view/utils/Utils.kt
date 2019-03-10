@@ -4,8 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.view.MotionEvent
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import kotlin.system.measureNanoTime
 
@@ -104,4 +108,17 @@ fun View.hide() {
 fun View.scale(scale: Float) {
     scaleX = scale
     scaleY = scale
+}
+
+fun ConstraintLayout.constrain(cs: ConstraintSet, transition: Transition, block: ((cs: ConstraintSet) -> Unit)) {
+    cs.clone(this)
+    TransitionManager.beginDelayedTransition(this, transition)
+    block.invoke(cs)
+    cs.applyTo(this)
+}
+
+fun ConstraintLayout.constrain(cs: ConstraintSet, block: ((cs: ConstraintSet) -> Unit)) {
+    cs.clone(this)
+    block.invoke(cs)
+    cs.applyTo(this)
 }

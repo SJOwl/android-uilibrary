@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<au.sjowl.lib.view.transitions.TransitionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/mainNavigationFragment"
+        android:id="@+id/content"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorPrimaryDark"
-        android:translationY="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/menu" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <au.sjowl.lib.view.transitions.MenuViewGroup
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:id="@+id/menuItemsContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </LinearLayout>
+
+    </au.sjowl.lib.view.transitions.MenuViewGroup>
+
+</au.sjowl.lib.view.transitions.TransitionLayout>

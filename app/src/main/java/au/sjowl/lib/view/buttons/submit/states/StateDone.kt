@@ -23,7 +23,6 @@ class StateDone(
         val sw = dh.paintFrame.strokeWidth
         val p = view.height * 1f - sw
         var w = view.width * dh.animator.getFloat(MULT)
-        println("width = $w, mult = ${dh.animator.getFloat(MULT)}")
         w = Math.max(p, w)
         dh.paintBackground.alpha = (255 * dh.animator.getFloat(MULT)).toInt()
         canvas.run {
