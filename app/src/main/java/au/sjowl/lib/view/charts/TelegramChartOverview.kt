@@ -17,23 +17,23 @@ class TelegramChartOverview : View {
     var data: ChartData = ChartData()
         set(value) {
             field = value
-            timeStart = value.x.values[value.x.values.lastIndex - 20]
-            timeEnd = value.x.values.last()
+            timeStartIndex = value.x.values.lastIndex / 4
+            timeEndIndex = value.x.values.lastIndex
             value.columns.values.forEach {
                 it.calculateBorders()
                 points[it.id] = arrayListOf()
             }
         }
 
-    var onTimeIntervalChanged: ((timeStart: Long, timeEnd: Long) -> Unit)? = null
+    var onTimeIntervalChanged: ((timeStartIndex: Int, timeEndIndex: Int) -> Unit)? = null
 
-    var timeStart = 0L
+    var timeStartIndex = 0
 
-    var timeEnd = 0L
+    var timeEndIndex = 0
 
-    private var timeStartDown = 0L
+    private var timeStartDownIndex = 0
 
-    private var timeEndDown = 0L
+    private var timeEndDownIndex = 0
 
     private val points = mutableMapOf<String, ArrayList<PointF>>()
 
@@ -131,46 +131,46 @@ class TelegramChartOverview : View {
                     else -> TOUCH_NONE
                 }
                 xDown = event.x
-                timeStartDown = timeStart
-                timeEndDown = timeEnd
+                timeStartDownIndex = timeStartIndex
+                timeEndDownIndex = timeEndIndex
             }
             MotionEvent.ACTION_MOVE -> {
                 val delta = xDown - event.x
-                val deltaTime = -canvasToTime(delta.toInt())
+                val deltaIndex = -canvasToIndexInterval(delta.toInt())
                 when (touchMode) {
                     TOUCH_NONE -> {
                     }
                     TOUCH_DRAG -> {
-                        val w = timeEnd - timeStart
-                        val s = timeStartDown + deltaTime
-                        val e = timeEndDown + deltaTime
+                        val w = timeEndIndex - timeStartIndex
+                        val s = timeStartDownIndex + deltaIndex
+                        val e = timeEndDownIndex + deltaIndex
 
                         when {
-                            s < data.x.min -> {
-                                timeStart = data.x.min
-                                timeEnd = timeStart + w
+                            s < 0 -> {
+                                timeStartIndex = 0
+                                timeEndIndex = timeStartIndex + w
                             }
-                            e > data.x.max -> {
-                                timeEnd = data.x.max
-                                timeStart = data.x.max - w
+                            e >= data.x.values.size -> {
+                                timeEndIndex = data.x.values.size - 1
+                                timeStartIndex = timeEndIndex - w
                             }
                             else -> {
-                                timeStart = s
-                                timeEnd = e
+                                timeEndIndex = e
+                                timeStartIndex = s
                             }
                         }
 
-                        onTimeIntervalChanged?.invoke(timeStart, timeEnd)
+                        onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex)
                         invalidate()
                     }
                     TOUCH_SCALE_LEFT -> {
-                        timeStart = Math.min(timeStartDown + deltaTime, timeEnd)
-                        onTimeIntervalChanged?.invoke(timeStart, timeEnd)
+                        timeStartIndex = Math.min(timeStartDownIndex + deltaIndex, timeEndIndex)
+                        onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex)
                         invalidate()
                     }
                     TOUCH_SCALE_RIGHT -> {
-                        timeEnd = Math.max(timeEndDown + deltaTime, timeStart)
-                        onTimeIntervalChanged?.invoke(timeStart, timeEnd)
+                        timeEndIndex = Math.max(timeEndDownIndex + deltaIndex, timeStartIndex)
+                        onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex)
                         invalidate()
                     }
                 }
@@ -225,22 +225,22 @@ class TelegramChartOverview : View {
 
     private fun drawWindow(canvas: Canvas) {
         with(rectTimeWindow) {
-            left = timeToCanvas(timeStart)
-            right = timeToCanvas(timeEnd)
+            left = timeToCanvas(timeStartIndex)
+            right = timeToCanvas(timeEndIndex)
         }
         canvas.drawRect(rectTimeWindow, paintWindow)
     }
 
     private fun drawBackground(canvas: Canvas) {
-        rectBgLeft.right = timeToCanvas(timeStart)
-        rectBgRight.left = timeToCanvas(timeEnd)
+        rectBgLeft.right = timeToCanvas(timeStartIndex)
+        rectBgRight.left = timeToCanvas(timeEndIndex)
         canvas.drawRect(rectBgLeft, paintWindowBackground)
         canvas.drawRect(rectBgRight, paintWindowBackground)
     }
 
-    private inline fun timeToCanvas(time: Long): Float = measuredWidth * 1f * (time - data.x.min) / data.x.interval
+    private inline fun timeToCanvas(timeIndex: Int): Float = measuredWidth * 1f * timeIndex / data.x.values.size
 
-    private inline fun canvasToTime(canvasDistance: Int): Long = canvasDistance * data.x.interval / measuredWidth // + data.x.min
+    private inline fun canvasToIndexInterval(canvasDistance: Int): Int = canvasDistance * data.x.values.size / measuredWidth
 
     companion object {
         private val TOUCH_NONE = -1
