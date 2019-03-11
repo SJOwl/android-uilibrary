@@ -11,13 +11,14 @@ import au.sjowl.lib.view.app.buttons.FabMenuCircularFragment
 import au.sjowl.lib.view.app.buttons.FabMenuVerticalFragment
 import au.sjowl.lib.view.app.buttons.SimpleButtonFragment
 import au.sjowl.lib.view.app.buttons.SubmitButtonFragment
+import au.sjowl.lib.view.app.charts.ChartsFragment
 import au.sjowl.lib.view.app.transitions.TransitionsFragment
 
 // todo 1 to fabs: https://github.com/Nightonke/BoomMenu
 // todo 2 https://github.com/yavski/fab-speed-dial
 class MainActivity : AppCompatActivity() {
 
-    private val currentFragmentIndex = 7
+    private val currentFragmentIndex = 9
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             6 -> FabMenuVerticalFragment()
             7 -> FabMenuCircularFragment()
             8 -> TransitionsFragment()
+            9 -> ChartsFragment()
 
             else -> HomeFragment()
         }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <au.sjowl.lib.view.charts.TelegramChartOverview
+        android:id="@+id/chartOverview0"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
+
+    <au.sjowl.lib.view.charts.TelegramChartOverview
+        android:id="@+id/chartOverview1"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
+
+    <au.sjowl.lib.view.charts.TelegramChartOverview
+        android:id="@+id/chartOverview2"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
+
+    <au.sjowl.lib.view.charts.TelegramChartOverview
+        android:id="@+id/chartOverview3"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
+
+    <au.sjowl.lib.view.charts.TelegramChartOverview
+        android:id="@+id/chartOverview4"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
+
+</LinearLayout>
