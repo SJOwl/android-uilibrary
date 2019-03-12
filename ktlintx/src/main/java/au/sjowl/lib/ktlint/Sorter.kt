@@ -25,9 +25,13 @@ class Sorter() {
         "onDestroyView",
         "onDestroy",
         /* View */
+        "onAttachedToWindow",
         "onSizeChanged",
         "onMeasure",
         "onDraw",
+        "dispatchTouchEvent",
+        "onInterceptTouchEvent",
+        "onTouchEvent",
         "callOnClick",
         "setEnabled"
     )

@@ -38,5 +38,7 @@
     <color name="fab_tint_expanded">#00E092</color>
     <color name="fab_menu_bg">#FFFFFF</color>
 
+    <color name="mockLines">#4EFFD7</color>
+
     <color name="telegram_chart_overview_bg">#C4DBE7F0</color>
 </resources>

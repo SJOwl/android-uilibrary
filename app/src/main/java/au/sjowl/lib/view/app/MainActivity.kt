@@ -12,6 +12,7 @@ import au.sjowl.lib.view.app.buttons.FabMenuVerticalFragment
 import au.sjowl.lib.view.app.buttons.SimpleButtonFragment
 import au.sjowl.lib.view.app.buttons.SubmitButtonFragment
 import au.sjowl.lib.view.app.charts.ChartsFragment
+import au.sjowl.lib.view.app.test.touch.TestTouchesFragment
 import au.sjowl.lib.view.app.transitions.TransitionsFragment
 
 // todo 1 to fabs: https://github.com/Nightonke/BoomMenu
@@ -42,6 +43,8 @@ class MainActivity : AppCompatActivity() {
             7 -> FabMenuCircularFragment()
             8 -> TransitionsFragment()
             9 -> ChartsFragment()
+            10 -> ShadersFragment()
+            11 -> TestTouchesFragment()
 
             else -> HomeFragment()
         }

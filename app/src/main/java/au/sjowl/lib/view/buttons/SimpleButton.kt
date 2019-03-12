@@ -91,11 +91,6 @@ class SimpleButton : TextView {
         super.onDraw(canvas)
     }
 
-    override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enabled)
-        setState(if (enabled) stateDefault else stateDisabled)
-    }
-
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (isEnabled) {
             when (event.action) {
@@ -112,6 +107,11 @@ class SimpleButton : TextView {
             return true
         }
         return false
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        setState(if (enabled) stateDefault else stateDisabled)
     }
 
     private fun setState(state: Map<Int, Any>) {
