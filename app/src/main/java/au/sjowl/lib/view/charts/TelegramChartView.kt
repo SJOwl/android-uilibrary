@@ -3,6 +3,7 @@ package au.sjowl.lib.view.charts
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sp
@@ -32,7 +33,9 @@ class TelegramChartView : View {
 
     private val axisTime = AxisTime(layoutHelper, chartRange)
 
-    private val pointer = Pointer(layoutHelper)
+    private val pointer = Pointer(layoutHelper, chartRange)
+
+    private var drawPointer = false
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -43,7 +46,27 @@ class TelegramChartView : View {
         axisY.draw(canvas, measuredWidth)
         axisTime.draw(canvas, measuredWidth, measuredHeight)
         charts.forEach { it.draw(canvas) }
-        pointer.draw(canvas)
+        if (drawPointer) {
+            pointer.draw(canvas, measuredHeight)
+            charts.forEach { it.drawPointer(canvas) }
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                drawPointer = true
+                updateTimeIndexFromX(event.x)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                updateTimeIndexFromX(event.x)
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                drawPointer = false
+                invalidate()
+            }
+        }
+        return true
     }
 
     fun onTimeIntervalChanged(timeIndexStart: Int, timeIndexEnd: Int) {
@@ -66,12 +89,15 @@ class TelegramChartView : View {
         invalidate()
     }
 
+    private inline fun updateTimeIndexFromX(x: Float) {
+        if (charts.size > 0) {
+            chartRange.pointerTimeX = charts[0].getPointerX()
+            chartRange.pointerTimeIndex = (chartRange.timeIntervalIndexes * x / measuredWidth).toInt()
+            invalidate()
+        }
+    }
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 }
-
-// charts: List<Chart>
-// axisY (+horizontal grid)
-// axisTime
-// pointer (circles at intersection, vertical line, info window)

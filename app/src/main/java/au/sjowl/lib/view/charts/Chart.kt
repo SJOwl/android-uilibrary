@@ -1,7 +1,6 @@
 package au.sjowl.lib.view.charts
 
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Path
 
 class Chart(
@@ -10,18 +9,12 @@ class Chart(
     val layoutHelper: LayoutHelper,
     val chartRange: ChartRange
 ) {
-    private val paintLine = Paint().apply {
-        isAntiAlias = true
-        strokeWidth = 4f
-        style = Paint.Style.STROKE
-        color = column.color
-    }
-
     private val path = Path()
 
     private val points = ArrayList<PointF>()
 
     fun draw(canvas: Canvas) {
+        layoutHelper.paintChartLine.color = column.color
         if (column.enabled) {
             with(path) {
                 reset()
@@ -30,15 +23,23 @@ class Chart(
                     lineTo(points[i].x, points[i].y)
                 }
             }
-            canvas.drawPath(path, paintLine)
+            canvas.drawPath(path, layoutHelper.paintChartLine)
         }
     }
 
+    fun drawPointer(canvas: Canvas) {
+        layoutHelper.paintChartLine.color = column.color
+        val i = chartRange.pointerTimeIndex
+        canvas.drawCircle(points[i].x, points[i].y, layoutHelper.pointerCircleRadius, layoutHelper.paintBackground)
+        canvas.drawCircle(points[i].x, points[i].y, layoutHelper.pointerCircleRadius, layoutHelper.paintChartLine)
+    }
+
+    fun getPointerX() = points[chartRange.pointerTimeIndex].x
+
     fun onWindowChanged(measuredWidth: Int, measuredHeight: Int) {
         val xmin = x.values[chartRange.timeIndexStart]
-        val xInterval = x.values[chartRange.timeIndexEnd] - xmin
         val mh = measuredHeight * 1f - layoutHelper.paddingBottom
-        val kX = measuredWidth * 1f / xInterval
+        val kX = measuredWidth * 1f / (x.values[chartRange.timeIndexEnd] - xmin)
 
         points.clear()
 

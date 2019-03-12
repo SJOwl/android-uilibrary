@@ -1,7 +1,6 @@
 package au.sjowl.lib.view.charts
 
 import android.graphics.Canvas
-import android.graphics.Paint
 
 class AxisY(
     private val layoutHelper: LayoutHelper,
@@ -11,23 +10,10 @@ class AxisY(
 
     private var points = arrayListOf<Int>()
 
-    private val paintLines = Paint().apply {
-        isAntiAlias = true
-        color = layoutHelper.colorLines
-        style = Paint.Style.STROKE
-        strokeWidth = 3f
-    }
-
-    private val paintText = Paint().apply {
-        isAntiAlias = true
-        color = layoutHelper.colorText
-        textSize = layoutHelper.textSize.toFloat()
-    }
-
     fun draw(canvas: Canvas, measuredWidth: Int) {
         for (i in 0 until marks.size) {
-            canvas.drawLine(0f, marks[i], measuredWidth.toFloat(), marks[i], paintLines)
-            canvas.drawText(points[i].toString(), 0f, marks[i] - layoutHelper.paddingTextBottom, paintText)
+            canvas.drawLine(0f, marks[i], measuredWidth.toFloat(), marks[i], layoutHelper.paintGrid)
+            canvas.drawText(points[i].toString(), 0f, marks[i] - layoutHelper.paddingTextBottom, layoutHelper.paintText)
         }
     }
 
