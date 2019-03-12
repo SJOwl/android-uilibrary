@@ -9,4 +9,7 @@ class LayoutHelper {
     var paddingTextBottom = 0
     var colorLines = Color.parseColor("#f1f1f2")
     var colorText = Color.parseColor("#96a2aa")
+
+    var yMarks = 5
+    var xMarks = 5
 }

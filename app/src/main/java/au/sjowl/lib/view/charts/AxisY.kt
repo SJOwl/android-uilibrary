@@ -31,10 +31,13 @@ class AxisY(
         }
     }
 
-    fun onWindowChanged(min: Int, max: Int, measuredHeight: Int) {
+    fun adjustValuesRange(min: Int, max: Int) {
         points = marksFromRange(min, max)
         chartRange.valueMin = points[0]
         chartRange.valueMax = points.last()
+    }
+
+    fun onWindowChanged(measuredHeight: Int) {
         val kY = 1f * (measuredHeight - layoutHelper.paddingBottom - layoutHelper.paddingTop) / (chartRange.interval)
         val mh = measuredHeight * 1f - layoutHelper.paddingBottom
         marks.clear()
@@ -50,7 +53,7 @@ class AxisY(
         val list = arrayListOf<Int>()
         for (i in 0..5) list.add(stepAdjusted * i + minAdjusted)
 
-        println("[$min;$max] -> [$minAdjusted;$maxAdjusted], $step->$stepAdjusted, $list")
+//        println("[$min;$max] -> [$minAdjusted;$maxAdjusted], $step->$stepAdjusted, $list")
         return list
     }
 
@@ -65,8 +68,8 @@ class AxisY(
             s = stepFromIndex(i)
             val t = interval / s
 
-            for (j in 1..STEPS * 2) {
-                if (t in 0..STEPS * j) {
+            for (j in 1..layoutHelper.yMarks * 2) {
+                if (t in 0..layoutHelper.yMarks * j) {
                     s *= j
                     stop = true
                     break
@@ -84,9 +87,5 @@ class AxisY(
             val i = index - 1
             (i + 1) % 2 * 5 * Math.pow(10.0, (i / 2).toDouble()).toInt() + (i) % 2 * 10 * Math.pow(10.0, (i / 2).toDouble()).toInt()
         }
-    }
-
-    companion object {
-        const val STEPS = 5
     }
 }

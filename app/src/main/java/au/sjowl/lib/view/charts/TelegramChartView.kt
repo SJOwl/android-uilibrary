@@ -12,12 +12,13 @@ class TelegramChartView : View {
     var chartData: ChartData = ChartData()
         set(value) {
             field = value
+            chartRange.chartData = value
             charts.clear()
             value.columns.values.forEach { charts.add(Chart(it, value.x, layoutHelper, chartRange)) }
         }
 
     private val layoutHelper = LayoutHelper().apply {
-        paddingBottom = context.dip(32)
+        paddingBottom = context.dip(40)
         paddingTop = context.dip(20)
         textSize = context.sp(16)
         paddingTextBottom = context.dip(4)
@@ -29,7 +30,7 @@ class TelegramChartView : View {
 
     private val axisY = AxisY(layoutHelper, chartRange)
 
-    private val axisTime = AxisTime(layoutHelper)
+    private val axisTime = AxisTime(layoutHelper, chartRange)
 
     private val pointer = Pointer(layoutHelper)
 
@@ -40,7 +41,7 @@ class TelegramChartView : View {
 
     override fun onDraw(canvas: Canvas) {
         axisY.draw(canvas, measuredWidth)
-        axisTime.draw(canvas)
+        axisTime.draw(canvas, measuredWidth, measuredHeight)
         charts.forEach { it.draw(canvas) }
         pointer.draw(canvas)
     }
@@ -51,12 +52,16 @@ class TelegramChartView : View {
 
         // get valueMin and valueMax for each of charts
         val columns = chartData.columns.values
-        columns.forEach { it.calculateBorders(chartRange.timeIndexStart, chartRange.timeIndexEnd) }
+        columns.forEach { it.calculateBorders(timeIndexStart, timeIndexEnd) }
         val chartsMin = columns.minBy { it.min }!!.min
         val chartsMax = columns.maxBy { it.max }!!.max
+        axisY.adjustValuesRange(chartsMin, chartsMax)
 
-        axisY.onWindowChanged(chartsMin, chartsMax, measuredHeight)
-        charts.forEach { it.onWindowChanged(measuredWidth, measuredHeight) }
+        axisY.onWindowChanged(measuredHeight)
+        axisTime.onWindowChanged()
+        charts.forEach {
+            it.onWindowChanged(measuredWidth, measuredHeight)
+        }
 
         invalidate()
     }

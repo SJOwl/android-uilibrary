@@ -4,7 +4,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class AxisYTest {
-    val axisY = AxisY(LayoutHelper())
+    val axisY = AxisY(LayoutHelper(), ChartRange())
 
     @Test
     fun marksFromRangeTest() {
