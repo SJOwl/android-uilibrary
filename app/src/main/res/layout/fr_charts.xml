@@ -1,33 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent">-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <au.sjowl.lib.view.charts.TelegramChartOverview
-        android:id="@+id/chartOverview0"
+    <au.sjowl.lib.view.charts.ChartContainer
+        android:id="@+id/chartContainer0"
         android:layout_width="match_parent"
-        android:layout_height="72dp" />
+        android:layout_height="wrap_content" />
 
-    <au.sjowl.lib.view.charts.TelegramChartOverview
-        android:id="@+id/chartOverview1"
-        android:layout_width="match_parent"
-        android:layout_height="72dp" />
+    <!--<au.sjowl.lib.view.charts.ChartContainer-->
+    <!--android:id="@+id/chartContainer1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
 
-    <au.sjowl.lib.view.charts.TelegramChartOverview
-        android:id="@+id/chartOverview2"
-        android:layout_width="match_parent"
-        android:layout_height="72dp" />
+    <!--<au.sjowl.lib.view.charts.ChartContainer-->
+    <!--android:id="@+id/chartContainer2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
 
-    <au.sjowl.lib.view.charts.TelegramChartOverview
-        android:id="@+id/chartOverview3"
-        android:layout_width="match_parent"
-        android:layout_height="72dp" />
+    <!--<au.sjowl.lib.view.charts.ChartContainer-->
+    <!--android:id="@+id/chartContainer3"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
 
-    <au.sjowl.lib.view.charts.TelegramChartOverview
-        android:id="@+id/chartOverview4"
-        android:layout_width="match_parent"
-        android:layout_height="72dp" />
+    <!--<au.sjowl.lib.view.charts.ChartContainer-->
+    <!--android:id="@+id/chartContainer4"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
 
-</LinearLayout>
+</LinearLayout><!--</ScrollView>-->

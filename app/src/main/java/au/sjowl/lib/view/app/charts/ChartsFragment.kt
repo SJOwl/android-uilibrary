@@ -15,26 +15,11 @@ class ChartsFragment : BaseFragment() {
 
         val json = ResourcesUtils.getResourceAsString("chart_data.json")
         val data = ChartColumnJsonParser(json).parse()
-        chartOverview0.data = data[0]
-        chartOverview0.onTimeIntervalChanged = { timeStart, timeEnd ->
-            println("$timeStart->$timeEnd")
-        }
-        chartOverview1.data = data[1]
-        chartOverview1.onTimeIntervalChanged = { timeStart, timeEnd ->
-            println("$timeStart->$timeEnd")
-        }
-        chartOverview2.data = data[2]
-        chartOverview2.onTimeIntervalChanged = { timeStart, timeEnd ->
-            println("$timeStart->$timeEnd")
-        }
-        chartOverview3.data = data[3]
-        chartOverview3.onTimeIntervalChanged = { timeStart, timeEnd ->
-            println("$timeStart->$timeEnd")
-        }
-
-        chartOverview4.data = data[4]
-        chartOverview4.onTimeIntervalChanged = { timeStart, timeEnd ->
-            println("$timeStart->$timeEnd")
-        }
+        // todo create rv
+        chartContainer0.data = data[0]
+//        chartContainer1.chartData = chartData[1]
+//        chartContainer2.chartData = chartData[2]
+//        chartContainer3.chartData = chartData[3]
+//        chartContainer4.chartData = chartData[4]
     }
 }
