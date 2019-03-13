@@ -16,8 +16,8 @@ class AxisTime(
 
     private val dateFormatter = DateFormatter()
 
-    fun draw(canvas: Canvas, measuredWidth: Int, measuredHeight: Int) {
-        val y = (measuredHeight - timeRectangles[0].height()) * 1f
+    fun draw(canvas: Canvas, measuredWidth: Int, top: Int) {
+        val y = top * 1f + timeRectangles[0].height() + layoutHelper.paddingTextBottom
 
         val step = (measuredWidth - timeRectangles.sumBy { it.width() }) / (layoutHelper.xMarks)
 

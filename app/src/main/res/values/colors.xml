@@ -5,6 +5,7 @@
     <color name="colorAccent">#6ED37C</color>
     <color name="colorAccentxzxxx">#6ED37C</color>
     <color name="colorBg">#6C9592</color>
+    <color name="colorMainBackground">#ffffff</color>
 
     <color name="color1">#FFF5BB</color>
     <color name="color2">#D2FAB7</color>
@@ -41,4 +42,9 @@
     <color name="mockLines">#4EFFD7</color>
 
     <color name="telegram_chart_overview_bg">#C4DBE7F0</color>
+    <color name="telegram_text">#222</color>
+    <color name="telegram_grid">#e5ebef</color>
+    <color name="telegram_toolbar">#517da2</color>
+    <color name="telegram_title">#3896d4</color>
+
 </resources>

@@ -29,7 +29,7 @@ class Checkbox : ImageView {
             paintBackground.color = value
         }
 
-    var radiusPercent: Float = 0.15f
+    var radiusPercent: Float = 0.09f
 
     private var onCheckedChangedListener: ((checked: Boolean) -> Unit)? = null
 
@@ -59,6 +59,10 @@ class Checkbox : ImageView {
     override fun onDetachedFromWindow() {
         onCheckedChangedListener = null
         super.onDetachedFromWindow()
+    }
+
+    fun check() {
+        checked = !checked
     }
 
     fun onCheckedChangedListener(listener: ((checked: Boolean) -> Unit)?) {

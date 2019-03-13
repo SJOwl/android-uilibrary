@@ -19,10 +19,10 @@ class TelegramChartView : View {
         }
 
     private val layoutHelper = LayoutHelper().apply {
-        paddingBottom = context.dip(40)
+        paddingBottom = context.dip(24)
         paddingTop = context.dip(20)
-        textSize = context.sp(16)
-        paddingTextBottom = context.dip(4)
+        textSize = context.sp(10)
+        paddingTextBottom = context.dip(6)
     }
 
     private val chartRange = ChartRange()
@@ -39,16 +39,17 @@ class TelegramChartView : View {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        onTimeIntervalChanged(chartRange.timeIndexStart, chartRange.timeIndexEnd)
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
         axisY.draw(canvas, measuredWidth)
-        axisTime.draw(canvas, measuredWidth, measuredHeight)
-        charts.forEach { it.draw(canvas) }
+        axisTime.draw(canvas, measuredWidth, measuredHeight - layoutHelper.paddingBottom)
+        val activeCharts = charts.filter { it.column.enabled }
+        activeCharts.forEach { it.draw(canvas) }
         if (drawPointer) {
             pointer.draw(canvas, measuredHeight)
-            charts.forEach { it.drawPointer(canvas) }
+            activeCharts.forEach { it.drawPointer(canvas) }
         }
     }
 
@@ -69,15 +70,11 @@ class TelegramChartView : View {
         return true
     }
 
-    fun onTimeIntervalChanged(timeIndexStart: Int, timeIndexEnd: Int) {
-        chartRange.timeIndexStart = timeIndexStart
-        chartRange.timeIndexEnd = timeIndexEnd
-
-        // get valueMin and valueMax for each of charts
+    override fun invalidate() {
         val columns = chartData.columns.values
-        columns.forEach { it.calculateBorders(timeIndexStart, timeIndexEnd) }
-        val chartsMin = columns.minBy { it.min }!!.min
-        val chartsMax = columns.maxBy { it.max }!!.max
+        columns.forEach { it.calculateBorders(chartRange.timeIndexStart, chartRange.timeIndexEnd) }
+        val chartsMin = columns.filter { it.enabled }.minBy { it.min }?.min ?: 0
+        val chartsMax = columns.filter { it.enabled }.maxBy { it.max }?.max ?: 100
         axisY.adjustValuesRange(chartsMin, chartsMax)
 
         axisY.onWindowChanged(measuredHeight)
@@ -85,6 +82,13 @@ class TelegramChartView : View {
         charts.forEach {
             it.onWindowChanged(measuredWidth, measuredHeight)
         }
+
+        super.invalidate()
+    }
+
+    fun onTimeIntervalChanged(timeIndexStart: Int, timeIndexEnd: Int) {
+        chartRange.timeIndexStart = timeIndexStart
+        chartRange.timeIndexEnd = timeIndexEnd
 
         invalidate()
     }

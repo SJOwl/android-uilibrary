@@ -38,13 +38,20 @@ class TelegramChartOverview : View {
 
     private val paintLine = Paint().apply {
         isAntiAlias = true
-        strokeWidth = 4f
+        strokeWidth = 2f
         style = Paint.Style.STROKE
     }
 
-    private val paintWindow = Paint().apply {
+    private val paintWindowVerticals = Paint().apply {
         isAntiAlias = true
-        strokeWidth = 20f
+        strokeWidth = 12f
+        style = Paint.Style.STROKE
+        color = Color.parseColor("#dbe7f0")
+    }
+
+    private val paintWindowHorizontals = Paint().apply {
+        isAntiAlias = true
+        strokeWidth = 3f
         style = Paint.Style.STROKE
         color = Color.parseColor("#dbe7f0")
     }
@@ -106,11 +113,9 @@ class TelegramChartOverview : View {
 
     // todo bitmap with charts vs redraw each frame
     override fun onDraw(canvas: Canvas) {
-//        measureDrawingMs("overview") {
-            drawCharts(canvas)
-            drawBackground(canvas)
-            drawWindow(canvas)
-//        }
+        drawCharts(canvas)
+        drawBackground(canvas)
+        drawWindow(canvas)
     }
 
     // todo scale with 2 pointers
@@ -183,25 +188,33 @@ class TelegramChartOverview : View {
         return true
     }
 
+    fun onChartsChanged() {
+        calculateChartPoints()
+        invalidate()
+    }
+
     private fun calculateChartPoints() {
         val xmin = data.x.min
         val h = 1f * (measuredHeight - padBottom - padTop)
         val mh = measuredHeight * 1f - padBottom
         val kX = measuredWidth * 1f / data.x.interval
 
+        data.columns.values.forEach { it.calculateBorders() }
+        val chartsMin = data.columns.values.filter { it.enabled }.minBy { it.min }?.min
+            ?: Int.MIN_VALUE
+        val chartsMax = data.columns.values.filter { it.enabled }.maxBy { it.max }?.max
+            ?: Int.MAX_VALUE
+
         data.columns.values.forEach { chart ->
 
             val chartPoints = points[chart.id]!!
             chartPoints.clear()
-            chart.calculateBorders()
 
-            val chartHeight = chart.height
-            val chartMin = chart.min
-            val kY = h / chartHeight
+            val kY = h / (chartsMax - chartsMin)
 
             for (i in 0 until data.x.values.size) {
                 val x = kX * (data.x.values[i] - xmin)
-                val y = mh - kY * (chart.values[i] - chartMin)
+                val y = mh - kY * (chart.values[i] - chartsMin)
                 chartPoints.add(PointF(x, y))
             }
         }
@@ -229,7 +242,12 @@ class TelegramChartOverview : View {
             left = timeToCanvas(timeStartIndex)
             right = timeToCanvas(timeEndIndex)
         }
-        canvas.drawRect(rectTimeWindow, paintWindow)
+        with(canvas) {
+            drawLine(rectTimeWindow.left, 0f, rectTimeWindow.left, measuredHeight * 1f, paintWindowVerticals)
+            drawLine(rectTimeWindow.right, 0f, rectTimeWindow.right, measuredHeight * 1f, paintWindowVerticals)
+            drawLine(rectTimeWindow.left, 0f, rectTimeWindow.right, 0f, paintWindowHorizontals)
+            drawLine(rectTimeWindow.left, measuredHeight * 1f, rectTimeWindow.right, measuredHeight * 1f, paintWindowHorizontals)
+        }
     }
 
     private fun drawBackground(canvas: Canvas) {

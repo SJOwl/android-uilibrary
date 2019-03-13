@@ -15,16 +15,14 @@ class Chart(
 
     fun draw(canvas: Canvas) {
         layoutHelper.paintChartLine.color = column.color
-        if (column.enabled) {
-            with(path) {
-                reset()
-                if (points.size > 0) moveTo(points[0].x, points[0].y)
-                for (i in 1 until points.size) {
-                    lineTo(points[i].x, points[i].y)
-                }
+        with(path) {
+            reset()
+            if (points.size > 0) moveTo(points[0].x, points[0].y)
+            for (i in 1 until points.size) {
+                lineTo(points[i].x, points[i].y)
             }
-            canvas.drawPath(path, layoutHelper.paintChartLine)
         }
+        canvas.drawPath(path, layoutHelper.paintChartLine)
     }
 
     fun drawPointer(canvas: Canvas) {

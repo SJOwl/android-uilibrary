@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 
 class ChartData {
+    val title: String = "Followers"
     val columns: MutableMap<String, ChartColumn> = mutableMapOf()
     val x: ChartX = ChartX()
 }

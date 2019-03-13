@@ -39,7 +39,7 @@ class LayoutHelper {
 
     val paintChartLine = Paint().apply {
         isAntiAlias = true
-        strokeWidth = 4f
+        strokeWidth = 6f
         style = Paint.Style.STROKE
     }
 

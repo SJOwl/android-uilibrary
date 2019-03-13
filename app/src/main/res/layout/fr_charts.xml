@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?><!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent">-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/telegram_toolbar"
+        android:elevation="8dp"
+        android:minHeight="?attr/actionBarSize"
+        app:title="Statistics"
+        app:titleTextColor="@android:color/white" />
 
     <au.sjowl.lib.view.charts.ChartContainer
         android:id="@+id/chartContainer0"
