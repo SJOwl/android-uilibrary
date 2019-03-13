@@ -19,7 +19,7 @@ import au.sjowl.lib.view.app.transitions.TransitionsFragment
 // todo 2 https://github.com/yavski/fab-speed-dial
 class MainActivity : AppCompatActivity() {
 
-    private val currentFragmentIndex = 9
+    private val currentFragmentIndex = 12
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             9 -> ChartsFragment()
             10 -> ShadersFragment()
             11 -> TestTouchesFragment()
+            12 -> CheckboxFragment()
 
             else -> HomeFragment()
         }

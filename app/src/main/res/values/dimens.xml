@@ -5,4 +5,5 @@
 
     <dimen name="fab_menu_vertical_size">64dp</dimen>
     <dimen name="fab_menu_vertical_margins">8dp</dimen>
+    <dimen name="size_checkbox">72dp</dimen>
 </resources>
