@@ -46,5 +46,7 @@
     <color name="telegram_grid">#e5ebef</color>
     <color name="telegram_toolbar">#517da2</color>
     <color name="telegram_title">#3896d4</color>
-
+    <color name="telegram_lines">#f1f1f2</color>
+    <color name="telegram_chart_text">#96a2aa</color>
+    <color name="telegram_pointer">#FFFFFF</color>
 </resources>

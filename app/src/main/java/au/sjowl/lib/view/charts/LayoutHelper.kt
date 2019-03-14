@@ -1,28 +1,33 @@
 package au.sjowl.lib.view.charts
 
-import android.graphics.Color
+import android.content.Context
 import android.graphics.Paint
+import androidx.core.content.ContextCompat
+import au.sjowl.lib.uxlibrary.R
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.sp
 
-class LayoutHelper {
-    var paddingBottom = 0
-    var paddingTop = 0
-    var textSize = 0
-        set(value) {
-            field = value
-            paintText.textSize = value.toFloat()
-        }
-    var paddingTextBottom = 0
-    var colorLines = Color.parseColor("#f1f1f2")
-    var colorText = Color.parseColor("#96a2aa")
-        set(value) {
-            field = value
-            paintText.color = value
-        }
+class LayoutHelper(context: Context) {
 
-    var pointerCircleRadius = 20f
+    var w = 0f
 
-    var yMarks = 5
-    var xMarks = 5
+    var h = 0f
+
+    val paddingBottom = context.dip(24)
+
+    val paddingTop = context.dip(20)
+
+    val paddingTextBottom = context.dip(6)
+
+    val colorLines = context.colorCompat(R.color.telegram_lines)
+
+    val colorText = context.colorCompat(R.color.telegram_chart_text)
+
+    val pointerCircleRadius = 20f
+
+    val yMarks = 5
+
+    val xMarks = 5
 
     val paintGrid = Paint().apply {
         isAntiAlias = true
@@ -34,7 +39,7 @@ class LayoutHelper {
     val paintText = Paint().apply {
         isAntiAlias = true
         color = colorText
-        textSize = this@LayoutHelper.textSize.toFloat()
+        textSize = context.sp(12f) * 1f
     }
 
     val paintChartLine = Paint().apply {
@@ -43,9 +48,11 @@ class LayoutHelper {
         style = Paint.Style.STROKE
     }
 
-    val paintBackground = Paint().apply {
+    val paintPointerCircle = Paint().apply {
         isAntiAlias = true
         style = Paint.Style.FILL
-        color = Color.WHITE // todo
+        color = context.colorCompat(R.color.telegram_pointer)
     }
 }
+
+fun Context.colorCompat(colorId: Int) = ContextCompat.getColor(this, colorId)

@@ -6,9 +6,9 @@ class Pointer(
     val layoutHelper: LayoutHelper,
     val chartRange: ChartRange
 ) {
-    fun draw(canvas: Canvas, measuredHeight: Int) {
+    fun draw(canvas: Canvas) {
         // line
-        canvas.drawLine(chartRange.pointerTimeX, measuredHeight * 1f, chartRange.pointerTimeX, 0f, layoutHelper.paintGrid)
+        canvas.drawLine(chartRange.pointerTimeX, layoutHelper.h, chartRange.pointerTimeX, 0f, layoutHelper.paintGrid)
 
         // circles for each chart
 

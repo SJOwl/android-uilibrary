@@ -5,8 +5,6 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.sp
 
 class TelegramChartView : View {
 
@@ -18,12 +16,7 @@ class TelegramChartView : View {
             value.columns.values.forEach { charts.add(Chart(it, value.x, layoutHelper, chartRange)) }
         }
 
-    private val layoutHelper = LayoutHelper().apply {
-        paddingBottom = context.dip(24)
-        paddingTop = context.dip(20)
-        textSize = context.sp(10)
-        paddingTextBottom = context.dip(6)
-    }
+    private val layoutHelper = LayoutHelper(context)
 
     private val chartRange = ChartRange()
 
@@ -42,13 +35,19 @@ class TelegramChartView : View {
         invalidate()
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        layoutHelper.w = measuredWidth * 1f
+        layoutHelper.h = measuredHeight * 1f
+    }
+
     override fun onDraw(canvas: Canvas) {
-        axisY.draw(canvas, measuredWidth)
-        axisTime.draw(canvas, measuredWidth, measuredHeight - layoutHelper.paddingBottom)
+        axisY.draw(canvas)
+        axisTime.draw(canvas, measuredHeight - layoutHelper.paddingBottom)
         val activeCharts = charts.filter { it.column.enabled }
         activeCharts.forEach { it.draw(canvas) }
         if (drawPointer) {
-            pointer.draw(canvas, measuredHeight)
+            pointer.draw(canvas)
             activeCharts.forEach { it.drawPointer(canvas) }
         }
     }
@@ -77,10 +76,10 @@ class TelegramChartView : View {
         val chartsMax = columns.filter { it.enabled }.maxBy { it.max }?.max ?: 100
         axisY.adjustValuesRange(chartsMin, chartsMax)
 
-        axisY.onWindowChanged(measuredHeight)
+        axisY.onWindowChanged()
         axisTime.onWindowChanged()
         charts.forEach {
-            it.onWindowChanged(measuredWidth, measuredHeight)
+            it.onWindowChanged()
         }
 
         super.invalidate()

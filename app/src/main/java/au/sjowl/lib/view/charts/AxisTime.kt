@@ -16,10 +16,10 @@ class AxisTime(
 
     private val dateFormatter = DateFormatter()
 
-    fun draw(canvas: Canvas, measuredWidth: Int, top: Int) {
+    fun draw(canvas: Canvas, top: Int) {
         val y = top * 1f + timeRectangles[0].height() + layoutHelper.paddingTextBottom
 
-        val step = (measuredWidth - timeRectangles.sumBy { it.width() }) / (layoutHelper.xMarks)
+        val step = (layoutHelper.w - timeRectangles.sumBy { it.width() }) / (layoutHelper.xMarks)
 
         var x = 0f
         for (i in 0 until timeTitles.size) {

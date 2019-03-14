@@ -10,9 +10,9 @@ class AxisY(
 
     private var points = arrayListOf<Int>()
 
-    fun draw(canvas: Canvas, measuredWidth: Int) {
+    fun draw(canvas: Canvas) {
         for (i in 0 until marks.size) {
-            canvas.drawLine(0f, marks[i], measuredWidth.toFloat(), marks[i], layoutHelper.paintGrid)
+            canvas.drawLine(0f, marks[i], layoutHelper.w, marks[i], layoutHelper.paintGrid)
             canvas.drawText(points[i].toString(), 0f, marks[i] - layoutHelper.paddingTextBottom, layoutHelper.paintText)
         }
     }
@@ -23,9 +23,9 @@ class AxisY(
         chartRange.valueMax = points.last()
     }
 
-    fun onWindowChanged(measuredHeight: Int) {
-        val kY = 1f * (measuredHeight - layoutHelper.paddingBottom - layoutHelper.paddingTop) / (chartRange.interval)
-        val mh = measuredHeight * 1f - layoutHelper.paddingBottom
+    fun onWindowChanged() {
+        val kY = 1f * (layoutHelper.h - layoutHelper.paddingBottom - layoutHelper.paddingTop) / (chartRange.valueInterval)
+        val mh = layoutHelper.h * 1f - layoutHelper.paddingBottom
         marks.clear()
         points.mapTo(marks) { mh - kY * (it - chartRange.valueMin) }
     }
