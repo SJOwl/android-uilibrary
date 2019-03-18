@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.GregorianCalendar
 import java.util.Locale
 
-class DateFormatter {
+object DateFormatter {
     private val calendar = GregorianCalendar()
     private val dateFormat = SimpleDateFormat("MMM d", Locale.getDefault())
 

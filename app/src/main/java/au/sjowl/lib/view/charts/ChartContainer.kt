@@ -24,23 +24,24 @@ class ChartContainer : LinearLayout {
     var chartData: ChartData = ChartData()
         set(value) {
             field = value
+            value.initTimeWindow()
+
             titleTextView.text = value.title
-            overview.data = value
-            chart.chartData = value
-            chart.onTimeIntervalChanged(overview.timeStartIndex, overview.timeEndIndex)
+            overview.initWith(chartData)
+            chart.initWith(chartData)
             chartsAdapter.items = value.columns.values.map { ChartItem(it.id, it.name, it.color, it.enabled) }
 
             requestLayout()
         }
 
-    private var chart = TelegramChartView(context).apply {
+    private var chart = ChartView(context).apply {
         layoutParams = LayoutParams(matchParent, context.dip(300)).apply {
             marginStart = context.dip(16)
             marginEnd = context.dip(16)
         }
     }
 
-    private var overview = TelegramChartOverview(context).apply {
+    private var overview = ChartOverview(context).apply {
         layoutParams = LayoutParams(matchParent, context.dip(40)).apply {
             marginStart = context.dip(16)
             marginEnd = context.dip(16)
@@ -51,7 +52,7 @@ class ChartContainer : LinearLayout {
         override fun onChecked(data: ChartItem, checked: Boolean) {
             chartData.columns[data.chartId]!!.enabled = checked
             overview.onChartsChanged()
-            chart.invalidate()
+            chart.onChartsChanged()
         }
     })
 

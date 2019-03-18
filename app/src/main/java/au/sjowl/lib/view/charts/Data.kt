@@ -7,6 +7,12 @@ class ChartData {
     val title: String = "Followers"
     val columns: MutableMap<String, ChartColumn> = mutableMapOf()
     val x: ChartX = ChartX()
+    var timeIndexStart = 0
+    var timeIndexEnd = 0
+
+    fun initTimeWindow() {
+        timeIndexEnd = x.values.size / 4
+    }
 }
 
 class ChartColumn(

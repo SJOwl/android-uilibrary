@@ -6,9 +6,9 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 
-class TelegramChartView : View {
+class ChartView : View {
 
-    var chartData: ChartData = ChartData()
+    private var chartData: ChartData = ChartData()
         set(value) {
             field = value
             chartRange.chartData = value
@@ -35,15 +35,9 @@ class TelegramChartView : View {
         invalidate()
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        layoutHelper.w = measuredWidth * 1f
-        layoutHelper.h = measuredHeight * 1f
-    }
-
     override fun onDraw(canvas: Canvas) {
         axisY.draw(canvas)
-        axisTime.draw(canvas, measuredHeight - layoutHelper.paddingBottom)
+        axisTime.draw(canvas)
         val activeCharts = charts.filter { it.column.enabled }
         activeCharts.forEach { it.draw(canvas) }
         if (drawPointer) {
@@ -69,7 +63,15 @@ class TelegramChartView : View {
         return true
     }
 
+    // todo animate changes for each of charts
+    fun onChartsChanged() {
+        invalidate()
+    }
+
     override fun invalidate() {
+        layoutHelper.w = measuredWidth * 1f
+        layoutHelper.h = measuredHeight * 1f
+
         val columns = chartData.columns.values
         columns.forEach { it.calculateBorders(chartRange.timeIndexStart, chartRange.timeIndexEnd) }
         val chartsMin = columns.filter { it.enabled }.minBy { it.min }?.min ?: 0
@@ -85,9 +87,19 @@ class TelegramChartView : View {
         super.invalidate()
     }
 
-    fun onTimeIntervalChanged(timeIndexStart: Int, timeIndexEnd: Int) {
+    fun initWith(chartData: ChartData) {
+        this.chartData = chartData
+        chartRange.timeIndexStart = chartData.timeIndexStart
+        chartRange.timeIndexEnd = chartData.timeIndexEnd
+        chartRange.scaleInProgress = false
+
+        invalidate()
+    }
+
+    fun onTimeIntervalChanged(timeIndexStart: Int, timeIndexEnd: Int, inProgress: Boolean) {
         chartRange.timeIndexStart = timeIndexStart
         chartRange.timeIndexEnd = timeIndexEnd
+        chartRange.scaleInProgress = inProgress
 
         invalidate()
     }

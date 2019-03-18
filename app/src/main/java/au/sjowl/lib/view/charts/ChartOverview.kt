@@ -11,24 +11,30 @@ import android.view.MotionEvent
 import android.view.View
 import org.jetbrains.anko.dip
 
-class TelegramChartOverview : View {
+class ChartOverview : View {
 
-    var data: ChartData = ChartData()
+    var chartData: ChartData = ChartData()
         set(value) {
             field = value
-            timeStartIndex = value.x.values.size * 3 / 4
-            timeEndIndex = value.x.values.lastIndex
             value.columns.values.forEach {
                 it.calculateBorders()
                 points[it.id] = arrayListOf()
             }
         }
 
-    var onTimeIntervalChanged: ((timeStartIndex: Int, timeEndIndex: Int) -> Unit)? = null
+    var onTimeIntervalChanged: ((timeStartIndex: Int, timeEndIndex: Int, inProgress: Boolean) -> Unit)? = null
 
-    var timeStartIndex = 0
+    var timeStartIndex
+        get() = chartData.timeIndexStart
+        set(value) {
+            chartData.timeIndexStart = value
+        }
 
-    var timeEndIndex = 0
+    var timeEndIndex
+        get() = chartData.timeIndexEnd
+        set(value) {
+            chartData.timeIndexEnd = value
+        }
 
     private var timeStartDownIndex = 0
 
@@ -154,8 +160,8 @@ class TelegramChartOverview : View {
                                 timeStartIndex = 0
                                 timeEndIndex = timeStartIndex + w
                             }
-                            e >= data.x.values.size -> {
-                                timeEndIndex = data.x.values.size - 1
+                            e >= chartData.x.values.size -> {
+                                timeEndIndex = chartData.x.values.size - 1
                                 timeStartIndex = timeEndIndex - w
                             }
                             else -> {
@@ -163,57 +169,58 @@ class TelegramChartOverview : View {
                                 timeStartIndex = s
                             }
                         }
-
-                        onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex)
-                        invalidate()
                     }
                     TOUCH_SCALE_LEFT -> {
                         timeStartIndex = Math.min(timeStartDownIndex + deltaIndex, timeEndIndex - SCALE_THRESHOLD)
                         timeStartIndex = if (timeStartIndex < 0) 0 else timeStartIndex
-                        onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex)
-                        invalidate()
                     }
                     TOUCH_SCALE_RIGHT -> {
                         timeEndIndex = Math.max(timeEndDownIndex + deltaIndex, timeStartIndex + SCALE_THRESHOLD)
-                        timeEndIndex = if (timeEndIndex >= data.x.values.size) data.x.values.size - 1 else timeEndIndex
-                        onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex)
-                        invalidate()
+                        timeEndIndex = if (timeEndIndex >= chartData.x.values.size) chartData.x.values.size - 1 else timeEndIndex
                     }
                 }
+                onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex, true)
+                invalidate()
             }
             MotionEvent.ACTION_UP -> {
                 touchMode = TOUCH_NONE
+                onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex, false)
             }
         }
         return true
     }
 
+    // todo animate charts changes
     fun onChartsChanged() {
         calculateChartPoints()
         invalidate()
     }
 
+    fun initWith(chartData: ChartData) {
+        this.chartData = chartData
+    }
+
     private fun calculateChartPoints() {
-        val xmin = data.x.min
+        val xmin = chartData.x.min
         val h = 1f * (measuredHeight - padBottom - padTop)
         val mh = measuredHeight * 1f - padBottom
-        val kX = measuredWidth * 1f / data.x.interval
+        val kX = measuredWidth * 1f / chartData.x.interval
 
-        data.columns.values.forEach { it.calculateBorders() }
-        val chartsMin = data.columns.values.filter { it.enabled }.minBy { it.min }?.min
+        chartData.columns.values.forEach { it.calculateBorders() }
+        val chartsMin = chartData.columns.values.filter { it.enabled }.minBy { it.min }?.min
             ?: Int.MIN_VALUE
-        val chartsMax = data.columns.values.filter { it.enabled }.maxBy { it.max }?.max
+        val chartsMax = chartData.columns.values.filter { it.enabled }.maxBy { it.max }?.max
             ?: Int.MAX_VALUE
 
-        data.columns.values.forEach { chart ->
+        chartData.columns.values.forEach { chart ->
 
             val chartPoints = points[chart.id]!!
             chartPoints.clear()
 
             val kY = h / (chartsMax - chartsMin)
 
-            for (i in 0 until data.x.values.size) {
-                val x = kX * (data.x.values[i] - xmin)
+            for (i in 0 until chartData.x.values.size) {
+                val x = kX * (chartData.x.values[i] - xmin)
                 val y = mh - kY * (chart.values[i] - chartsMin)
                 chartPoints.add(PointF(x, y))
             }
@@ -221,7 +228,7 @@ class TelegramChartOverview : View {
     }
 
     private fun drawCharts(canvas: Canvas) {
-        data.columns.values.forEach { chart ->
+        chartData.columns.values.forEach { chart ->
             if (chart.enabled) {
                 with(path) {
                     reset()
@@ -257,9 +264,9 @@ class TelegramChartOverview : View {
         canvas.drawRect(rectBgRight, paintWindowBackground)
     }
 
-    private inline fun timeToCanvas(timeIndex: Int): Float = measuredWidth * 1f * timeIndex / data.x.values.size
+    private inline fun timeToCanvas(timeIndex: Int): Float = measuredWidth * 1f * timeIndex / chartData.x.values.size
 
-    private inline fun canvasToIndexInterval(canvasDistance: Int): Int = canvasDistance * data.x.values.size / measuredWidth
+    private inline fun canvasToIndexInterval(canvasDistance: Int): Int = canvasDistance * chartData.x.values.size / measuredWidth
 
     companion object {
         private const val TOUCH_NONE = -1

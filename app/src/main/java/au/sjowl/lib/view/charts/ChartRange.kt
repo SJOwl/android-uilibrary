@@ -10,6 +10,8 @@ class ChartRange {
 
     var timeIndexEnd = 0
 
+    var scaleInProgress = false
+
     val valueInterval get() = valueMax - valueMin
 
     var chartData = ChartData()
