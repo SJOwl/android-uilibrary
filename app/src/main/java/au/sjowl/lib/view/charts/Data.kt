@@ -13,6 +13,8 @@ class ChartData {
     fun initTimeWindow() {
         timeIndexEnd = x.values.size / 4
     }
+
+    var chartRange = ChartRange()
 }
 
 class ChartColumn(

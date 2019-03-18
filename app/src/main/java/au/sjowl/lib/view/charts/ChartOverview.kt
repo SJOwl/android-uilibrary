@@ -190,14 +190,14 @@ class ChartOverview : View {
         return true
     }
 
-    // todo animate charts changes
-    fun onChartsChanged() {
-        calculateChartPoints()
-        invalidate()
-    }
-
     fun initWith(chartData: ChartData) {
         this.chartData = chartData
+    }
+
+    fun initAnimationPoints() {
+    }
+
+    fun onAnimateValues(v: Float) {
     }
 
     private fun calculateChartPoints() {

@@ -27,6 +27,12 @@ class Chart(
     fun onWindowChanged() {
         update(layoutHelper.w.toInt(), layoutHelper.h.toInt(), chartRange.timeIndexStart, chartRange.timeIndexEnd)
     }
+
+    fun initAnimationPoints() {
+    }
+
+    fun onAnimateValues(v: Float) {
+    }
 }
 
 open class AbstractChart(

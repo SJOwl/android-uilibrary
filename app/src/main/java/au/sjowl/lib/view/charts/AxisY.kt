@@ -30,6 +30,12 @@ class AxisY(
         points.mapTo(marks) { mh - kY * (it - chartRange.valueMin) }
     }
 
+    fun initAnimationPoints() {
+    }
+
+    fun onAnimateValues(v: Float) {
+    }
+
     fun marksFromRange(min: Int, max: Int): ArrayList<Int> {
         val step = stepFromRange(min, max)
         val minAdjusted = min - min % step

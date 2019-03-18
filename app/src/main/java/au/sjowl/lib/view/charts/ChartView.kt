@@ -63,28 +63,27 @@ class ChartView : View {
         return true
     }
 
-    // todo animate changes for each of charts
-    fun onChartsChanged() {
-        invalidate()
-    }
-
     override fun invalidate() {
         layoutHelper.w = measuredWidth * 1f
         layoutHelper.h = measuredHeight * 1f
 
-        val columns = chartData.columns.values
-        columns.forEach { it.calculateBorders(chartRange.timeIndexStart, chartRange.timeIndexEnd) }
-        val chartsMin = columns.filter { it.enabled }.minBy { it.min }?.min ?: 0
-        val chartsMax = columns.filter { it.enabled }.maxBy { it.max }?.max ?: 100
-        axisY.adjustValuesRange(chartsMin, chartsMax)
+        adjustValueRange()
 
         axisY.onWindowChanged()
         axisTime.onWindowChanged()
-        charts.forEach {
-            it.onWindowChanged()
-        }
+        charts.forEach { it.onWindowChanged() }
 
         super.invalidate()
+    }
+
+    fun initAnimationPoints() {
+        axisY.initAnimationPoints()
+        charts.forEach { it.initAnimationPoints() }
+    }
+
+    fun onAnimateValues(v: Float) {
+        axisY.onAnimateValues(v)
+        charts.forEach { it.onAnimateValues(v) }
     }
 
     fun initWith(chartData: ChartData) {
@@ -102,6 +101,15 @@ class ChartView : View {
         chartRange.scaleInProgress = inProgress
 
         invalidate()
+    }
+
+    private fun adjustValueRange() {
+        val columns = chartData.columns.values
+        columns.forEach { it.calculateBorders(chartRange.timeIndexStart, chartRange.timeIndexEnd) }
+        val enabled = columns.filter { it.enabled }
+        val chartsMin = enabled.minBy { it.min }?.min ?: 0
+        val chartsMax = enabled.maxBy { it.max }?.max ?: 100
+        axisY.adjustValuesRange(chartsMin, chartsMax)
     }
 
     private inline fun updateTimeIndexFromX(x: Float) {

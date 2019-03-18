@@ -1,8 +1,10 @@
 package au.sjowl.lib.view.charts
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -47,12 +49,23 @@ class ChartContainer : LinearLayout {
             marginEnd = context.dip(16)
         }
     }
+    private val floatValueAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+        duration = 1000
+        interpolator = DecelerateInterpolator()
+        addUpdateListener {
+            val v = animatedValue as Float
+            overview.onAnimateValues(v)
+            chart.onAnimateValues(v)
+            this@ChartContainer.postInvalidate()
+        }
+    }
 
     private val chartsAdapter = ChartItemAdapter(object : ChartItemHolderListener {
         override fun onChecked(data: ChartItem, checked: Boolean) {
+            overview.initAnimationPoints()
+            chart.initAnimationPoints()
             chartData.columns[data.chartId]!!.enabled = checked
-            overview.onChartsChanged()
-            chart.onChartsChanged()
+            floatValueAnimator.start()
         }
     })
 
