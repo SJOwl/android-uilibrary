@@ -4,17 +4,43 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 
 class ChartData {
+
     val title: String = "Followers"
+
     val columns: MutableMap<String, ChartColumn> = mutableMapOf()
+
     val x: ChartX = ChartX()
+
+    var valueMin: Int = 0
+
+    var valueMax: Int = 0
+
     var timeIndexStart = 0
+
     var timeIndexEnd = 0
+        set(value) {
+            field = if (value < timeIndexStart) timeIndexStart else value
+        }
+
+    var scaleInProgress = false
+
+    val valueInterval get() = valueMax - valueMin
+
+    val timeStart get() = x.values[timeIndexStart]
+
+    val timeEnd get() = x.values[timeIndexEnd]
+
+    val timeInterval get() = timeEnd - timeStart
+
+    val timeIntervalIndexes get() = Math.max(0, timeIndexEnd - timeIndexStart) // todo how it can be < 0?
+
+    var pointerTimeIndex = 0
+
+    var pointerTimeX = 0f
 
     fun initTimeWindow() {
         timeIndexEnd = x.values.size / 4
     }
-
-    var chartRange = ChartRange()
 }
 
 class ChartColumn(

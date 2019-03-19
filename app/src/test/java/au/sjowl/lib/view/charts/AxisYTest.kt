@@ -1,10 +1,11 @@
 package au.sjowl.lib.view.charts
 
+import org.amshove.kluent.mock
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class AxisYTest {
-    val axisY = AxisY(LayoutHelper(), ChartRange())
+    val axisY = AxisY(mock(), mock())
 
     @Test
     fun marksFromRangeTest() {
@@ -19,13 +20,27 @@ class AxisYTest {
         assertEquals(axisY.marksFromRange(26, 278), arrayListOf(0, 60, 120, 180, 240, 300))
     }
 
-//    @Test
-//    fun stepFromRangeTest() {
-//        axisY.stepFromRange(1, 250) shouldBe 50
-//        axisY.stepFromRange(10, 250) shouldBe 50
-//        axisY.stepFromRange(10, 230) shouldBe 50
-//        axisY.stepFromRange(5, 99) shouldBe 20
-//        axisY.stepFromRange(5, 10) shouldBe 1
-//        axisY.stepFromRange(5, 200) shouldBe 40
-//    }
+    @Test
+    fun stepFromRangeTest() {
+        axisY.stepFromRange(1, 250) shouldBe 50
+        axisY.stepFromRange(10, 250) shouldBe 50
+        axisY.stepFromRange(10, 230) shouldBe 50
+        axisY.stepFromRange(5, 99) shouldBe 20
+        axisY.stepFromRange(5, 10) shouldBe 1
+        axisY.stepFromRange(5, 200) shouldBe 40
+    }
+
+    @Test
+    fun formatRangeTest() {
+        assertEquals("1.2k", axisY.formatPoint(1200))
+        assertEquals("1k", axisY.formatPoint(1000))
+        assertEquals("5", axisY.formatPoint(5))
+        assertEquals("403", axisY.formatPoint(403))
+        assertEquals("2.3k", axisY.formatPoint(2300))
+        assertEquals("23k", axisY.formatPoint(23001))
+        assertEquals("2.1M", axisY.formatPoint(2100000))
+        assertEquals("21M", axisY.formatPoint(21000000))
+        assertEquals("21M", axisY.formatPoint(21000001))
+        assertEquals("21.4M", axisY.formatPoint(21400001))
+    }
 }

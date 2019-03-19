@@ -11,22 +11,21 @@ class ChartView : View {
     private var chartData: ChartData = ChartData()
         set(value) {
             field = value
-            chartRange.chartData = value
             charts.clear()
-            value.columns.values.forEach { charts.add(Chart(it, value.x, layoutHelper, chartRange)) }
+            axisY.chartData = value
+            axisTime.chartData = value
+            value.columns.values.forEach { charts.add(Chart(it, layoutHelper, value)) }
         }
 
     private val layoutHelper = LayoutHelper(context)
 
-    private val chartRange = ChartRange()
-
     private val charts = arrayListOf<Chart>()
 
-    private val axisY = AxisY(layoutHelper, chartRange)
+    private val axisY = AxisY(layoutHelper, chartData)
 
-    private val axisTime = AxisTime(layoutHelper, chartRange)
+    private val axisTime = AxisTime(layoutHelper, chartData)
 
-    private val pointer = Pointer(layoutHelper, chartRange)
+    private val pointer = Pointer(layoutHelper, chartData)
 
     private var drawPointer = false
 
@@ -38,7 +37,7 @@ class ChartView : View {
     override fun onDraw(canvas: Canvas) {
         axisY.draw(canvas)
         axisTime.draw(canvas)
-        val activeCharts = charts.filter { it.column.enabled }
+        val activeCharts = charts
         activeCharts.forEach { it.draw(canvas) }
         if (drawPointer) {
             pointer.draw(canvas)
@@ -64,48 +63,50 @@ class ChartView : View {
     }
 
     override fun invalidate() {
+        updateFinishState()
+        super.invalidate()
+    }
+
+    fun updateFinishState() {
         layoutHelper.w = measuredWidth * 1f
         layoutHelper.h = measuredHeight * 1f
 
         adjustValueRange()
 
-        axisY.onWindowChanged()
+        axisY.onAnimateValues(0f)
         axisTime.onWindowChanged()
         charts.forEach { it.onWindowChanged() }
-
-        super.invalidate()
     }
 
-    fun initAnimationPoints() {
-        axisY.initAnimationPoints()
-        charts.forEach { it.initAnimationPoints() }
+    fun updateStartPoints() {
+        axisY.updateStartPoints()
+        charts.forEach { it.updateStartPoints() }
     }
 
     fun onAnimateValues(v: Float) {
         axisY.onAnimateValues(v)
         charts.forEach { it.onAnimateValues(v) }
+        super.invalidate()
     }
 
     fun initWith(chartData: ChartData) {
         this.chartData = chartData
-        chartRange.timeIndexStart = chartData.timeIndexStart
-        chartRange.timeIndexEnd = chartData.timeIndexEnd
-        chartRange.scaleInProgress = false
+        chartData.scaleInProgress = false
 
         invalidate()
     }
 
     fun onTimeIntervalChanged(timeIndexStart: Int, timeIndexEnd: Int, inProgress: Boolean) {
-        chartRange.timeIndexStart = timeIndexStart
-        chartRange.timeIndexEnd = timeIndexEnd
-        chartRange.scaleInProgress = inProgress
+        chartData.timeIndexStart = timeIndexStart
+        chartData.timeIndexEnd = timeIndexEnd
+        chartData.scaleInProgress = inProgress
 
         invalidate()
     }
 
     private fun adjustValueRange() {
         val columns = chartData.columns.values
-        columns.forEach { it.calculateBorders(chartRange.timeIndexStart, chartRange.timeIndexEnd) }
+        columns.forEach { it.calculateBorders(chartData.timeIndexStart, chartData.timeIndexEnd) }
         val enabled = columns.filter { it.enabled }
         val chartsMin = enabled.minBy { it.min }?.min ?: 0
         val chartsMax = enabled.maxBy { it.max }?.max ?: 100
@@ -114,8 +115,8 @@ class ChartView : View {
 
     private inline fun updateTimeIndexFromX(x: Float) {
         if (charts.size > 0) {
-            chartRange.pointerTimeX = charts[0].getPointerX()
-            chartRange.pointerTimeIndex = (chartRange.timeIntervalIndexes * x / measuredWidth).toInt()
+            chartData.pointerTimeX = charts[0].getPointerX()
+            chartData.pointerTimeIndex = (chartData.timeIntervalIndexes * x / measuredWidth).toInt()
             invalidate()
         }
     }

@@ -6,7 +6,30 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorBackground">@color/colorMainBackground</item>
+    </style>
+
+    <style name="AppTheme.Dark">
+        <item name="colorWindow">#151e27</item>
+        <item name="colorBackground">#1d2733</item>
+        <item name="colorToolbar">#212d3b</item>
+        <item name="colorPointer">#202b38</item>
+        <item name="colorGrid">#111924</item>
+        <item name="colorOverviewWindow">#2b4256</item>
+        <item name="colorOverviewTint">#19232e</item>
+        <item name="colorChartText">#19232e</item>
+        <item name="colorText">#e5eff5</item>
+    </style>
+
+    <style name="AppTheme.Light">
+        <item name="colorWindow">#f0f0f0</item>
+        <item name="colorBackground">#ffffff</item>
+        <item name="colorToolbar">#517da2</item>
+        <item name="colorPointer">#ffffff</item>
+        <item name="colorGrid">#e7e8e9</item>
+        <item name="colorOverviewWindow">#dbe7f0</item>
+        <item name="colorOverviewTint">#f5f8f9</item>
+        <item name="colorChartText">#9ba6ae</item>
+        <item name="colorText">#222222</item>
     </style>
 
     <style name="MainTheme"></style>

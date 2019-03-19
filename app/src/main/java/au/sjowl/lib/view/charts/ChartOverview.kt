@@ -2,14 +2,56 @@ package au.sjowl.lib.view.charts
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import org.jetbrains.anko.dip
+
+class OverviewRectangles {
+
+    val rectTimeWindow = RectF()
+
+    val rectBgLeft = RectF()
+
+    val rectBgRight = RectF()
+
+    val rectBorderLeft = RectF()
+
+    val rectBorderRight = RectF()
+
+    fun setVerticalsToAll(top: Float, bottom: Float) {
+        rectTimeWindow.top = top
+        rectBgLeft.top = top
+        rectBgRight.top = top
+        rectBorderLeft.top = top
+        rectBorderRight.top = top
+
+        rectTimeWindow.bottom = bottom
+        rectBgLeft.bottom = bottom
+        rectBgRight.bottom = bottom
+        rectBorderLeft.bottom = bottom
+        rectBorderRight.bottom = bottom
+    }
+
+    fun updateTouch(touchWidth: Int) {
+        rectBorderLeft.left = rectTimeWindow.left - touchWidth
+        rectBorderLeft.right = rectTimeWindow.left + touchWidth
+
+        rectBorderRight.left = rectTimeWindow.right - touchWidth
+        rectBorderRight.right = rectTimeWindow.right + touchWidth
+    }
+
+    fun getTouchMode(x: Float, y: Float): Int {
+        return when {
+            rectBorderLeft.contains(x, y) -> ChartOverview.TOUCH_SCALE_LEFT
+            rectBorderRight.contains(x, y) -> ChartOverview.TOUCH_SCALE_RIGHT
+            rectTimeWindow.contains(x, y) -> ChartOverview.TOUCH_DRAG
+            else -> ChartOverview.TOUCH_NONE
+        }
+    }
+}
 
 class ChartOverview : View {
 
@@ -22,19 +64,9 @@ class ChartOverview : View {
             }
         }
 
-    var onTimeIntervalChanged: ((timeStartIndex: Int, timeEndIndex: Int, inProgress: Boolean) -> Unit)? = null
+    var onTimeIntervalChanged: ((timeIndexStart: Int, timeIndexEnd: Int, inProgress: Boolean) -> Unit)? = null
 
-    var timeStartIndex
-        get() = chartData.timeIndexStart
-        set(value) {
-            chartData.timeIndexStart = value
-        }
-
-    var timeEndIndex
-        get() = chartData.timeIndexEnd
-        set(value) {
-            chartData.timeIndexEnd = value
-        }
+    private val rectangles = OverviewRectangles()
 
     private var timeStartDownIndex = 0
 
@@ -42,47 +74,11 @@ class ChartOverview : View {
 
     private val points = mutableMapOf<String, ArrayList<PointF>>()
 
-    private val paintLine = Paint().apply {
-        isAntiAlias = true
-        strokeWidth = 2f
-        style = Paint.Style.STROKE
-    }
-
-    private val paintWindowVerticals = Paint().apply {
-        isAntiAlias = true
-        strokeWidth = 12f
-        style = Paint.Style.STROKE
-        color = Color.parseColor("#dbe7f0")
-    }
-
-    private val paintWindowHorizontals = Paint().apply {
-        isAntiAlias = true
-        strokeWidth = 3f
-        style = Paint.Style.STROKE
-        color = Color.parseColor("#dbe7f0")
-    }
-
-    private val paintWindowBackground = Paint().apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-        color = Color.parseColor("#C4f5f8f9")
-    }
-
     private val path = Path()
 
     private val padBottom = context.dip(4)
 
     private val padTop = context.dip(4)
-
-    private val rectTimeWindow = RectF()
-
-    private val rectBgLeft = RectF()
-
-    private val rectBgRight = RectF()
-
-    private val rectBorderLeft = RectF()
-
-    private val rectBorderRight = RectF()
 
     private val touchWidth = context.dip(10)
 
@@ -90,31 +86,14 @@ class ChartOverview : View {
 
     private var xDown = 0f
 
+    private val paints = TelegramPaints(context)
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         calculateChartPoints()
-        with(rectBorderLeft) {
-            top = 0f
-            bottom = measuredHeight * 1f
-        }
-        with(rectBorderRight) {
-            top = 0f
-            bottom = measuredHeight * 1f
-        }
-        with(rectTimeWindow) {
-            top = 0f
-            bottom = measuredHeight * 1f
-        }
-        with(rectBgLeft) {
-            top = 0f
-            bottom = measuredHeight * 1f
-            left = 0f
-        }
-        with(rectBgRight) {
-            top = 0f
-            bottom = measuredHeight * 1f
-            right = measuredWidth * 1f
-        }
+        rectangles.setVerticalsToAll(0f, measuredHeight * 1f)
+        rectangles.rectBgLeft.left = 0f
+        rectangles.rectBgRight.right = measuredWidth * 1f
     }
 
     // todo bitmap with charts vs redraw each frame
@@ -128,21 +107,12 @@ class ChartOverview : View {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                rectBorderLeft.left = rectTimeWindow.left - touchWidth
-                rectBorderLeft.right = rectTimeWindow.left + touchWidth
+                rectangles.updateTouch(touchWidth)
+                touchMode = rectangles.getTouchMode(event.x, event.y)
 
-                rectBorderRight.left = rectTimeWindow.right - touchWidth
-                rectBorderRight.right = rectTimeWindow.right + touchWidth
-
-                touchMode = when {
-                    rectBorderLeft.contains(event.x, event.y) -> TOUCH_SCALE_LEFT
-                    rectBorderRight.contains(event.x, event.y) -> TOUCH_SCALE_RIGHT
-                    rectTimeWindow.contains(event.x, event.y) -> TOUCH_DRAG
-                    else -> TOUCH_NONE
-                }
                 xDown = event.x
-                timeStartDownIndex = timeStartIndex
-                timeEndDownIndex = timeEndIndex
+                timeStartDownIndex = chartData.timeIndexStart
+                timeEndDownIndex = chartData.timeIndexEnd
             }
             MotionEvent.ACTION_MOVE -> {
                 val delta = xDown - event.x
@@ -151,40 +121,40 @@ class ChartOverview : View {
                     TOUCH_NONE -> {
                     }
                     TOUCH_DRAG -> {
-                        val w = timeEndIndex - timeStartIndex
+                        val w = chartData.timeIndexEnd - chartData.timeIndexStart
                         val s = timeStartDownIndex + deltaIndex
                         val e = timeEndDownIndex + deltaIndex
 
                         when {
                             s < 0 -> {
-                                timeStartIndex = 0
-                                timeEndIndex = timeStartIndex + w
+                                chartData.timeIndexStart = 0
+                                chartData.timeIndexEnd = chartData.timeIndexStart + w
                             }
                             e >= chartData.x.values.size -> {
-                                timeEndIndex = chartData.x.values.size - 1
-                                timeStartIndex = timeEndIndex - w
+                                chartData.timeIndexEnd = chartData.x.values.size - 1
+                                chartData.timeIndexStart = chartData.timeIndexEnd - w
                             }
                             else -> {
-                                timeEndIndex = e
-                                timeStartIndex = s
+                                chartData.timeIndexEnd = e
+                                chartData.timeIndexStart = s
                             }
                         }
                     }
                     TOUCH_SCALE_LEFT -> {
-                        timeStartIndex = Math.min(timeStartDownIndex + deltaIndex, timeEndIndex - SCALE_THRESHOLD)
-                        timeStartIndex = if (timeStartIndex < 0) 0 else timeStartIndex
+                        chartData.timeIndexStart = Math.min(timeStartDownIndex + deltaIndex, chartData.timeIndexEnd - SCALE_THRESHOLD)
+                        chartData.timeIndexStart = if (chartData.timeIndexStart < 0) 0 else chartData.timeIndexStart
                     }
                     TOUCH_SCALE_RIGHT -> {
-                        timeEndIndex = Math.max(timeEndDownIndex + deltaIndex, timeStartIndex + SCALE_THRESHOLD)
-                        timeEndIndex = if (timeEndIndex >= chartData.x.values.size) chartData.x.values.size - 1 else timeEndIndex
+                        chartData.timeIndexEnd = Math.max(timeEndDownIndex + deltaIndex, chartData.timeIndexStart + SCALE_THRESHOLD)
+                        chartData.timeIndexEnd = if (chartData.timeIndexEnd >= chartData.x.values.size) chartData.x.values.size - 1 else chartData.timeIndexEnd
                     }
                 }
-                onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex, true)
+                onTimeIntervalChanged?.invoke(chartData.timeIndexStart, chartData.timeIndexEnd, true)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
                 touchMode = TOUCH_NONE
-                onTimeIntervalChanged?.invoke(timeStartIndex, timeEndIndex, false)
+                onTimeIntervalChanged?.invoke(chartData.timeIndexStart, chartData.timeIndexEnd, false)
             }
         }
         return true
@@ -194,10 +164,14 @@ class ChartOverview : View {
         this.chartData = chartData
     }
 
-    fun initAnimationPoints() {
+    fun updateStartPoints() {
     }
 
     fun onAnimateValues(v: Float) {
+        invalidate()
+    }
+
+    fun updateFinishState() {
     }
 
     private fun calculateChartPoints() {
@@ -206,11 +180,8 @@ class ChartOverview : View {
         val mh = measuredHeight * 1f - padBottom
         val kX = measuredWidth * 1f / chartData.x.interval
 
-        chartData.columns.values.forEach { it.calculateBorders() }
-        val chartsMin = chartData.columns.values.filter { it.enabled }.minBy { it.min }?.min
-            ?: Int.MIN_VALUE
-        val chartsMax = chartData.columns.values.filter { it.enabled }.maxBy { it.max }?.max
-            ?: Int.MAX_VALUE
+        val chartsMin = chartData.valueMin
+        val chartsMax = chartData.valueMax
 
         chartData.columns.values.forEach { chart ->
 
@@ -238,30 +209,30 @@ class ChartOverview : View {
                         lineTo(chartPoints[i].x, chartPoints[i].y)
                     }
                 }
-                paintLine.color = chart.color
-                canvas.drawPath(path, paintLine)
+                paints.paintOverviewLine.color = chart.color
+                canvas.drawPath(path, paints.paintOverviewLine)
             }
         }
     }
 
     private fun drawWindow(canvas: Canvas) {
-        with(rectTimeWindow) {
-            left = timeToCanvas(timeStartIndex)
-            right = timeToCanvas(timeEndIndex)
+        with(rectangles.rectTimeWindow) {
+            left = timeToCanvas(chartData.timeIndexStart)
+            right = timeToCanvas(chartData.timeIndexEnd)
         }
         with(canvas) {
-            drawLine(rectTimeWindow.left, 0f, rectTimeWindow.left, measuredHeight * 1f, paintWindowVerticals)
-            drawLine(rectTimeWindow.right, 0f, rectTimeWindow.right, measuredHeight * 1f, paintWindowVerticals)
-            drawLine(rectTimeWindow.left, 0f, rectTimeWindow.right, 0f, paintWindowHorizontals)
-            drawLine(rectTimeWindow.left, measuredHeight * 1f, rectTimeWindow.right, measuredHeight * 1f, paintWindowHorizontals)
+            drawLine(rectangles.rectTimeWindow.left, 0f, rectangles.rectTimeWindow.left, measuredHeight * 1f, paints.paintOverviewWindowVerticals)
+            drawLine(rectangles.rectTimeWindow.right, 0f, rectangles.rectTimeWindow.right, measuredHeight * 1f, paints.paintOverviewWindowVerticals)
+            drawLine(rectangles.rectTimeWindow.left, 0f, rectangles.rectTimeWindow.right, 0f, paints.paintOverviewWindowHorizontals)
+            drawLine(rectangles.rectTimeWindow.left, measuredHeight * 1f, rectangles.rectTimeWindow.right, measuredHeight * 1f, paints.paintOverviewWindowHorizontals)
         }
     }
 
     private fun drawBackground(canvas: Canvas) {
-        rectBgLeft.right = timeToCanvas(timeStartIndex)
-        rectBgRight.left = timeToCanvas(timeEndIndex)
-        canvas.drawRect(rectBgLeft, paintWindowBackground)
-        canvas.drawRect(rectBgRight, paintWindowBackground)
+        rectangles.rectBgLeft.right = timeToCanvas(chartData.timeIndexStart)
+        rectangles.rectBgRight.left = timeToCanvas(chartData.timeIndexEnd)
+        canvas.drawRect(rectangles.rectBgLeft, paints.paintOverviewWindowTint)
+        canvas.drawRect(rectangles.rectBgRight, paints.paintOverviewWindowTint)
     }
 
     private inline fun timeToCanvas(timeIndex: Int): Float = measuredWidth * 1f * timeIndex / chartData.x.values.size
@@ -269,11 +240,11 @@ class ChartOverview : View {
     private inline fun canvasToIndexInterval(canvasDistance: Int): Int = canvasDistance * chartData.x.values.size / measuredWidth
 
     companion object {
-        private const val TOUCH_NONE = -1
-        private const val TOUCH_DRAG = 0
-        private const val TOUCH_SCALE_LEFT = 1
-        private const val TOUCH_SCALE_RIGHT = 2
-        private const val SCALE_THRESHOLD = 10
+        const val TOUCH_NONE = -1
+        const val TOUCH_DRAG = 0
+        const val TOUCH_SCALE_LEFT = 1
+        const val TOUCH_SCALE_RIGHT = 2
+        const val SCALE_THRESHOLD = 10
     }
 
     constructor(context: Context) : super(context)

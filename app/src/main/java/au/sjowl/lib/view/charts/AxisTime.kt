@@ -6,7 +6,7 @@ import android.graphics.Rect
 
 class AxisTime(
     private val layoutHelper: LayoutHelper,
-    private val chartRange: ChartRange
+    var chartData: ChartData
 ) {
 
     private val rectText = Rect()
@@ -15,7 +15,7 @@ class AxisTime(
 
     private val scalablePoints = arrayListOf<ScalablePoint>()
 
-    private val paintText = Paint(layoutHelper.paintText)
+    private val paintText = Paint(layoutHelper.paints.paintText)
 
     private var defaultDistance = 1f
 
@@ -28,12 +28,12 @@ class AxisTime(
     }
 
     fun onWindowChanged() {
-        layoutHelper.paintText.getTextBounds("Mar 222", 0, 6, rectText)
-        if (chartRange.scaleInProgress) {
-            println("before ${scalablePoints.map { it.x }}")
+        layoutHelper.paints.paintText.getTextBounds("Mar 222", 0, 6, rectText)
+        if (chartData.scaleInProgress) {
+//            println("before ${scalablePoints.map { it.x }}")
             onScale()
-            println("after  ${scalablePoints.map { it.x }}")
-        } else if (!chartRange.scaleInProgress) {
+//            println("after  ${scalablePoints.map { it.x }}")
+        } else if (!chartData.scaleInProgress) {
             onScaleEnd()
         }
     }
@@ -45,8 +45,8 @@ class AxisTime(
         val halfText = rectText.width() / 2
         val t0 = w / halfText
 
-        val start: Long = chartRange.timeInterval / t0 + chartRange.timeStart
-        val timeInterval = chartRange.timeInterval - 2 * (start - chartRange.timeStart)
+        val start: Long = chartData.timeInterval / t0 + chartData.timeStart
+        val timeInterval = chartData.timeInterval - 2 * (start - chartData.timeStart)
 
         scalablePoints.forEach {
             it.x = it.xStart + 1f * (it.t - start) / timeInterval - 1f * (it.t - it.start) / it.interval
@@ -91,8 +91,8 @@ class AxisTime(
         val w = (if (layoutHelper.w > 0) layoutHelper.w else 100f).toLong()
         val halfText = rectText.width() / 2
         val t0 = w / halfText
-        val start: Long = chartRange.timeInterval / t0 + chartRange.timeStart
-        val timeInterval = chartRange.timeInterval - 2 * (start - chartRange.timeStart)
+        val start: Long = chartData.timeInterval / t0 + chartData.timeStart
+        val timeInterval = chartData.timeInterval - 2 * (start - chartData.timeStart)
 
         val step = timeInterval / layoutHelper.xMarks
         scalablePoints.clear()
@@ -101,7 +101,7 @@ class AxisTime(
             val t = step * i + start
             scalablePoints.add(ScalablePoint(
                 t = t,
-                xStart = 1f * (t - chartRange.timeStart) / chartRange.timeInterval,
+                xStart = 1f * (t - chartData.timeStart) / chartData.timeInterval,
                 interval = timeInterval,
                 start = start
             ))
