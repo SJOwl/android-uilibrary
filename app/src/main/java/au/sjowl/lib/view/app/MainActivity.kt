@@ -3,6 +3,7 @@ package au.sjowl.lib.view.app
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import au.sjowl.lib.uxlibrary.BuildConfig
 import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.app.bottomnav.NavFluidFragment
 import au.sjowl.lib.view.app.bottomnav.NavRotationFragment
@@ -12,6 +13,7 @@ import au.sjowl.lib.view.app.buttons.FabMenuVerticalFragment
 import au.sjowl.lib.view.app.buttons.SimpleButtonFragment
 import au.sjowl.lib.view.app.buttons.SubmitButtonFragment
 import au.sjowl.lib.view.app.charts.ChartsFragment
+import au.sjowl.lib.view.app.gallery.home.HomeFragment
 import au.sjowl.lib.view.app.test.touch.TestTouchesFragment
 import au.sjowl.lib.view.app.transitions.TransitionsFragment
 
@@ -19,7 +21,7 @@ import au.sjowl.lib.view.app.transitions.TransitionsFragment
 // todo 2 https://github.com/yavski/fab-speed-dial
 class MainActivity : AppCompatActivity() {
 
-    private val currentFragmentIndex = 9
+    private val currentFragmentIndex = 13
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,27 +34,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testFragment(): BaseFragment {
-        return when (currentFragmentIndex) {
-            0 -> ProgressFragment()
-            1 -> NavFluidFragment()
-            2 -> NavRotationFragment()
-            3 -> NavSpreadFragment()
-            4 -> SimpleButtonFragment()
-            5 -> SubmitButtonFragment()
-            6 -> FabMenuVerticalFragment()
-            7 -> FabMenuCircularFragment()
-            8 -> TransitionsFragment()
-            9 -> ChartsFragment()
-            10 -> ShadersFragment()
-            11 -> TestTouchesFragment()
-            12 -> CheckboxFragment()
+        if (BuildConfig.DEBUG) {
+            return when (currentFragmentIndex) {
+                1 -> ProgressFragment()
+                2 -> NavFluidFragment()
+                3 -> NavRotationFragment()
+                4 -> NavSpreadFragment()
+                5 -> SimpleButtonFragment()
+                6 -> SubmitButtonFragment()
+                7 -> FabMenuVerticalFragment()
+                8 -> FabMenuCircularFragment()
+                9 -> TransitionsFragment()
+                10 -> ChartsFragment()
+                11 -> ShadersFragment()
+                12 -> TestTouchesFragment()
+                13 -> CheckboxFragment()
 
-            else -> HomeFragment()
+                else -> HomeFragment()
+            }
         }
+        return HomeFragment()
     }
 }
 
-class HomeFragment : BaseFragment() {
+class XFragment : BaseFragment() {
     override val layoutId: Int get() = R.layout.layout_test
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
