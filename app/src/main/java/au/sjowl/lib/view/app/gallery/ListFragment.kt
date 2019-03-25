@@ -2,7 +2,6 @@ package au.sjowl.lib.view.app.gallery
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentTransaction
 import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.app.BaseFragment
 import au.sjowl.lib.view.app.gallery.home.CategoryAdapter
@@ -22,10 +21,10 @@ abstract class ListFragment : BaseFragment() {
             val fragment = Screens.fragmentFromId(data.fragmentId)
             activity?.run {
                 supportFragmentManager.beginTransaction().apply {
+                    setCustomAnimations(R.anim.fr_transition_enter, R.anim.fr_transition_exit,
+                        R.anim.fr_transition_enter, R.anim.fr_transition_exit)
                     replace(R.id.mainNavigationFragment, fragment, data.name)
                     addToBackStack(data.name)
-                    // todo set animation
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     commit()
                 }
             }
