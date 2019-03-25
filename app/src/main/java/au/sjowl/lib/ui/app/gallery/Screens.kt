@@ -29,7 +29,7 @@ object Screens {
     val TRANSITIONS_TOP_MENU = key++
 
     val developmentScreen = MAIN
-//    val developmentScreen = NAVBAR_ROTATION
+//    val developmentScreen = LIST_CHECKBOX
 
     val screens = listOf(
         ScreenData("Home", MAIN) { ListFragment.createArguments(intArrayOf(LIST_BUTTONS, LIST_BOTTOMBARS, LIST_CHARTS, LIST_TRANSITIONS, LIST_PROGRESSBAR, LIST_FAB, LIST_CHECKBOX)) },
