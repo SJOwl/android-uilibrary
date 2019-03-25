@@ -1,2 +1,2 @@
-include ':app', ':ktlintx'
+include ':app', ':ktlintx', ':telegramchart'
 

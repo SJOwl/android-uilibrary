@@ -40,21 +40,4 @@
     <color name="fab_menu_bg">#FFFFFF</color>
 
     <color name="mockLines">#4EFFD7</color>
-
-    <color name="telegram_chart_overview_bg">#C4DBE7F0</color>
-    <color name="telegram_text">#222</color>
-    <color name="telegram_grid">#e5ebef</color>
-    <color name="telegram_toolbar">#517da2</color>
-    <color name="telegram_title">#3896d4</color>
-    <color name="telegram_lines">#f1f1f2</color>
-    <color name="telegram_chart_text">#96a2aa</color>
-    <color name="telegram_pointer">#FFFFFF</color>
-    <color name="telegram_overview_tint">#C4f5f8f9</color>
-    <color name="telegram_overview_window">#dbe7f0</color>
-
-    <color name="telegram_toolbar_dark">#212d3b</color>
-    <color name="telegram_toolbar_light">#517da2</color>
-    <color name="telegram_background_light">#517da2</color>
-    <color name="telegram_background_dark">#1d2733</color>
-
 </resources>
