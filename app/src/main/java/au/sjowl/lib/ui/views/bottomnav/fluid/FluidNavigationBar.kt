@@ -3,11 +3,11 @@ package au.sjowl.lib.ui.views.bottomnav.fluid
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.children
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 /**
  * todo badges, test set params from code
@@ -17,7 +17,7 @@ class FluidNavigationBar : LinearLayout {
     var items = listOf<NavigationItem>()
         set(value) {
             field = value
-            value.forEach { fluidNavigationItem ->
+            value.forEachIndexed { selectedIndex, fluidNavigationItem ->
                 addView(FluidTabView(context).apply {
                     drawableId = fluidNavigationItem.drawableId
                     title = fluidNavigationItem.title
@@ -26,6 +26,15 @@ class FluidNavigationBar : LinearLayout {
                     colorTintUnselected = this@FluidNavigationBar.colorTintUnselected
                     colorBubble = this@FluidNavigationBar.colorBubble
                     colorBg = this@FluidNavigationBar.colorBackground
+                    onClick {
+                        if (currentItemIndex != selectedIndex) {
+                            onItemSelected?.invoke(selectedIndex)
+                            currentItemIndex = selectedIndex
+                            selectItem(currentItemIndex)
+                        } else {
+                            onItemReselected?.invoke(currentItemIndex)
+                        }
+                    }
                 })
             }
             currentItemIndex = 0
@@ -105,28 +114,6 @@ class FluidNavigationBar : LinearLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN,
-            MotionEvent.ACTION_MOVE -> {
-                val selectedIndex = indexOfItemClicked(event.x)
-                selectItem(selectedIndex)
-            }
-            MotionEvent.ACTION_UP -> {
-                val selectedIndex = indexOfItemClicked(event.x)
-                if (currentItemIndex != selectedIndex) {
-                    onItemSelected?.invoke(selectedIndex)
-                    currentItemIndex = selectedIndex
-                    selectItem(currentItemIndex)
-                } else {
-                    onItemReselected?.invoke(currentItemIndex)
-                }
-            }
-        }
-        return true
-    }
-
     fun onItemSelected(callback: ((index: Int) -> Unit)) {
         onItemSelected = callback
     }
@@ -140,8 +127,6 @@ class FluidNavigationBar : LinearLayout {
             (view as FluidTabView).checked = index == i
         }
     }
-
-    private inline fun indexOfItemClicked(x: Float): Int = x.toInt() / (measuredWidth / items.size)
 
     private fun defaultSize(measureSpec: Int, size: Int = heightDefault + ovalPadding): Int {
         var result = size

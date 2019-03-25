@@ -3,6 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        telegram {
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "au.sjowl.lib.uxlibrary"
@@ -14,11 +18,11 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     testOptions {
         unitTests.returnDefaultValues = true
     }
@@ -88,7 +92,7 @@ dependencies {
     androidTestImplementation "com.nhaarman:mockito-kotlin:$v_test_mockito"
     androidTestImplementation "androidx.test:runner:$v_androidx_runner"
     androidTestImplementation "androidx.test.espresso:espresso-core:$v_test_espresso"
-    compile project(path: ':telegramchart')
+    implementation project(path: ':telegramchart')
 }
 
 preBuild.dependsOn ktlintFormat

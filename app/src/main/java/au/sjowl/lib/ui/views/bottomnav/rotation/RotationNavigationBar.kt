@@ -3,18 +3,18 @@ package au.sjowl.lib.ui.views.bottomnav.rotation
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
-import android.widget.LinearLayout
+import android.view.ViewGroup
 import androidx.core.view.children
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
-class RotationNavigationBar : LinearLayout {
+class RotationNavigationBar : ViewGroup {
 
     var items = listOf<RotationNavItem>()
         set(value) {
             field = value
-            value.forEach { navItem ->
+            value.forEachIndexed { selectedIndex, navItem ->
                 addView(RotationTabView(context).apply {
                     drawableId = navItem.drawableId
                     title = navItem.title
@@ -22,6 +22,15 @@ class RotationNavigationBar : LinearLayout {
                     animationDuration = this@RotationNavigationBar.animationDuration
                     colorTintUnselected = this@RotationNavigationBar.colorTintUnselected
                     colorBubble = this@RotationNavigationBar.colorBubble
+                    onClick {
+                        if (currentItemIndex != selectedIndex) {
+                            onItemSelected?.invoke(selectedIndex)
+                            currentItemIndex = selectedIndex
+                            selectItem(currentItemIndex)
+                        } else {
+                            onItemReselected?.invoke(currentItemIndex)
+                        }
+                    }
                 })
             }
             currentItemIndex = 0
@@ -75,46 +84,30 @@ class RotationNavigationBar : LinearLayout {
 
     private var onItemReselected: ((index: Int) -> Unit)? = null
 
-    private val ovalPadding = context.dip(30)
-
     private val heightDefault = context.dip(56)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val w = defaultSize(widthMeasureSpec)
-        val h = defaultSize(heightMeasureSpec)
-        setMeasuredDimension(w, h)
-
         if (items.size !in (3..5)) throw IllegalStateException("Bottombar must contain 3-5 items")
         spaceBetweenIcons = measuredWidth / items.size
 
         val childW = measuredWidth / items.size
         children.forEach {
             it.layoutParams.width = childW
+            it.layoutParams.height = heightDefault
+            it.measure(childW, heightDefault)
         }
 
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), heightDefault)
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN,
-            MotionEvent.ACTION_MOVE -> {
-                val selectedIndex = indexOfItemClicked(event.x)
-                selectItem(selectedIndex)
-            }
-            MotionEvent.ACTION_UP -> {
-                val selectedIndex = indexOfItemClicked(event.x)
-                if (currentItemIndex != selectedIndex) {
-                    onItemSelected?.invoke(selectedIndex)
-                    currentItemIndex = selectedIndex
-                    selectItem(currentItemIndex)
-                } else {
-                    onItemReselected?.invoke(currentItemIndex)
-                }
-            }
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        var left = 0
+        var w = 0
+        children.forEach { view ->
+            w = view.layoutParams.width
+            view.layout(left, 0, left + w, measuredHeight)
+            left += w
         }
-        return true
     }
 
     fun setBadgeCount(tabIndex: Int, badgeCount: Int) {
@@ -135,20 +128,6 @@ class RotationNavigationBar : LinearLayout {
         children.forEachIndexed { i, view ->
             (view as RotationTabView).checked = index == i
         }
-    }
-
-    private inline fun indexOfItemClicked(x: Float): Int = x.toInt() / (measuredWidth / items.size)
-
-    private fun defaultSize(measureSpec: Int, size: Int = heightDefault + ovalPadding): Int {
-        var result = size
-        val specMode = View.MeasureSpec.getMode(measureSpec)
-        val specSize = MeasureSpec.getSize(measureSpec)
-
-        when (specMode) {
-            MeasureSpec.AT_MOST -> result = size
-            MeasureSpec.UNSPECIFIED, MeasureSpec.EXACTLY -> result = specSize
-        }
-        return result
     }
 
     constructor(context: Context) : super(context)

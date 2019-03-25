@@ -99,7 +99,7 @@ class SpreadTabView : View {
 
     private var iconHalf = iconSize / 2
 
-    private var animatorSet: AnimatorSet? = AnimatorSet()
+    private var animatorSet: AnimatorSet = AnimatorSet()
 
     private val paintOvalBg = defaultPaint().apply {
         color = colorBubble
@@ -127,7 +127,7 @@ class SpreadTabView : View {
 
     private val animBadgeFloat = AnimatedPropertyF()
 
-    private var badgeAnim: Animator? = null
+    private var badgeAnim: Animator = valueAnim(animBadgeFloat)
 
     private val titleRect = Rect()
 
@@ -140,14 +140,7 @@ class SpreadTabView : View {
     private val titleDst = Rect()
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-
-        val w = defaultSize(widthMeasureSpec, defaultWidth)
-        val h = defaultSize(heightMeasureSpec, baseHeight)
-        setMeasuredDimension(w, h)
-
-        centerY = (baseHeight / 2).toInt()
-
-        setSelectedStateAnimations()
+        setMeasuredDimension(layoutParams.width, baseHeight.toInt())
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -164,9 +157,8 @@ class SpreadTabView : View {
         animBadgeFloat.to = 1f
         animBadgeFloat.setup()
 
-        badgeAnim?.cancel()
-        badgeAnim = valueAnim(animBadgeFloat)
-        badgeAnim?.start()
+        badgeAnim.cancel()
+        badgeAnim.start()
     }
 
     private fun defaultPaint() = Paint().apply {
@@ -188,7 +180,7 @@ class SpreadTabView : View {
         sb.centerY = centerY * 1f
         sb.radius = (iconHalf * (1 + scaleAmplitude * Math.sin(animFloat.value * Math.PI))).toFloat()
 
-        drawable.setBounds(sb.rect)
+        drawable.bounds = sb.rect
         drawable.setTint(animTint.value)
         drawable.draw(canvas)
     }
@@ -238,23 +230,22 @@ class SpreadTabView : View {
             it.reverse()
         }
 
-        if (animatorSet?.isRunning != true) {
+        if (!animatorSet.isRunning) {
             animProperties.forEach { it.setup() }
         }
     }
 
     private fun animateSelectedState() {
-        animatorSet?.cancel()
-        animatorSet = AnimatorSet().apply {
+        animatorSet.cancel()
+        animatorSet.apply {
             playTogether(
                 valueAnim(animFloat),
                 colorAnim(animTint)
             )
-            start()
-        }
+        }.start()
     }
 
-    private fun valueAnim(animatedProperty: AnimatedPropertyF): ValueAnimator? {
+    private fun valueAnim(animatedProperty: AnimatedPropertyF): ValueAnimator {
         return ValueAnimator.ofFloat(animatedProperty.from, animatedProperty.to).apply {
             duration = animationDuration
             interpolator = DecelerateInterpolator()
@@ -272,18 +263,6 @@ class SpreadTabView : View {
         setIntValues(animatedProperty.from, animatedProperty.to)
         setEvaluator(ArgbEvaluator())
         duration = animationDuration
-    }
-
-    private fun defaultSize(measureSpec: Int, size: Float): Int {
-        var result = size
-        val specMode = View.MeasureSpec.getMode(measureSpec)
-        val specSize = View.MeasureSpec.getSize(measureSpec) * 1f
-
-        when (specMode) {
-            View.MeasureSpec.AT_MOST -> result = size
-            View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.EXACTLY -> result = specSize
-        }
-        return result.toInt()
     }
 
     constructor(context: Context) : super(context)

@@ -21,4 +21,21 @@
         android:layout_margin="16dp"
         app:layout_constraintStart_toEndOf="@id/checkbox0"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <au.sjowl.lib.ui.views.checkbox.BorderedCheckbox
+        android:id="@+id/borderedCheckbox0"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkbox0" />
+
+    <au.sjowl.lib.ui.views.checkbox.BorderedCheckbox
+        android:id="@+id/borderedCheckbox1"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toEndOf="@id/borderedCheckbox0"
+        app:layout_constraintTop_toBottomOf="@id/checkbox0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

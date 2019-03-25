@@ -119,14 +119,8 @@ class RotationTabView : View {
     private var badgeAnim: Animator? = null
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val w = defaultSize(widthMeasureSpec, defaultWidth)
-        val h = defaultSize(heightMeasureSpec, baseHeight)
-        setMeasuredDimension(w, h)
-
+        setMeasuredDimension(layoutParams.width, layoutParams.height)
         centerX = measuredWidth / 2
-        centerY = (baseHeight / 2).toInt()
-
-        setSelectedStateAnimations()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -224,18 +218,6 @@ class RotationTabView : View {
         setIntValues(animatedProperty.from, animatedProperty.to)
         setEvaluator(ArgbEvaluator())
         duration = animationDuration
-    }
-
-    private fun defaultSize(measureSpec: Int, size: Float): Int {
-        var result = size
-        val specMode = View.MeasureSpec.getMode(measureSpec)
-        val specSize = View.MeasureSpec.getSize(measureSpec) * 1f
-
-        when (specMode) {
-            View.MeasureSpec.AT_MOST -> result = size
-            View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.EXACTLY -> result = specSize
-        }
-        return result.toInt()
     }
 
     constructor(context: Context) : super(context)

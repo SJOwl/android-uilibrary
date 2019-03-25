@@ -5,26 +5,39 @@ import android.graphics.Color
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
-import android.widget.LinearLayout
+import android.view.ViewGroup
 import androidx.core.view.children
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
-class SpreadNavigationBar : LinearLayout {
+class SpreadNavigationBar : ViewGroup {
+
+    val childrenX = arrayListOf<View>()
 
     var items = listOf<SpreadNavigationItem>()
         set(value) {
             field = value
-            value.forEach { fluidNavigationItem ->
-                addView(SpreadTabView(context).apply {
+            value.forEachIndexed { selectedIndex, fluidNavigationItem ->
+                val v = SpreadTabView(context).apply {
                     drawableId = fluidNavigationItem.drawableId
                     title = fluidNavigationItem.title
                     colorTintSelected = fluidNavigationItem.colorTextSelected
                     colorBubble = fluidNavigationItem.colorBackground
                     animationDuration = this@SpreadNavigationBar.animationDuration
                     colorTintUnselected = this@SpreadNavigationBar.colorTintUnselected
-                })
+                    onClick {
+                        if (currentItemIndex != selectedIndex) {
+                            onItemSelected?.invoke(selectedIndex)
+                            currentItemIndex = selectedIndex
+                            selectItem(currentItemIndex)
+                        } else {
+                            onItemReselected?.invoke(currentItemIndex)
+                        }
+                    }
+                }
+                addView(v)
+                childrenX.add(v)
             }
             currentItemIndex = 0
         }
@@ -66,48 +79,30 @@ class SpreadNavigationBar : LinearLayout {
             children.forEach { (it as SpreadTabView).iconSize = value * 1f }
         }
 
+    private val baseHeight = context.dip(56) * 1f + 1f
+
     private var onItemSelected: ((index: Int) -> Unit)? = null
 
     private var onItemReselected: ((index: Int) -> Unit)? = null
-
-    private val ovalPadding = context.dip(30)
-
-    private val heightDefault = context.dip(56)
 
     private val transition = AutoTransition().apply {
         duration = animationDuration
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val w = defaultSize(widthMeasureSpec)
-        val h = defaultSize(heightMeasureSpec)
-        setMeasuredDimension(w, h)
-
-        measureChildren()
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        measureChildren()
+        setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), baseHeight.toInt())
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN,
-            MotionEvent.ACTION_MOVE -> {
-                val selectedIndex = indexOfItemClicked(event.x)
-                selectItem(selectedIndex)
-            }
-            MotionEvent.ACTION_UP -> {
-                val selectedIndex = indexOfItemClicked(event.x)
-                if (currentItemIndex != selectedIndex) {
-                    onItemSelected?.invoke(selectedIndex)
-                    currentItemIndex = selectedIndex
-                    selectItem(currentItemIndex)
-                } else {
-                    onItemReselected?.invoke(currentItemIndex)
-                }
-            }
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        var left = 0
+        var w = 0
+        children.forEach { view ->
+            w = view.layoutParams.width
+            view.layout(left, 0, left + w, measuredHeight)
+            left += w
         }
-        return true
     }
 
     fun setBadgeCount(tabIndex: Int, badgeCount: Int) {
@@ -138,30 +133,6 @@ class SpreadNavigationBar : LinearLayout {
         }
         requestLayout()
         TransitionManager.beginDelayedTransition(this, transition)
-    }
-
-    private inline fun indexOfItemClicked(x: Float): Int {
-        val list = children.toList()
-        var child: View
-        for (index in 0 until childCount) {
-            child = list[index]
-            if (child.x < x && child.width + child.x > x)
-                return index
-        }
-
-        throw IllegalStateException("No tab clicked")
-    }
-
-    private fun defaultSize(measureSpec: Int, size: Int = heightDefault + ovalPadding): Int {
-        var result = size
-        val specMode = View.MeasureSpec.getMode(measureSpec)
-        val specSize = View.MeasureSpec.getSize(measureSpec)
-
-        when (specMode) {
-            MeasureSpec.AT_MOST -> result = size
-            MeasureSpec.UNSPECIFIED, MeasureSpec.EXACTLY -> result = specSize
-        }
-        return result
     }
 
     constructor(context: Context) : super(context)
