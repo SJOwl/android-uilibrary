@@ -11,7 +11,7 @@
         android:divider="@drawable/rv_chart_names_divider"
         android:orientation="vertical">
 
-        <au.sjowl.lib.view.buttons.SimpleButton
+        <au.sjowl.lib.ui.views.buttons.SimpleButton
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <au.sjowl.lib.view.buttons.submit.SubmitButton
+            <au.sjowl.lib.ui.views.buttons.submit.SubmitButton
                 android:id="@+id/submitButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

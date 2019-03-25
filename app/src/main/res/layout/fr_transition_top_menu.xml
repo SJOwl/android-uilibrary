@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<au.sjowl.lib.view.transitions.TransitionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<au.sjowl.lib.ui.views.transitions.TransitionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/menu" />
 
-    <au.sjowl.lib.view.transitions.MenuViewGroup
+    <au.sjowl.lib.ui.views.transitions.MenuViewGroup
         android:id="@+id/menu"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -35,6 +35,6 @@
 
         </LinearLayout>
 
-    </au.sjowl.lib.view.transitions.MenuViewGroup>
+    </au.sjowl.lib.ui.views.transitions.MenuViewGroup>
 
-</au.sjowl.lib.view.transitions.TransitionLayout>
+</au.sjowl.lib.ui.views.transitions.TransitionLayout>

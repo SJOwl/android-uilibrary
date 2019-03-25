@@ -6,25 +6,25 @@
     android:layout_height="match_parent"
     android:background="#002A3A">
 
-    <au.sjowl.lib.view.progress.EllipticProgress
+    <au.sjowl.lib.ui.views.progress.EllipticProgress
         android:id="@+id/ellipticProgress"
         style="@style/MainTheme.Progress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <au.sjowl.lib.view.progress.ArcProgress
+    <au.sjowl.lib.ui.views.progress.ArcProgress
         android:id="@+id/arcProgress"
         style="@style/MainTheme.Progress"
         app:layout_constraintStart_toEndOf="@id/ellipticProgress"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <au.sjowl.lib.view.progress.ArcProgressSwing
+    <au.sjowl.lib.ui.views.progress.ArcProgressSwing
         android:id="@+id/arcProgressSwing"
         style="@style/MainTheme.Progress"
         app:layout_constraintStart_toEndOf="@id/arcProgress"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <au.sjowl.lib.view.progress.ArcProgressStriped
+    <au.sjowl.lib.ui.views.progress.ArcProgressStriped
         style="@style/MainTheme.Progress"
         app:layout_constraintStart_toEndOf="@id/arcProgressSwing"
         app:layout_constraintTop_toTopOf="parent" />

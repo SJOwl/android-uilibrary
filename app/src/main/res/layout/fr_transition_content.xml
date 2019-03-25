@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-    <au.sjowl.lib.view.app.test.touch.TouchViewGroup
+    <au.sjowl.lib.ui.app.test.touch.TouchViewGroup
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

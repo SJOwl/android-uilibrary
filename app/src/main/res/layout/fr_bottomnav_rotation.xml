@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <au.sjowl.lib.view.bottomnav.rotation.RotationNavigationBar
+    <au.sjowl.lib.ui.views.bottomnav.rotation.RotationNavigationBar
         android:id="@+id/rotNavigationBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

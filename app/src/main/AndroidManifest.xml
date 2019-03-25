@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light">
-        <activity android:name="au.sjowl.lib.view.app.gallery.MainActivity">
+        <activity android:name="au.sjowl.lib.ui.app.gallery.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
