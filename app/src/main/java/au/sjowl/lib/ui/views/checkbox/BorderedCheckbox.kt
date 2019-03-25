@@ -12,7 +12,9 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyF
+import au.sjowl.lib.uxlibrary.R
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
@@ -62,6 +64,12 @@ class BorderedCheckbox : View {
 
     private val rectBackground = RectF()
 
+    private val pointsTick = floatArrayOf(
+        0.77f, 0.29f,
+        0.42f, 0.75f,
+        0.25f, 0.54f
+    )
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         rectBackground.bottom = h * 1f
@@ -77,7 +85,8 @@ class BorderedCheckbox : View {
         canvas.drawRoundRect(rectBackground, rectBackground.width() * radiusPercent, rectBackground.height() * radiusPercent, paintBackground)
 
         drawTick(canvas)
-        super.onDraw(canvas)
+
+        AnimatedVectorDrawableCompat.create(context, R.drawable.anim_point_to_tick)
     }
 
     override fun onDetachedFromWindow() {
@@ -94,11 +103,16 @@ class BorderedCheckbox : View {
     }
 
     private inline fun drawTick(canvas: Canvas) {
-        paintTick.alpha = (animFloat.value * 255).toInt()
-        pathTick.reset()
-        pathTick.moveTo(0.77f * measuredWidth, 0.29f * measuredHeight)
-        pathTick.lineTo(0.42f * measuredWidth, 0.75f * measuredHeight)
-        pathTick.lineTo(0.25f * measuredWidth, 0.54f * measuredHeight)
+        drawPath(pathTick, pointsTick, canvas)
+    }
+
+    private fun drawPath(path: Path, points: FloatArray, canvas: Canvas) {
+        path.reset()
+        val dy = (animFloat.value - 1) * measuredHeight
+        path.moveTo(points[0] * measuredWidth, points[1] * measuredHeight + dy)
+        for (i in 2 until points.size step 2) {
+            pathTick.lineTo(points[i] * measuredWidth, points[i + 1] * measuredHeight + dy)
+        }
         canvas.drawPath(pathTick, paintTick)
     }
 

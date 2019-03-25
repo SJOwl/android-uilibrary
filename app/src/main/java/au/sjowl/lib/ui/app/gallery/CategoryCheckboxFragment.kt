@@ -30,7 +30,7 @@ class CategoryCheckboxFragment : BaseFragment() {
             onCheckedChangedListener { checked -> println("checked $checked #2") }
         }
         with(borderedCheckbox1) {
-            checked = false
+            checked = true
             color = Color.parseColor("#F34C44")
             onCheckedChangedListener { checked -> println("checked $checked #3") }
         }
