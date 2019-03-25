@@ -10,7 +10,6 @@ import au.sjowl.lib.uxlibrary.R
 import kotlinx.android.synthetic.main.fr_bottomnav_spread.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.support.v4.toast
 import kotlin.random.Random
 
 class NavSpreadFragment : BaseFragment() {
@@ -32,10 +31,10 @@ class NavSpreadFragment : BaseFragment() {
             )
 
             onItemSelected { index ->
-                toast("selected   $index")
+                println("selected   $index")
             }
             onItemReselected { index ->
-                toast("reselected $index")
+                println("reselected $index")
             }
 
             setBadgeCount(0, 25)
