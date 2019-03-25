@@ -7,9 +7,11 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/autoscrollTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="18sp"
         tools:text="Sample text" />
 </LinearLayout>

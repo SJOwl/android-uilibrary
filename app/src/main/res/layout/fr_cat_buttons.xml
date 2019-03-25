@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/rv_divider"
+        android:orientation="vertical">
+
+        <au.sjowl.lib.view.buttons.SimpleButton
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:paddingStart="@dimen/button_padding_h"
+            android:paddingTop="@dimen/button_padding_v"
+            android:paddingEnd="@dimen/button_padding_h"
+            android:paddingBottom="@dimen/button_padding_v"
+            android:text="Home"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <au.sjowl.lib.view.buttons.submit.SubmitButton
+                android:id="@+id/submitButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:paddingStart="@dimen/button_padding_h"
+                android:paddingTop="@dimen/button_padding_v"
+                android:paddingEnd="@dimen/button_padding_h"
+                android:paddingBottom="@dimen/button_padding_v" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/stateDisabled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="disabled" />
+
+                <Button
+                    android:id="@+id/stateReady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ready" />
+
+                <Button
+                    android:id="@+id/stateProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="progress" />
+
+                <Button
+                    android:id="@+id/stateError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="error" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:text="Animation duration: " />
+
+            <SeekBar
+                android:id="@+id/durationSeek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

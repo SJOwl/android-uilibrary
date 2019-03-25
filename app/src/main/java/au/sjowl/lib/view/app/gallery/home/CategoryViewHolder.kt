@@ -13,7 +13,7 @@ class CategoryViewHolder(
         (item as CategoryData)
         with(itemView) {
             setOnClickListener { listener.onClick(item) }
-            textView.text = item.name
+            autoscrollTextView.text = item.name
         }
     }
 }

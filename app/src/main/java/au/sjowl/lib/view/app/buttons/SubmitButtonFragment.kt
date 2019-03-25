@@ -23,7 +23,7 @@ class SubmitButtonFragment : BaseFragment() {
 
     private var processJob: Job? = null
 
-    private val delay = 10L
+    private val delayStep = 10L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,7 +83,7 @@ class SubmitButtonFragment : BaseFragment() {
         var progress = 0f
         button.progress = 0f
         while (progress < 1) {
-            delay(delay)
+            delay(delayStep)
             progress += progressStep
             button.progress = progress
         }
@@ -93,7 +93,7 @@ class SubmitButtonFragment : BaseFragment() {
         var progress = 0f
         button.progress = 0f
         while (progress < 0.9f) {
-            delay(delay)
+            delay(delayStep)
             progress += progressStep
             button.progress = progress
         }

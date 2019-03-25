@@ -17,6 +17,7 @@ import au.sjowl.lib.view.buttons.submit.states.StateError
 import au.sjowl.lib.view.buttons.submit.states.StateProgress
 import au.sjowl.lib.view.buttons.submit.states.StateReady
 import org.jetbrains.anko.sdk27.coroutines.onClick
+import org.jetbrains.anko.wrapContent
 
 class SubmitButton : View {
 
@@ -75,7 +76,7 @@ class SubmitButton : View {
         val t2 = dh.rectText.width()
 
         val w = defaultSize(widthMeasureSpec, (Math.max(t, t2) + paddingLeft + paddingRight).toFloat())
-        val h = defaultSize(heightMeasureSpec, (dh.rectText.height() + paddingTop + paddingBottom).toFloat())
+        val h = defaultSize(wrapContent, (dh.rectText.height() + paddingTop + paddingBottom).toFloat())
         setMeasuredDimension(w, h)
     }
 

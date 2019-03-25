@@ -1,14 +1,14 @@
 package au.sjowl.lib.view.app.gallery
 
-import android.os.Bundle
-import android.view.View
-import au.sjowl.lib.uxlibrary.R
-import au.sjowl.lib.view.app.BaseFragment
+import au.sjowl.lib.view.app.gallery.Screens.NAVBAR_FLUID
+import au.sjowl.lib.view.app.gallery.Screens.NAVBAR_ROTATION
+import au.sjowl.lib.view.app.gallery.Screens.NAVBAR_SPREAD
+import au.sjowl.lib.view.app.gallery.home.CategoryData
 
-class CategoryBottombarsFragment : BaseFragment() {
-    override val layoutId: Int get() = R.layout.layout_test
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
+class CategoryBottombarsFragment : ListFragment() {
+    override val screens: List<CategoryData> = listOf(
+        NAVBAR_FLUID,
+        NAVBAR_ROTATION,
+        NAVBAR_SPREAD
+    )
 }
