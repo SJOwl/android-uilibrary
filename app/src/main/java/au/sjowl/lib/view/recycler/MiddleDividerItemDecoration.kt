@@ -10,7 +10,7 @@ import org.jetbrains.anko.dip
 
 class MiddleDividerItemDecoration(val context: Context) : RecyclerView.ItemDecoration() {
 
-    private val mDivider: Drawable = ContextCompat.getDrawable(context, R.drawable.rv_chart_names_divider)!!
+    private val mDivider: Drawable = ContextCompat.getDrawable(context, R.drawable.rv_divider)!!
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = context.dip(16)

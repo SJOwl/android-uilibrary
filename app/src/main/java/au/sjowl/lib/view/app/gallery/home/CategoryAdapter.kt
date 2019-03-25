@@ -7,7 +7,7 @@ import au.sjowl.lib.view.recycler.BaseViewHolder
 
 class CategoryAdapter(
     private val onItemClickListener: CategoryHolderListener
-) : BaseRecyclerViewAdapter<CategoryData, BaseViewHolder>() {
+) : BaseRecyclerViewAdapter<ScreenData, BaseViewHolder>() {
 
     override fun getViewHolderLayoutId(viewType: Int): Int = R.layout.rv_item_category
 

@@ -1,52 +1,52 @@
 package au.sjowl.lib.view.app.gallery
 
-import androidx.fragment.app.Fragment
 import au.sjowl.lib.view.app.bottomnav.NavFluidFragment
 import au.sjowl.lib.view.app.bottomnav.NavRotationFragment
 import au.sjowl.lib.view.app.bottomnav.NavSpreadFragment
 import au.sjowl.lib.view.app.buttons.FabMenuCircularFragment
 import au.sjowl.lib.view.app.buttons.FabMenuVerticalFragment
 import au.sjowl.lib.view.app.charts.TelegramChartsFragment
-import au.sjowl.lib.view.app.gallery.home.CategoryData
-import au.sjowl.lib.view.app.gallery.home.HomeFragment
+import au.sjowl.lib.view.app.gallery.home.ScreenData
+import au.sjowl.lib.view.app.transitions.TransitionsFragment
 
 object Screens {
     var key = 0
 
-    val MAIN = CategoryData("Home", key++)
-    val NAVBAR_FLUID = CategoryData("Fluid", key++)
-    val NAVBAR_ROTATION = CategoryData("Rotations", key++)
-    val NAVBAR_SPREAD = CategoryData("Spread", key++)
-    val FAB_CIRCULAR = CategoryData("Circular", key++)
-    val FAB_VERTICAL = CategoryData("Vertical", key++)
-    val CHART_TELEGRAM = CategoryData("Telegram chart", key++)
+    val MAIN = key++
+    val NAVBAR_FLUID = key++
+    val NAVBAR_ROTATION = key++
+    val NAVBAR_SPREAD = key++
+    val FAB_CIRCULAR = key++
+    val FAB_VERTICAL = key++
+    val CHART_TELEGRAM = key++
+    val LIST_BUTTONS = key++
+    val LIST_BOTTOMBARS = key++
+    val LIST_CHARTS = key++
+    val LIST_TRANSITIONS = key++
+    val LIST_PROGRESSBAR = key++
+    val LIST_FAB = key++
+    val LIST_CHECKBOX = key++
+    val TRANSITIONS_TOP_MENU = key++
 
-    val LIST_BUTTONS = CategoryData("Buttons", key++)
-    val LIST_BOTTOMBARS = CategoryData("Bottombars", key++)
-    val LIST_CHARTS = CategoryData("Charts", key++)
-    val LIST_TRANSITIONS = CategoryData("Transitions", key++)
-    val LIST_PROGRESSBAR = CategoryData("Progressbar", key++)
-    val LIST_FAB = CategoryData("FAB", key++)
-    val LIST_CHECKBOX = CategoryData("Checkbox", key++)
+    val screens = listOf(
+        ScreenData("Home", MAIN) { ListFragment.createArguments(intArrayOf(LIST_BUTTONS, LIST_BOTTOMBARS, LIST_CHARTS, LIST_TRANSITIONS, LIST_PROGRESSBAR, LIST_FAB, LIST_CHECKBOX)) },
+        ScreenData("Fluid", NAVBAR_FLUID) { NavFluidFragment() },
+        ScreenData("Rotations", NAVBAR_ROTATION) { NavRotationFragment() },
+        ScreenData("Spread", NAVBAR_SPREAD) { NavSpreadFragment() },
+        ScreenData("Circular", FAB_CIRCULAR) { FabMenuCircularFragment() },
+        ScreenData("Vertical", FAB_VERTICAL) { FabMenuVerticalFragment() },
+        ScreenData("Telegram chart", CHART_TELEGRAM) { TelegramChartsFragment() },
+        ScreenData("Top menu", TRANSITIONS_TOP_MENU) { TransitionsFragment() },
+        ScreenData("Buttons", LIST_BUTTONS) { CategoryButtonsFragment() },
+        ScreenData("Bottombars", LIST_BOTTOMBARS) { ListFragment.createArguments(intArrayOf(NAVBAR_FLUID, NAVBAR_ROTATION, NAVBAR_SPREAD)) },
+        ScreenData("Charts", LIST_CHARTS) { ListFragment.createArguments(intArrayOf(CHART_TELEGRAM)) },
+        ScreenData("Transitions", LIST_TRANSITIONS) { ListFragment.createArguments(intArrayOf(TRANSITIONS_TOP_MENU)) },
+        ScreenData("Progressbar", LIST_PROGRESSBAR) { CategoryProgressBarFragment() },
+        ScreenData("FAB", LIST_FAB) { ListFragment.createArguments(intArrayOf(FAB_CIRCULAR, FAB_VERTICAL)) },
+        ScreenData("Checkbox", LIST_CHECKBOX) { CategoryCheckboxFragment() }
+    )
 
-    fun fragmentFromId(id: Int): Fragment {
-        return when (id) {
-            MAIN.fragmentId -> HomeFragment()
-            NAVBAR_FLUID.fragmentId -> NavFluidFragment()
-            NAVBAR_ROTATION.fragmentId -> NavRotationFragment()
-            NAVBAR_SPREAD.fragmentId -> NavSpreadFragment()
-            FAB_CIRCULAR.fragmentId -> FabMenuCircularFragment()
-            FAB_VERTICAL.fragmentId -> FabMenuVerticalFragment()
-            CHART_TELEGRAM.fragmentId -> TelegramChartsFragment()
+    fun fragmentFromId(key: Int) = fromKey(key).fragment()
 
-            LIST_BUTTONS.fragmentId -> CategoryButtonsFragment()
-            LIST_BOTTOMBARS.fragmentId -> CategoryBottombarsFragment()
-            LIST_CHARTS.fragmentId -> CategoryChartsFragment()
-            LIST_TRANSITIONS.fragmentId -> CategoryTransitionsFragment()
-            LIST_PROGRESSBAR.fragmentId -> CategoryProgressBarFragment()
-            LIST_FAB.fragmentId -> CategoryFabFragment()
-            LIST_CHECKBOX.fragmentId -> CategoryCheckboxFragment()
-            else -> throw IllegalStateException("")
-        }
-    }
+    fun fromKey(key: Int): ScreenData = screens.first { it.fragmentId == key }
 }

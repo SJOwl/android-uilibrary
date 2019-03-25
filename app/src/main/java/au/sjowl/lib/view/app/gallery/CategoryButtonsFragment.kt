@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 class CategoryButtonsFragment : BaseFragment() {
+
     override val layoutId: Int get() = R.layout.fr_cat_buttons
 
     var animDuration = 200L
@@ -28,6 +29,11 @@ class CategoryButtonsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        processJob?.cancel()
     }
 
     private fun setupSubmitButton() {
@@ -82,6 +88,7 @@ class CategoryButtonsFragment : BaseFragment() {
     }
 
     private fun progress() = GlobalScope.launch(Dispatchers.Main) {
+        // todo take progress from db with autoupdates
         var progress = 0f
         submitButton.progress = 0f
         while (progress < 1) {

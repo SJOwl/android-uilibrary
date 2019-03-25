@@ -22,6 +22,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testFragment(): Fragment {
-        return Screens.fragmentFromId(currentFragment.fragmentId)
+        return Screens.fragmentFromId(currentFragment)
     }
 }

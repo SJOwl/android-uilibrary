@@ -2,21 +2,22 @@ package au.sjowl.lib.view.app.gallery
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import au.sjowl.lib.uxlibrary.R
 import au.sjowl.lib.view.app.BaseFragment
 import au.sjowl.lib.view.app.gallery.home.CategoryAdapter
-import au.sjowl.lib.view.app.gallery.home.CategoryData
 import au.sjowl.lib.view.app.gallery.home.CategoryHolderListener
+import au.sjowl.lib.view.app.gallery.home.ScreenData
 import kotlinx.android.synthetic.main.fr_home.*
 
-abstract class ListFragment : BaseFragment() {
+class ListFragment : BaseFragment() {
 
-    abstract val screens: List<CategoryData>
+//    abstract val screens: List<ScreenData>
 
     override val layoutId: Int get() = R.layout.fr_home
 
     val categoryAdapter = CategoryAdapter(object : CategoryHolderListener {
-        override fun onClick(data: CategoryData) {
+        override fun onClick(data: ScreenData) {
             println("click on ${data.name}")
             val fragment = Screens.fragmentFromId(data.fragmentId)
             activity?.run {
@@ -39,6 +40,17 @@ abstract class ListFragment : BaseFragment() {
             adapter = categoryAdapter
             addItemDecoration(au.sjowl.lib.view.recycler.MiddleDividerItemDecoration(context))
         }
-        categoryAdapter.items = screens
+        categoryAdapter.items = arguments!!.getIntArray(KEY_LIST)!!
+            .map { Screens.fromKey(it) }
+            .sortedBy { it.name }
+    }
+
+    companion object {
+        private val KEY_LIST = "KEY_LIST"
+        fun createArguments(items: IntArray) = ListFragment().apply {
+            arguments = bundleOf().apply {
+                putIntArray(KEY_LIST, items)
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ class CategoryViewHolder(
 ) : BaseViewHolder(view) {
 
     override fun bind(item: Any) {
-        (item as CategoryData)
+        (item as ScreenData)
         with(itemView) {
             setOnClickListener { listener.onClick(item) }
             autoscrollTextView.text = item.name
