@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.ui.views.recycler.BaseRecyclerViewAdapter
 import au.sjowl.lib.ui.views.recycler.BaseViewHolder
 import au.sjowl.lib.uxlibrary.R

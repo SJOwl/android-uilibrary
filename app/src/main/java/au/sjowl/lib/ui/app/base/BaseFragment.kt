@@ -1,4 +1,4 @@
-package au.sjowl.lib.ui.app
+package au.sjowl.lib.ui.app.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

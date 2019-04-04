@@ -2,7 +2,7 @@ package au.sjowl.lib.ui.app.buttons
 
 import android.os.Bundle
 import android.view.View
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.ui.app.buttons.commands.CommandChat
 import au.sjowl.lib.ui.app.buttons.commands.CommandSearch
 import au.sjowl.lib.ui.app.buttons.commands.CommandWallet

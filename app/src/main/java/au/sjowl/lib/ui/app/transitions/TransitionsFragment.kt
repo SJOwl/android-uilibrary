@@ -2,7 +2,7 @@ package au.sjowl.lib.ui.app.transitions
 
 import android.os.Bundle
 import android.view.View
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.uxlibrary.R
 import kotlinx.android.synthetic.main.fr_transition_top_menu.*
 import org.jetbrains.anko.dip

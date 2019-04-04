@@ -3,6 +3,7 @@ package au.sjowl.lib.ui.app.gallery
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import au.sjowl.lib.ui.app.Screens
 import au.sjowl.lib.uxlibrary.R
 
 // todo 1 to fabs: https://github.com/Nightonke/BoomMenu

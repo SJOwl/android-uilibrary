@@ -3,7 +3,7 @@ package au.sjowl.lib.ui.app.bottomnav
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.ui.views.bottomnav.rotation.RotationNavItem
 import au.sjowl.lib.ui.views.utils.colorCompat
 import au.sjowl.lib.uxlibrary.R

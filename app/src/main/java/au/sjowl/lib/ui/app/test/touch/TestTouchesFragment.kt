@@ -2,7 +2,7 @@ package au.sjowl.lib.ui.app.test.touch
 
 import android.os.Bundle
 import android.view.View
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.uxlibrary.R
 import kotlinx.android.synthetic.main.fr_test_touches.*
 import org.jetbrains.anko.sdk27.coroutines.onCheckedChange

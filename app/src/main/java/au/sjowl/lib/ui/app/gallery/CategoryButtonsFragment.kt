@@ -3,7 +3,7 @@ package au.sjowl.lib.ui.app.gallery
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.uxlibrary.R
 import kotlinx.android.synthetic.main.fr_cat_buttons.*
 import kotlinx.coroutines.Dispatchers

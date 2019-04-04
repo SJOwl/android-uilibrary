@@ -3,7 +3,8 @@ package au.sjowl.lib.ui.app.gallery
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.Screens
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.ui.app.gallery.home.CategoryAdapter
 import au.sjowl.lib.ui.app.gallery.home.CategoryHolderListener
 import au.sjowl.lib.ui.app.gallery.home.ScreenData

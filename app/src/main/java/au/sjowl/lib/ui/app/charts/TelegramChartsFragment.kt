@@ -3,7 +3,7 @@ package au.sjowl.lib.ui.app.charts
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import au.sjowl.lib.ui.app.BaseFragment
+import au.sjowl.lib.ui.app.base.BaseFragment
 import au.sjowl.lib.ui.telegramchart.getColorFromAttr
 import au.sjowl.lib.ui.views.telegram.ChartAdapter
 import au.sjowl.lib.ui.views.telegram.ChartColumnJsonParser
