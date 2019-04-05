@@ -16,13 +16,13 @@ class LinkedParticlesFragment : BaseFragment() {
 
         with(linkedParticlesView) {
             background = Color.parseColor("#FDFFFE")
-            color = Color.parseColor("#00D37F")
-            count = 50
-            particlesParams = ParticlesLinksParams(
+            particlesParams = LinkedParticleView.ParticlesParams(
+                color = Color.parseColor("#00D37F"),
+                count = 80,
                 radiusMin = 5,
                 radiusMax = 10,
-                velocity = 5,
-                radiusToConnect = 280
+                velocityX = 20,
+                velocityY = 20
             )
             applyChanges()
         }
@@ -32,19 +32,4 @@ class LinkedParticlesFragment : BaseFragment() {
         super.onPause()
         linkedParticlesView.stopThread()
     }
-
-    class ParticlesLinksParams(
-        radiusMin: Int = 1,
-        radiusMax: Int = 15,
-        velocity: Int = 20,
-        radiusToConnect: Int = 150
-    ) : LinkedParticleView.ParticlesParams(
-        radiusMin = radiusMin,
-        radiusMax = radiusMax,
-        velocityXMin = -velocity,
-        velocityXMax = velocity,
-        velocityYMin = -velocity,
-        velocityYMax = velocity,
-        radiusToConnect = radiusToConnect
-    )
 }

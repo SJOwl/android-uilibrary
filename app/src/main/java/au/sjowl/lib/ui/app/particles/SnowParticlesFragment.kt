@@ -16,9 +16,16 @@ class SnowParticlesFragment : BaseFragment() {
 
         with(snowParticlesView) {
             background = Color.parseColor("#07005F")
-            color = Color.parseColor("#FCFCFC")
-            count = 500
-            particlesParams = ParticlesSnowParams()
+            particlesParams = SnowParticleView.ParticlesParams(
+                color = Color.parseColor("#FCFCFC"),
+                count = 500,
+                radiusMin = 1,
+                radiusMax = 15,
+                velocityXMin = 3,
+                velocityXMax = 10,
+                velocityYMin = 10,
+                velocityYMax = 20
+            )
             applyChanges()
         }
     }
@@ -27,13 +34,4 @@ class SnowParticlesFragment : BaseFragment() {
         super.onPause()
         snowParticlesView.stopThread()
     }
-
-    class ParticlesSnowParams : SnowParticleView.ParticlesParams(
-        radiusMin = 1,
-        radiusMax = 15,
-        velocityXMin = 3,
-        velocityXMax = 10,
-        velocityYMin = 10,
-        velocityYMax = 20
-    )
 }

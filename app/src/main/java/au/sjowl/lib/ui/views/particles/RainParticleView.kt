@@ -4,12 +4,16 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import androidx.annotation.ColorInt
 import kotlin.random.Random
 
-class SnowParticleView : BaseInfiniteAnimationSurfaceView {
+class RainParticleView : BaseInfiniteAnimationSurfaceView {
 
     var background = Color.BLACK
+
+    var bgDrawable: Drawable? = null
 
     var particlesParams = ParticlesParams()
 
@@ -17,39 +21,50 @@ class SnowParticleView : BaseInfiniteAnimationSurfaceView {
 
     private val paint: Paint = Paint().apply {
         isAntiAlias = true
-        style = Paint.Style.FILL_AND_STROKE
+        style = Paint.Style.STROKE
         strokeWidth = 2F
         color = Color.WHITE
     }
 
+    private var t = System.currentTimeMillis()
+
     override fun drawSurface(canvas: Canvas) {
-            canvas.drawColor(background)
-            drawParticles(canvas)
+        printTime()
+        canvas.drawColor(background)
+        bgDrawable?.run {
+            setBounds(0, 0, measuredWidth, measuredHeight)
+            draw(canvas)
+        }
+        drawParticles(canvas)
     }
 
     fun applyChanges() {
         post {
             paint.color = particlesParams.color
             particles = Array(particlesParams.count) {
+                val v = Random.nextInt(particlesParams.velocityMin, particlesParams.velocityMax).toFloat()
                 Particle(
-                    radius = Random.nextInt(particlesParams.radiusMin, particlesParams.radiusMax).toFloat(),
+                    radius = 1f,
                     x = Random.nextInt(0, width).toFloat(),
                     y = Random.nextInt(0, height).toFloat(),
-                    vx = Random.nextInt(particlesParams.velocityXMin, particlesParams.velocityXMax).toFloat(),
-                    vy = Random.nextInt(particlesParams.velocityYMin, particlesParams.velocityYMax).toFloat(),
-                    alpha = Random.nextInt(150, 255)
+                    vx = v * particlesParams.cos,
+                    vy = v * particlesParams.sin,
+                    alpha = (v / particlesParams.velocityMax * 100).toInt()
                 )
             }
             restart()
         }
     }
 
-    private fun init() {
+    private fun printTime() {
+        println("t = ${System.currentTimeMillis() - t}")
+        t = System.currentTimeMillis()
     }
 
     private fun drawParticles(canvas: Canvas) {
         var p: Particle
 
+        paint.strokeWidth = particlesParams.width
         for (i in 0 until particlesParams.count) {
             p = particles[i]
             p.x += p.vx
@@ -69,8 +84,11 @@ class SnowParticleView : BaseInfiniteAnimationSurfaceView {
             if (p.y < 0 || p.y > height) p.vy = -p.vy
 
             paint.alpha = p.alpha
-            canvas.drawCircle(p.x, p.y, p.radius, paint)
+            canvas.drawLine(p.x, p.y, p.x - p.vx, p.y - p.vy, paint)
         }
+    }
+
+    private fun init() {
     }
 
     constructor(context: Context) : super(context) {
@@ -82,13 +100,15 @@ class SnowParticleView : BaseInfiniteAnimationSurfaceView {
     }
 
     open class ParticlesParams(
-        val color: Int = 0,
-        val count: Int = 100,
-        val radiusMin: Int = 2,
-        val radiusMax: Int = 10,
-        val velocityXMin: Int = -7,
-        val velocityXMax: Int = 7,
-        val velocityYMin: Int = -10,
-        val velocityYMax: Int = 10
-    )
+        val velocityMin: Int = 20,
+        val velocityMax: Int = 40,
+        angleDegrees: Int = 70,
+        val width: Float = 7f,
+        @ColorInt var color: Int = 0,
+        var count: Int = 10
+    ) {
+        val angleRad = (angleDegrees * Math.PI / 180)
+        val cos = Math.cos(angleRad).toFloat()
+        val sin = Math.sin(angleRad).toFloat()
+    }
 }

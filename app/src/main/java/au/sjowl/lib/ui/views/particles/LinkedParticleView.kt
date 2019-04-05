@@ -6,16 +6,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
-import au.sjowl.lib.ui.views.utils.measureDrawingMs
 import kotlin.random.Random
 
-class LinkedParticleView : BaseSurfaceView {
-
-    var count = 10
+class LinkedParticleView : BaseInfiniteAnimationSurfaceView {
 
     var background = Color.BLACK
-
-    var color = 0
 
     var particlesParams = ParticlesParams()
 
@@ -39,24 +34,24 @@ class LinkedParticleView : BaseSurfaceView {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 isTouching = true
-                particles[count - 1].x = event.x
-                particles[count - 1].y = event.y
-                particles[count - 1].vx = 0f
-                particles[count - 1].vy = 0f
+                particles[particlesParams.count - 1].x = event.x
+                particles[particlesParams.count - 1].y = event.y
+                particles[particlesParams.count - 1].vx = 0f
+                particles[particlesParams.count - 1].vy = 0f
 
                 touchX = event.x
                 touchY = event.y
             }
             MotionEvent.ACTION_MOVE -> {
                 isTouching = true
-                particles[count - 1].x = event.x
-                particles[count - 1].y = event.y
+                particles[particlesParams.count - 1].x = event.x
+                particles[particlesParams.count - 1].y = event.y
                 touchX = event.x
                 touchY = event.y
             }
             MotionEvent.ACTION_UP -> {
                 isTouching = false
-                for (i in 0 until count - 1) {
+                for (i in 0 until particlesParams.count - 1) {
                     val p = particles[i]
                     p.vx = Random.nextInt(particlesParams.velocityXMin, particlesParams.velocityXMax).toFloat()
                     p.vy = Random.nextInt(particlesParams.velocityYMin, particlesParams.velocityYMax).toFloat()
@@ -66,20 +61,18 @@ class LinkedParticleView : BaseSurfaceView {
         return true
     }
 
-    override fun draw(canvas: Canvas) {
+    override fun drawSurface(canvas: Canvas) {
         super.draw(canvas)
-        measureDrawingMs("points $count $isTouching") {
             canvas.drawColor(background)
             drawParticles(canvas)
             drawLinks(canvas)
-        }
     }
 
     fun applyChanges() {
         post {
-            paint.color = color
+            paint.color = particlesParams.color
 
-            particles = Array(count) {
+            particles = Array(particlesParams.count) {
                 Particle(
                     radius = Random.nextInt(particlesParams.radiusMin, particlesParams.radiusMax).toFloat(),
                     x = Random.nextInt(0, measuredWidth).toFloat(),
@@ -98,7 +91,7 @@ class LinkedParticleView : BaseSurfaceView {
 
         val kx = 1f * particlesParams.velocityXMax / measuredWidth
         val ky = 1f * particlesParams.velocityYMax / measuredHeight
-        for (i in 0 until count - 1) {
+        for (i in 0 until particlesParams.count - 1) {
             p = particles[i]
 
             if (isTouching) {
@@ -122,8 +115,8 @@ class LinkedParticleView : BaseSurfaceView {
     private fun drawLinks(canvas: Canvas) {
         val div = 10
         val r = width / div * width / div + height / div * height / div
-        for (i in 0 until if (isTouching) count else count - 1) {
-            for (j in 0 until if (isTouching) count else count - 1) {
+        for (i in 0 until if (isTouching) particlesParams.count else particlesParams.count - 1) {
+            for (j in 0 until if (isTouching) particlesParams.count else particlesParams.count - 1) {
                 val p1 = particles[i]
                 val p2 = particles[j]
                 val dx = p1.x - p2.x
@@ -131,7 +124,7 @@ class LinkedParticleView : BaseSurfaceView {
                 val dist = (dx * dx + dy * dy).toInt()
 
                 if (dist < r) {
-                    paint.alpha = 255 - (255f * dist / particlesParams.radiusToConnect).toInt()
+                    paint.alpha = 255 - (255f * dist / r).toInt()
                     canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint)
                 }
             }
@@ -150,14 +143,16 @@ class LinkedParticleView : BaseSurfaceView {
     }
 
     open class ParticlesParams(
+        val color: Int = 0,
+        val count: Int = 50,
         val radiusMin: Int = 2,
         val radiusMax: Int = 10,
-        val velocityXMin: Int = -7,
-        val velocityXMax: Int = 7,
-        val velocityYMin: Int = -10,
-        val velocityYMax: Int = 10,
-        radiusToConnect: Int = 150
+        velocityX: Int = 7,
+        velocityY: Int = 7
     ) {
-        val radiusToConnect = radiusToConnect * radiusToConnect
+        val velocityXMin: Int = -velocityX
+        val velocityXMax: Int = velocityX
+        val velocityYMin: Int = -velocityY
+        val velocityYMax: Int = velocityY
     }
 }

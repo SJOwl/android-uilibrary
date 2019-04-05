@@ -15,14 +15,14 @@
         android:textSize="14sp"
         tools:text="Followers" />
 
-    <au.sjowl.lib.ui.telegramchart.view.ChartView
+    <au.sjowl.lib.view.charts.telegram.view.ChartView
         android:id="@+id/chartView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default" />
 
-    <au.sjowl.lib.ui.telegramchart.time.AxisTimeView
+    <au.sjowl.lib.view.charts.telegram.time.AxisTimeView
         android:id="@+id/axisTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,17 +31,18 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp" />
 
-    <au.sjowl.lib.ui.telegramchart.overview.ChartOverviewView
+    <au.sjowl.lib.view.charts.telegram.overview.ChartOverviewView
         android:id="@+id/chartOverview"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
+        android:id="@+id/chartNames"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        tools:listitem="@layout/rv_item_chart_title" />
+        android:dividerPadding="@dimen/margin_default"
+        android:orientation="vertical" />
+
 </LinearLayout>
