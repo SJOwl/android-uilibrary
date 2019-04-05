@@ -43,8 +43,7 @@ object Screens {
     val LIST_TRANSITIONS = key++
     /* -> */val TRANSITIONS_TOP_MENU = key++
 
-    //    val developmentScreen = MAIN
-    val developmentScreen = CHART_TELEGRAM
+    val developmentScreen = MAIN
 
     val screens = listOf(
         ScreenData("Home", MAIN) {
