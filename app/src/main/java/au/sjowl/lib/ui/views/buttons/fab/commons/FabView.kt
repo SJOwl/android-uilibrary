@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import au.sjowl.lib.ui.views.animations.ViewStateAnimator
+import au.sjowl.lib.ui.views.utils.setTintCompat
 
 class FabView : View {
 
@@ -45,7 +46,7 @@ class FabView : View {
         circlePaint.color = colorBackground
         canvas.drawCircle(cx, cy, r, circlePaint)
         icon.setBounds((cx - r / 2).toInt(), (cy - r / 2).toInt(), (cx + r / 2).toInt(), (cy + r / 2).toInt())
-        icon.setTint(colorTint)
+        icon.setTintCompat(colorTint)
         icon.draw(canvas)
     }
 

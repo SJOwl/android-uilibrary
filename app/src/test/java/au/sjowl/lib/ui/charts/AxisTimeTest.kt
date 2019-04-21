@@ -1,10 +1,8 @@
 package au.sjowl.lib.ui.charts
 
-import org.amshove.kluent.mock
 import org.junit.Test
 
 class AxisTimeTest {
-    val axisTime = AxisTime(mock(), mock())
 
     @Test
     fun formatDateTest() {

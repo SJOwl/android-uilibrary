@@ -3,6 +3,8 @@ package au.sjowl.lib.ui.views.buttons.submit.states
 import android.graphics.Canvas
 import android.graphics.Color
 import au.sjowl.lib.ui.views.buttons.submit.DrawHelper
+import au.sjowl.lib.ui.views.utils.drawCompatArc
+import au.sjowl.lib.ui.views.utils.drawCompatRoundRect
 
 class StateProgress(
     dh: DrawHelper
@@ -22,7 +24,7 @@ class StateProgress(
         val p = view.height * 1f - sw
         var w = view.width * dh.animator.getFloat(MULT)
         if (p < w) {
-            canvas.drawRoundRect((view.width - w) / 2, sw / 2, (view.width + w) / 2, view.height * 1f - sw / 2, dh.r, dh.r, dh.paintBackground)
+            canvas.drawCompatRoundRect((view.width - w) / 2, sw / 2, (view.width + w) / 2, view.height * 1f - sw / 2, dh.r, dh.r, dh.paintBackground)
         } else {
             w = p
             val left = (view.width - w) / 2
@@ -32,8 +34,8 @@ class StateProgress(
             val angle = view.progress * 360
             dh.paintBackground.alpha = (255 * dh.animator.getFloat(MULT)).toInt()
             canvas.run {
-                drawRoundRect(left, top, right, bottom, dh.r, dh.r, dh.paintBackground)
-                drawArc(left, top, right, bottom, -90f, angle, false, dh.paintFrame)
+                drawCompatRoundRect(left, top, right, bottom, dh.r, dh.r, dh.paintBackground)
+                drawCompatArc(left, top, right, bottom, -90f, angle, false, dh.paintFrame)
             }
         }
     }

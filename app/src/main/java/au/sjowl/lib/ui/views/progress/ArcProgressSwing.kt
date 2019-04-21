@@ -11,6 +11,8 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import au.sjowl.lib.ui.views.utils.drawArc
+import au.sjowl.lib.ui.views.utils.drawOval
 import org.jetbrains.anko.dip
 
 class ArcProgressSwing : View {
@@ -45,21 +47,13 @@ class ArcProgressSwing : View {
 
     private var center = 0f
 
-    private var currentAngle = 0f
-        set(value) {
-            if (field != value) {
-                field = value
-                postInvalidateOnAnimation()
-            }
-        }
-
     private var animatorSet: AnimatorSet? = AnimatorSet()
 
     private var s = 0f
         set(value) {
             if (field != value) {
                 field = value
-                postInvalidateOnAnimation()
+                invalidate()
             }
         }
 
@@ -78,21 +72,13 @@ class ArcProgressSwing : View {
 
     override fun onDraw(canvas: Canvas) {
         (1..circles).forEach { i ->
-            val r = sizeMax / 2 * i / circles
-            drawOval(canvas, center, center, r, paintBg)
+            val r = sizeMax / 2 * i / circles * 1f
+            canvas.drawOval(center, center, r, paintBg)
             val percent = (Math.sin((sizeMax * Math.PI - s) / (sizeMax * Math.PI) * Math.PI)).toFloat()
             var alfa = ((sizeMax * Math.PI - s) / (2 * r * Math.PI)).toFloat()
             if (alfa > 1) alfa = 0f
-            drawArc(canvas, center, center, r, alfa * 360 - percent * 30, 90f + percent * 30, paintProgress)
+            canvas.drawArc(center, center, r, alfa * 360 - percent * 30 - 45f, 90f + percent * 30, paintProgress)
         }
-    }
-
-    inline fun drawOval(canvas: Canvas, centerX: Float, centerY: Float, radius: Float, paint: Paint) {
-        canvas.drawOval(centerX - radius, centerY - radius, centerX + radius, centerY + radius, paint)
-    }
-
-    inline fun drawArc(canvas: Canvas, centerX: Float, centerY: Float, radius: Float, angleStart: Float, angleSwipe: Float, paint: Paint) {
-        canvas.drawArc(centerX - radius, centerY - radius, centerX + radius, centerY + radius, angleStart - 45f, angleSwipe, false, paint)
     }
 
     private fun startAnimation() {

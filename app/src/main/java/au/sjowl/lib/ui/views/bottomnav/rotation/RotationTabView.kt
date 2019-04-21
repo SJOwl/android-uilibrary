@@ -19,6 +19,7 @@ import au.sjowl.lib.ui.views.bottomnav.Boundaries
 import au.sjowl.lib.ui.views.utils.AnimProperty
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyF
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyInt
+import au.sjowl.lib.ui.views.utils.setTintCompat
 import org.jetbrains.anko.dip
 
 class RotationTabView : View {
@@ -164,7 +165,7 @@ class RotationTabView : View {
         sb.radius = (iconHalf * (1 + scaleAmplitude * Math.sin(animFloat.value * Math.PI))).toFloat()
         val r = (sb.radius * Math.abs(Math.cos(animFloat.value * Math.PI))).toInt()
         drawable.setBounds(centerX - r, sb.top, centerX + r, sb.bottom)
-        drawable.setTint(animTint.value)
+        drawable.setTintCompat(animTint.value)
         val angle = Math.sin(animFloat.value * Math.PI).toFloat() * 30
         canvas.rotate(angle, sb.centerX, sb.centerY)
         drawable.draw(canvas)

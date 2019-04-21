@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import au.sjowl.lib.ui.views.animations.ViewStateAnimator
 import au.sjowl.lib.ui.views.animations.interpolators.providers.DefaultInterpolatorProvider
+import au.sjowl.lib.ui.views.utils.getCompatDrawable
+import au.sjowl.lib.ui.views.utils.setElevation
+import au.sjowl.lib.ui.views.utils.setPaddingDips
 import au.sjowl.lib.uxlibrary.R
 import org.jetbrains.anko.dimen
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.padding
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 abstract class BaseMenuFab : ViewGroup {
@@ -43,7 +44,7 @@ abstract class BaseMenuFab : ViewGroup {
 
         items.forEachIndexed { index, drawableId ->
             val menuItem = FabMenuView(context).apply {
-                icon = context.getDrawable(drawableId) as Drawable
+                icon = context.getCompatDrawable(drawableId)
                 animator = this@BaseMenuFab.animator
             }
             this.items.add(menuItem)
@@ -67,8 +68,8 @@ abstract class BaseMenuFab : ViewGroup {
         fab.onClick {
             toggleState()
         }
-        fab.padding = context.dip(8)
-        fab.elevation = context.dip(4).toFloat()
+        fab.setPaddingDips(8)
+        fab.setElevation(4)
     }
 
     private fun setState(state: FmState) {

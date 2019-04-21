@@ -4,12 +4,12 @@ import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
 import android.view.Gravity
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sp
 import org.jetbrains.anko.textColor
 
-class MenuItemTextView : TextView {
+class MenuItemTextView : AppCompatTextView {
 
     var menuItemId: Int = 0
 

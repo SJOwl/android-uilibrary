@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import au.sjowl.lib.ui.views.utils.drawArc
 import org.jetbrains.anko.dip
 
 class ArcProgress : View {
@@ -39,7 +40,7 @@ class ArcProgress : View {
         set(value) {
             if (field != value) {
                 field = value
-                postInvalidateOnAnimation()
+                invalidate()
             }
         }
 
@@ -63,12 +64,8 @@ class ArcProgress : View {
     override fun onDraw(canvas: Canvas) {
         (1..circles).forEach { i ->
             val r = sizeMax / 2 * i / circles
-            drawArc(canvas, center, center, r, currentAngle * i, 60f, paintProgress)
+            canvas.drawArc(center, center, r, currentAngle * i - 120f, 60f, paintProgress)
         }
-    }
-
-    inline fun drawArc(canvas: Canvas, centerX: Float, centerY: Float, radius: Float, angleStart: Float, angleSwipe: Float, paint: Paint) {
-        canvas.drawArc(centerX - radius, centerY - radius, centerX + radius, centerY + radius, angleStart - 120f, angleSwipe, false, paint)
     }
 
     private fun startAnimation() {

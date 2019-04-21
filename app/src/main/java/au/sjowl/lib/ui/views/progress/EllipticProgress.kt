@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import au.sjowl.lib.ui.views.utils.drawCompatRoundRect
 import org.jetbrains.anko.dip
 
 class EllipticProgress : View {
@@ -45,7 +46,7 @@ class EllipticProgress : View {
         set(value) {
             if (field != value) {
                 field = value
-                postInvalidateOnAnimation()
+                invalidate()
             }
         }
 
@@ -74,7 +75,7 @@ class EllipticProgress : View {
     fun drawRoundRect(canvas: Canvas, xCenter: Float, yCenter: Float, radiusW: Float, radiusH: Float, round: Float, paint: Paint) {
         repeat(rectangles) {
             canvas.rotate(angle + currentAngle, xCenter, yCenter)
-            canvas.drawRoundRect(xCenter - radiusW, yCenter - radiusH, xCenter + radiusW, yCenter + radiusH, round, round, paint)
+            canvas.drawCompatRoundRect(xCenter - radiusW, yCenter - radiusH, xCenter + radiusW, yCenter + radiusH, round, round, paint)
         }
     }
 

@@ -20,6 +20,7 @@ import au.sjowl.lib.ui.views.utils.AnimProperty
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyF
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyInt
 import au.sjowl.lib.ui.views.utils.drawTextCentered
+import au.sjowl.lib.ui.views.utils.setTintCompat
 import org.jetbrains.anko.dip
 
 class FluidTabView : View {
@@ -198,7 +199,7 @@ class FluidTabView : View {
     private inline fun drawIcon(canvas: Canvas) {
         sb.radius = iconHalf
         drawable.setBounds(sb.left, sb.top, sb.right, sb.bottom)
-        drawable.setTint(animTint.value)
+        drawable.setTintCompat(animTint.value)
         drawable.draw(canvas)
     }
 

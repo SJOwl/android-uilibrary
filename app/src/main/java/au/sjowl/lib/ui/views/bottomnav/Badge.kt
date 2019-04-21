@@ -9,6 +9,7 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import au.sjowl.lib.ui.views.utils.absCos
 import au.sjowl.lib.ui.views.utils.absSin
+import au.sjowl.lib.ui.views.utils.drawCompatRoundRect
 import au.sjowl.lib.ui.views.utils.drawTextCentered
 import org.jetbrains.anko.dip
 
@@ -76,7 +77,7 @@ class Badge(
             if (bitmap == null || bitmap!!.width != bitmapW || bitmap!!.height != bitmapH) {
                 bitmap = Bitmap.createBitmap(bitmapW, bitmapH, Bitmap.Config.ARGB_4444)
                 Canvas(bitmap!!).apply {
-                    drawRoundRect(0f, 0f, bitmapW.toFloat(), bitmapH.toFloat(), r, r, paintBadge)
+                    drawCompatRoundRect(0f, 0f, bitmapW.toFloat(), bitmapH.toFloat(), r, r, paintBadge)
                     drawTextCentered(badgeText, bitmapW / 2f, bitmapH / 2f, paintBadgeText, drawRect)
                 }
             }

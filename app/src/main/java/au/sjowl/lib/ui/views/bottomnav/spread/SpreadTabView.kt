@@ -21,6 +21,8 @@ import au.sjowl.lib.ui.views.bottomnav.Boundaries
 import au.sjowl.lib.ui.views.utils.AnimProperty
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyF
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyInt
+import au.sjowl.lib.ui.views.utils.drawCompatRoundRect
+import au.sjowl.lib.ui.views.utils.setTintCompat
 import org.jetbrains.anko.dip
 
 class SpreadTabView : View {
@@ -172,7 +174,7 @@ class SpreadTabView : View {
         sb.centerY = centerY * 1f
         sb.radius = iconHalf * 1.6f
         paintOvalBg.alpha = (animFloat.value * 255).toInt()
-        canvas.drawRoundRect(iconHalf, sb.topF, width - iconHalf, sb.bottomF, sb.radius, sb.radius, paintOvalBg)
+        canvas.drawCompatRoundRect(iconHalf, sb.topF, width - iconHalf, sb.bottomF, sb.radius, sb.radius, paintOvalBg)
     }
 
     private inline fun drawIcon(canvas: Canvas) {
@@ -181,7 +183,7 @@ class SpreadTabView : View {
         sb.radius = (iconHalf * (1 + scaleAmplitude * Math.sin(animFloat.value * Math.PI))).toFloat()
 
         drawable.bounds = sb.rect
-        drawable.setTint(animTint.value)
+        drawable.setTintCompat(animTint.value)
         drawable.draw(canvas)
     }
 

@@ -1,9 +1,6 @@
 package au.sjowl.lib.ui.views.utils
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
 import android.transition.Transition
 import android.transition.TransitionManager
 import android.view.MotionEvent
@@ -29,16 +26,6 @@ inline fun View.contains(px: Float, py: Float): Boolean {
 
 inline fun View.contains(event: MotionEvent): Boolean {
     return contains(event.x + x, event.y + y)
-}
-
-fun Canvas.drawTextCenteredVertically(text: String, x: Float, y: Float, paint: Paint, r: Rect) {
-    paint.getTextBounds(text, 0, text.length, r)
-    drawText(text, x, y + r.height() / 2, paint)
-}
-
-fun Canvas.drawTextCentered(text: String, x: Float, y: Float, paint: Paint, r: Rect) {
-    paint.getTextBounds(text, 0, text.length, r)
-    drawText(text, x - r.width() / 2, y + r.height() / 2, paint)
 }
 
 interface AnimProperty {
@@ -112,7 +99,9 @@ fun View.scale(scale: Float) {
 
 fun ConstraintLayout.constrain(cs: ConstraintSet, transition: Transition, block: ((cs: ConstraintSet) -> Unit)) {
     cs.clone(this)
-    TransitionManager.beginDelayedTransition(this, transition)
+    if (android.os.Build.VERSION.SDK_INT >= 19) {
+        TransitionManager.beginDelayedTransition(this, transition)
+    }
     block.invoke(cs)
     cs.applyTo(this)
 }

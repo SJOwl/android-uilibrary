@@ -11,15 +11,17 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import au.sjowl.lib.ui.views.animations.ViewStateAnimator
 import au.sjowl.lib.ui.views.utils.colorCompat
 import au.sjowl.lib.ui.views.utils.contains
+import au.sjowl.lib.ui.views.utils.drawCompatRoundRect
+import au.sjowl.lib.ui.views.utils.setElevation
 import au.sjowl.lib.uxlibrary.R
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.textColor
 
-class SimpleButton : TextView {
+class SimpleButton : AppCompatTextView {
 
     private val COLOR_BACKGROUND = 1
 
@@ -27,23 +29,23 @@ class SimpleButton : TextView {
 
     private val ELEVATION = 3
 
-    private var baseElevation = context.dip(4) * 1f
+    private var baseElevation = 4
 
     private val r = context.dip(20) * 1f
 
-    private val stateDefault = mapOf(
+    private val stateDefault = mapOf<Int, Any>(
         COLOR_BACKGROUND to context.colorCompat(R.color.button_background_default),
         COLOR_TEXT to context.colorCompat(R.color.button_text_default),
         ELEVATION to baseElevation
     )
 
-    private val statePressed = mapOf(
+    private val statePressed = mapOf<Int, Any>(
         COLOR_BACKGROUND to context.colorCompat(R.color.button_background_pressed),
         COLOR_TEXT to context.colorCompat(R.color.button_text_pressed),
-        ELEVATION to 0f
+        ELEVATION to 0
     )
 
-    private val stateDisabled = mapOf(
+    private val stateDisabled = mapOf<Int, Any>(
         COLOR_BACKGROUND to context.colorCompat(R.color.button_background_disabled),
         COLOR_TEXT to context.colorCompat(R.color.button_text_disabled),
         ELEVATION to baseElevation
@@ -87,7 +89,7 @@ class SimpleButton : TextView {
     override fun onDraw(canvas: Canvas) {
         paintBackground.color = animator.getColor(COLOR_BACKGROUND)
         textColor = animator.getColor(COLOR_TEXT)
-        canvas.drawRoundRect(0f, 0f, width * 1f, height * 1f, r, r, paintBackground)
+        canvas.drawCompatRoundRect(0f, 0f, width * 1f, height * 1f, r, r, paintBackground)
         super.onDraw(canvas)
     }
 
@@ -117,7 +119,7 @@ class SimpleButton : TextView {
     private fun setState(state: Map<Int, Any>) {
         if (stateCurrent != state) {
             textColor = state[COLOR_TEXT] as Int
-            elevation = state[ELEVATION] as Float
+            setElevation(state[ELEVATION] as Int)
             colorBackground = state[COLOR_BACKGROUND] as Int
 
             animator.setStates(stateCurrent, state)

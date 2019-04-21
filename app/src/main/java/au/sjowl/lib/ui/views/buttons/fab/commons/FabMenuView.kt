@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import au.sjowl.lib.ui.views.animations.ViewStateAnimator
 import au.sjowl.lib.ui.views.utils.colorCompat
+import au.sjowl.lib.ui.views.utils.setTintCompat
 import au.sjowl.lib.uxlibrary.R
 
 class FabMenuView : View {
@@ -36,10 +37,9 @@ class FabMenuView : View {
         val cx = width / 2f
         val cy = height / 2f
         val r = cx - circlePaint.strokeWidth
-//        canvas.drawCircle(cx, cy, r, circleBgPaint)
         canvas.drawCircle(cx, cy, r, circlePaint)
         icon.setBounds((cx - r / 2).toInt(), (cy - r / 2).toInt(), (cx + r / 2).toInt(), (cy + r / 2).toInt())
-        icon.setTint(colorTint)
+        icon.setTintCompat(colorTint)
         icon.draw(canvas)
     }
 

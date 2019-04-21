@@ -1,12 +1,14 @@
 package au.sjowl.lib.ui.views.transitions
 
 import android.content.Context
+import android.os.Build
 import android.transition.ChangeBounds
-import android.transition.TransitionManager
+import android.transition.Transition
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.OvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
+import au.sjowl.lib.ui.views.utils.beginDelayedTransition
 import kotlinx.android.synthetic.main.fr_transition_top_menu.view.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -20,10 +22,10 @@ class MenuViewGroup : ConstraintLayout, StateView {
 
     override val heightRange = Range(heightMin, heightMax)
 
-    private val transition = ChangeBounds().apply {
+    private val transition: Transition? = if (Build.VERSION.SDK_INT >= 19) ChangeBounds().apply {
         duration = 180L
         interpolator = OvershootInterpolator()
-    }
+    } else null
 
     private val menuItems = listOf(
         MenuData(0, "Dashboard"),
@@ -99,7 +101,7 @@ class MenuViewGroup : ConstraintLayout, StateView {
 
     private fun onMenuItemClick(id: Int) {
         layoutParams.height = heightMin
-        TransitionManager.beginDelayedTransition(parent as ConstraintLayout, transition)
+        beginDelayedTransition(parent as ConstraintLayout, transition)
         parent.requestLayout()
 
         onMenuItemClickListener?.invoke(id)
