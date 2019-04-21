@@ -38,7 +38,7 @@
         app:layout_constraintStart_toEndOf="@id/borderedCheckbox0"
         app:layout_constraintTop_toBottomOf="@id/checkbox0" />
 
-    <au.sjowl.lib.ui.views.checkbox.LinesVeiwGroup
+    <au.sjowl.lib.ui.views.checkbox.LinedLayout
         android:id="@+id/linesContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

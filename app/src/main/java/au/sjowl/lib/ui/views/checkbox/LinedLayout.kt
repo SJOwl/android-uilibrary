@@ -12,7 +12,7 @@ import androidx.core.view.marginTop
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.wrapContent
 
-class LinesVeiwGroup : ViewGroup {
+class LinedLayout : ViewGroup {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         children.forEach { it.measure(wrapContent, wrapContent) }
