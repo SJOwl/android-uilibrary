@@ -10,6 +10,7 @@ import au.sjowl.lib.ui.app.gallery.CategoryCheckboxFragment
 import au.sjowl.lib.ui.app.gallery.CategoryProgressBarFragment
 import au.sjowl.lib.ui.app.gallery.ListFragment
 import au.sjowl.lib.ui.app.gallery.home.ScreenData
+import au.sjowl.lib.ui.app.gradients.GradientAnimatedFragment
 import au.sjowl.lib.ui.app.particles.LinkedParticlesFragment
 import au.sjowl.lib.ui.app.particles.RainParticlesFragment
 import au.sjowl.lib.ui.app.particles.SnowParticlesFragment
@@ -42,6 +43,9 @@ object Screens {
 
     val LIST_TRANSITIONS = key++
     /* -> */val TRANSITIONS_TOP_MENU = key++
+
+    val LIST_GRADIENTS = key++
+    /* -> */val GRADIENT_ANIMATED = key++
 
     val developmentScreen = MAIN
 
@@ -107,7 +111,14 @@ object Screens {
         ScreenData("Snow", PARTICLES_SNOW) { SnowParticlesFragment() },
         ScreenData("Rain", PARTICLES_RAIN) { RainParticlesFragment() },
 
-        ScreenData("Checkbox", LIST_CHECKBOX) { CategoryCheckboxFragment() }
+        ScreenData("Checkbox", LIST_CHECKBOX) { CategoryCheckboxFragment() },
+
+        ScreenData("Gradients", LIST_GRADIENTS) {
+            ListFragment.createArguments(intArrayOf(
+                GRADIENT_ANIMATED
+            ))
+        },
+        ScreenData("Animated", GRADIENT_ANIMATED) { GradientAnimatedFragment() }
     )
 
     fun fragmentFromId(key: Int) = fromKey(key).fragment()
