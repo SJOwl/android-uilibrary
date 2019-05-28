@@ -14,6 +14,7 @@ import au.sjowl.lib.ui.app.gradients.GradientAnimatedFragment
 import au.sjowl.lib.ui.app.particles.LinkedParticlesFragment
 import au.sjowl.lib.ui.app.particles.RainParticlesFragment
 import au.sjowl.lib.ui.app.particles.SnowParticlesFragment
+import au.sjowl.lib.ui.app.seek.DoubleSeekbarFragment
 import au.sjowl.lib.ui.app.transitions.TransitionsFragment
 import au.sjowl.lib.view.charts.telegram.fragment.ChartsFragment
 
@@ -47,7 +48,11 @@ object Screens {
     val LIST_GRADIENTS = key++
     /* -> */val GRADIENT_ANIMATED = key++
 
+    val LIST_SEEK = key++
+    /* -> */val SEEK_DOUBLE = key++
+
     val developmentScreen = MAIN
+//    val developmentScreen = SEEK_DOUBLE
 
     val screens = listOf(
         ScreenData("Home", MAIN) {
@@ -59,7 +64,8 @@ object Screens {
                 LIST_PROGRESSBAR,
                 LIST_FAB,
                 LIST_CHECKBOX,
-                LIST_PARTICLES
+                LIST_PARTICLES,
+                LIST_SEEK
             ))
         },
 
@@ -118,7 +124,14 @@ object Screens {
                 GRADIENT_ANIMATED
             ))
         },
-        ScreenData("Animated", GRADIENT_ANIMATED) { GradientAnimatedFragment() }
+        ScreenData("Animated", GRADIENT_ANIMATED) { GradientAnimatedFragment() },
+
+        ScreenData("Seekbars", LIST_SEEK) {
+            ListFragment.createArguments(intArrayOf(
+                SEEK_DOUBLE
+            ))
+        },
+        ScreenData("Double", SEEK_DOUBLE) { DoubleSeekbarFragment() }
     )
 
     fun fragmentFromId(key: Int) = fromKey(key).fragment()

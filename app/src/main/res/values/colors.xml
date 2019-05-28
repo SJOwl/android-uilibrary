@@ -41,4 +41,10 @@
 
     <color name="mockLines">#4EFFD7</color>
     <color name="mockLinexxxs">#3D3D3D</color>
+
+    <color name="seekUnselected">#D1D1D1</color>
+    <color name="seekSelected">#0078D8</color>
+    <color name="seekKnob">#FFFFFF</color>
+    <color name="seekShadow">#33000000</color>
+
 </resources>

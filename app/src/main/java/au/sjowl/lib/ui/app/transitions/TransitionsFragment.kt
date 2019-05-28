@@ -14,6 +14,11 @@ class TransitionsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        menuItemsContainer.onClick {
+            println("click on top")
+            menu.layoutParams.height = context!!.dip(200)
+            root.requestLayoutWithTransition()
+        }
         menu.onClick {
             println("click on top")
             menu.layoutParams.height = context!!.dip(200)

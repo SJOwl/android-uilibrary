@@ -38,15 +38,18 @@ class TransitionLayout : ConstraintLayout {
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         println("action dispatchTouchEvent ${eventToAction(event)}")
 
+        val res = super.dispatchTouchEvent(event)
+
         when (event.action) {
             MotionEvent.ACTION_UP -> {
                 if (Math.abs(event.y - downY) > 10f) {
                     menu.onSetStateToEdgeValues()
                     requestLayoutWithTransition()
+                    return true
                 }
             }
         }
-        return super.dispatchTouchEvent(event)
+        return res
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
@@ -64,16 +67,14 @@ class TransitionLayout : ConstraintLayout {
                 }
             }
             MotionEvent.ACTION_UP -> {
-                if (Math.abs(event.y - downY) > 10f) {
-                    menu.onSetStateToEdgeValues()
-                    requestLayoutWithTransition()
-                }
+                menu.onSetStateToEdgeValues()
+                requestLayoutWithTransition()
             }
         }
         return false
     }
 
-    fun requestLayoutWithTransition() {
+    fun requestLayoutWithTransition() { // todo replace with android:animateLayoutChanges=true
         TransitionManager.beginDelayedTransition(this, transition)
         requestLayout()
     }

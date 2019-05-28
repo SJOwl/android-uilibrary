@@ -5,7 +5,6 @@ import android.os.Build
 import android.transition.ChangeBounds
 import android.transition.Transition
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.animation.OvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import au.sjowl.lib.ui.views.utils.beginDelayedTransition
@@ -71,11 +70,6 @@ class MenuViewGroup : ConstraintLayout, StateView {
                 alpha = mult * 1f
             }
         }
-    }
-
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        return super.onInterceptTouchEvent(ev)
-        // todo click through rv
     }
 
     override fun increaseSize(deltaX: Float, deltaY: Float) {
