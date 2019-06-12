@@ -1,6 +1,7 @@
 package au.sjowl.lib.ui.views.utils
 
 import android.content.Context
+import android.transition.AutoTransition
 import android.transition.Transition
 import android.transition.TransitionManager
 import android.view.MotionEvent
@@ -108,6 +109,12 @@ fun ConstraintLayout.constrain(cs: ConstraintSet, transition: Transition, block:
 
 fun ConstraintLayout.constrain(cs: ConstraintSet, block: ((cs: ConstraintSet) -> Unit)) {
     cs.clone(this)
+    if (android.os.Build.VERSION.SDK_INT >= 19) {
+        val transition = AutoTransition().apply {
+            duration = 500L
+        }
+        TransitionManager.beginDelayedTransition(this, transition)
+    }
     block.invoke(cs)
     cs.applyTo(this)
 }

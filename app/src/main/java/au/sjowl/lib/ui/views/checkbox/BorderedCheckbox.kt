@@ -1,4 +1,4 @@
-package au.sjowl.lib.ui.views.checkbox
+package au.sjowl.app.widgets
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -12,9 +12,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import au.sjowl.lib.ui.views.utils.AnimatedPropertyF
-import au.sjowl.lib.uxlibrary.R
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
@@ -55,7 +53,7 @@ class BorderedCheckbox : View {
         isAntiAlias = true
         color = Color.WHITE
         style = Paint.Style.STROKE
-        strokeWidth = context.dip(4).toFloat()
+        strokeWidth = context.dip(3).toFloat()
         pathEffect = CornerPathEffect(2f)
         strokeCap = Paint.Cap.ROUND
     }
@@ -72,9 +70,18 @@ class BorderedCheckbox : View {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        rectBackground.bottom = h * 1f
-        rectBackground.right = w * 1f
+        rectBackground.left = paddingLeft * 1f
+        rectBackground.top = paddingTop * 1f
+        rectBackground.bottom = h * 1f - paddingBottom
+        rectBackground.right = w * 1f - paddingRight
     }
+
+    // todo create defaultSize
+//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//        val w = defaultSize(widthMeasureSpec, dip(24))
+//        val h = defaultSize(heightMeasureSpec, dip(24))
+//        setMeasuredDimension(w, h)
+//    }
 
     override fun onDraw(canvas: Canvas) {
         paintBackground.alpha = (animFloat.value * 255).toInt()
@@ -85,8 +92,6 @@ class BorderedCheckbox : View {
         canvas.drawRoundRect(rectBackground, rectBackground.width() * radiusPercent, rectBackground.height() * radiusPercent, paintBackground)
 
         drawTick(canvas)
-
-        AnimatedVectorDrawableCompat.create(context, R.drawable.anim_point_to_tick)
     }
 
     override fun onDetachedFromWindow() {
@@ -108,10 +113,13 @@ class BorderedCheckbox : View {
 
     private fun drawPath(path: Path, points: FloatArray, canvas: Canvas) {
         path.reset()
-        val dy = (animFloat.value - 1) * measuredHeight
-        path.moveTo(points[0] * measuredWidth, points[1] * measuredHeight + dy)
+        val dy = (animFloat.value - 1) * measuredHeight + paddingTop
+        val multX = rectBackground.width()
+        val multY = rectBackground.height()
+        val dx = paddingLeft
+        path.moveTo(points[0] * multX + dx, points[1] * multY + dy)
         for (i in 2 until points.size step 2) {
-            pathTick.lineTo(points[i] * measuredWidth, points[i + 1] * measuredHeight + dy)
+            pathTick.lineTo(points[i] * multX + dx, points[i + 1] * multY + dy)
         }
         canvas.drawPath(pathTick, paintTick)
     }
